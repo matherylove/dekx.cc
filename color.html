@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Color Reducer — Dekxtopia</title>
+<meta name="description" content="Reduce a picture's resolution and number of colors, optionally locked to a fixed palette.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#0C0A1E; --bg-1:#170D2B; --bg-2:#2A0F26;
+  --card:rgba(255,255,255,.035); --card-hi:rgba(255,255,255,.06);
+  --line:rgba(190,170,255,.16); --line-soft:rgba(190,170,255,.09);
+  --ink:#ECE8F7; --text:#C9C3DC; --muted:#8E87A8; --faint:#6E6889;
+  --accent:#A78BFA; --accent-2:#C4B0FF; --accent-deep:#7C6AF2; --accent-ink:#120D26;
+  --pill:#27224A; --field:rgba(10,8,26,.55); --danger:#FF8A9A;
+  --chk1:#16122B; --chk2:#1E1938;
+  --display:"Space Grotesk",Inter,ui-sans-serif,system-ui,sans-serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark}}
+:root[data-theme="dark"]{color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);background:var(--bg-0)}
+body{margin:0;min-height:100%;color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;
+  background:linear-gradient(115deg,var(--bg-0) 0%,var(--bg-1) 50%,var(--bg-2) 100%) fixed;background-color:var(--bg-0)}
+#sky{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-2)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+
+/* header */
+.site-header{position:sticky;top:0;z-index:10;background:rgba(12,10,30,.82);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft);padding-top:env(safe-area-inset-top,0px)}
+.site-header .inner{max-width:1040px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:19px;color:var(--ink)}
+.brand:hover{color:var(--ink)}
+.brand svg{width:22px;height:22px;color:var(--accent)}
+.site-nav{margin-left:auto;display:flex;gap:4px;align-items:center;flex-wrap:wrap;font-size:14px;font-weight:500}
+.site-nav a{color:var(--text);padding:6px 12px;border-radius:7px;display:flex;align-items:center;gap:8px}
+.site-nav a:hover{color:var(--ink);background:rgba(255,255,255,.04)}
+.site-nav a[aria-current="page"]{background:var(--pill);color:var(--ink);font-weight:600}
+.new{font-size:10.5px;font-weight:700;letter-spacing:.06em;color:var(--accent-2);border:1px solid rgba(167,139,250,.55);
+  background:rgba(124,106,242,.22);border-radius:999px;padding:1px 8px;line-height:1.5}
+
+/* page */
+.page{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:0 20px 40px}
+.hero{padding:52px 0 8px}
+.badge{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.06em;color:var(--ink);
+  border:1px solid rgba(167,139,250,.55);background:rgba(124,106,242,.14);border-radius:999px;padding:4px 14px}
+.badge::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent-2)}
+.hero-row{display:flex;align-items:center;gap:22px;margin-top:26px}
+.hero-icon{flex:none;width:88px;height:88px;border-radius:50%;display:grid;place-items:center;
+  border:2px solid rgba(167,139,250,.45);background:radial-gradient(circle at 35% 30%,#3a2d73,#140f2c 70%);box-shadow:0 0 28px rgba(124,106,242,.25)}
+.hero-icon svg{width:46px;height:46px}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(34px,6vw,52px);line-height:1.05;letter-spacing:-.02em;margin:0;
+  background:linear-gradient(90deg,#8E7CF6,#B9A2FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--muted);font-size:17px;margin-top:8px}
+.lead{max-width:62ch;font-size:16.5px;line-height:1.75;margin:26px 0 0;color:var(--text)}
+.lead b{color:var(--ink)}
+hr.rule{border:0;border-top:1px solid var(--line);margin:34px 0 30px}
+
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:start}
+.col{display:flex;flex-direction:column;gap:18px;min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+.label{font-size:12px;font-weight:700;letter-spacing:.09em;color:var(--muted);margin:0 0 12px;text-transform:uppercase}
+.card .label + .label{margin-top:0}
+.sect + .sect{margin-top:16px;padding-top:16px;border-top:1px solid var(--line-soft)}
+.field{display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;align-items:center;font-size:14px}
+.field + .field{margin-top:9px}
+.field > span:first-child,.field > label:first-child{color:var(--muted)}
+.row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.small{font-size:12.5px;color:var(--muted)}
+.hint{font-size:12.5px;color:var(--muted);margin-top:8px}
+.hint.err{color:var(--danger)}
+
+input[type=number],select,textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--field);
+  border:1px solid var(--line);border-radius:7px;padding:5px 8px}
+input[type=number]{width:74px}
+select{width:100%}
+select option{background:#1A1533;color:var(--ink)}
+textarea{width:100%;min-height:70px;resize:vertical;font-family:var(--mono);font-size:12px;margin-top:8px}
+input[type=range]{flex:1;min-width:0;accent-color:var(--accent)}
+input[type=checkbox]{accent-color:var(--accent);margin:0;width:15px;height:15px}
+input[type=color]{width:42px;height:28px;padding:2px;border:1px solid var(--line);border-radius:7px;background:var(--field)}
+.check{display:flex;gap:8px;align-items:center;cursor:pointer;font-size:14px;color:var(--text)}
+
+button{font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;border-radius:7px;border:1px solid var(--line);
+  background:var(--card-hi);color:var(--ink);padding:5px 11px;min-height:30px}
+button:hover{border-color:rgba(167,139,250,.5);background:rgba(124,106,242,.12)}
+button.primary{background:linear-gradient(90deg,#8E7CF6,#A78BFA);border-color:transparent;color:var(--accent-ink);font-weight:700;padding:7px 14px}
+button.primary:hover{filter:brightness(1.08)}
+button:disabled{opacity:.4;cursor:not-allowed;filter:none}
+button[aria-pressed="true"]{background:var(--pill);border-color:rgba(167,139,250,.55)}
+.tag{font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 8px;min-height:24px;color:var(--muted);
+  background:rgba(255,255,255,.03)}
+.filebtn{position:relative;overflow:hidden;display:inline-block}
+.filebtn input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--line-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:8px}
+.chips span{width:12px;height:12px;border-radius:3px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+
+/* preview */
+.toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.toolbar .spacer{flex:1}
+.status{font-size:12.5px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.status b{color:var(--ink);font-weight:600}
+.view{position:relative;height:min(64vh,580px);min-height:280px;overflow:auto;display:flex;border-radius:9px;
+  border:1px solid var(--line-soft);background-color:var(--chk2);
+  background-image:linear-gradient(45deg,var(--chk1) 25%,transparent 25%,transparent 75%,var(--chk1) 75%),
+    linear-gradient(45deg,var(--chk1) 25%,transparent 25%,transparent 75%,var(--chk1) 75%);
+  background-size:20px 20px;background-position:0 0,10px 10px}
+.view.drag{outline:2px dashed var(--accent);outline-offset:-8px}
+.view canvas{margin:auto;display:block;flex:none;image-rendering:pixelated;image-rendering:crisp-edges}
+.caption{font-size:12.5px;color:var(--faint);margin-top:10px}
+.empty{margin:auto;text-align:center;padding:30px 20px;max-width:420px}
+.empty p{margin:0 0 14px}
+.empty .big{font-family:var(--display);font-weight:600;font-size:24px;color:var(--ink);margin-bottom:6px}
+.busy{position:absolute;top:10px;right:10px;background:rgba(12,10,30,.9);border:1px solid var(--line);border-radius:999px;
+  padding:2px 12px;font-size:12.5px;color:var(--ink)}
+
+.strip{display:flex;height:34px;border-radius:7px;overflow:hidden;border:1px solid var(--line)}
+.strip i{display:block;min-width:2px;height:100%}
+.swatches{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;max-height:160px;overflow-y:auto}
+.swatches button{display:flex;align-items:center;gap:7px;padding:3px 9px 3px 4px;min-height:28px;font-weight:500;
+  font-family:var(--mono);font-size:12px;color:var(--text)}
+.swatches button span{width:18px;height:18px;border-radius:4px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+details{margin-top:10px}
+summary{cursor:pointer;color:var(--accent);font-size:13.5px}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--line-soft)}
+footer .inner{max-width:1040px;margin:0 auto;padding:18px 20px;font-size:13px;color:var(--faint)}
+
+@media (min-width:901px){.settings{position:sticky;top:76px}}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .view{height:54vh}
+  .hero{padding-top:36px}
+}
+@media (max-width:560px){
+  .hero-row{gap:14px}
+  .hero-icon{width:64px;height:64px}.hero-icon svg{width:34px;height:34px}
+  .site-nav a.hide-sm{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<header class="site-header"><div class="inner">
+  <a class="brand" href="https://dekx.cc/index.html">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5 20.5 7.25v9.5L12 21.5 3.5 16.75v-9.5z"/><path d="M12 7.5 15.9 9.75v4.5L12 16.5 8.1 14.25v-4.5z" fill="currentColor" opacity=".35"/></svg>
+    Dekxtopia</a>
+  <nav class="site-nav" aria-label="Site">
+    <a href="https://dekx.cc/index.html">Home</a>
+    <a class="hide-sm" href="https://dekx.cc/MPWGL2.html">MIDI Player WebGL2</a>
+    <a href="#" aria-current="page">Color Reducer <span class="new">NEW</span></a>
+  </nav>
+</div></header>
+
+<main class="page">
+  <section class="hero">
+    <span class="badge">TOOL PAGE</span>
+    <div class="hero-row">
+      <div class="hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 46 46"><rect x="3" y="3" width="12" height="12" rx="2" fill="#8E7CF6"/><rect x="17" y="3" width="12" height="12" rx="2" fill="#C4B0FF"/><rect x="31" y="3" width="12" height="12" rx="2" fill="#FF7AA8"/><rect x="3" y="17" width="12" height="12" rx="2" fill="#5B4BC4"/><rect x="17" y="17" width="12" height="12" rx="2" fill="#A78BFA"/><rect x="31" y="17" width="12" height="12" rx="2" fill="#B5426E"/><rect x="3" y="31" width="12" height="12" rx="2" fill="#2E2466"/><rect x="17" y="31" width="12" height="12" rx="2" fill="#6A50C8"/><rect x="31" y="31" width="12" height="12" rx="2" fill="#5E1E44"/></svg>
+      </div>
+      <div>
+        <h1>Color Reducer</h1>
+        <div class="sub">Resolution · Colors · Palettes</div>
+      </div>
+    </div>
+    <p class="lead">Load a picture and shrink its <b>resolution</b> and <b>number of colors</b>, optionally locked to a <b>fixed palette</b> like the Windows 16-color set. Everything runs in your browser; nothing gets uploaded.</p>
+  </section>
+  <hr class="rule">
+
+  <div class="layout">
+    <div class="col">
+      <section class="card">
+        <p class="label">Preview</p>
+        <div class="toolbar">
+          <div id="zoomBtns" style="display:flex;gap:4px;flex-wrap:wrap">
+            <button type="button" data-z="fit" aria-pressed="true">Fit</button>
+            <button type="button" data-z="1" aria-pressed="false">1×</button>
+            <button type="button" data-z="2" aria-pressed="false">2×</button>
+            <button type="button" data-z="4" aria-pressed="false">4×</button>
+            <button type="button" data-z="8" aria-pressed="false">8×</button>
+          </div>
+          <button type="button" id="compare" disabled>Hold to see original</button>
+          <span class="spacer"></span>
+          <div class="status" id="status" aria-live="polite"></div>
+        </div>
+        <div class="view" id="view">
+          <div class="empty" id="empty">
+            <p class="big">Drop a picture here</p>
+            <p class="small">PNG, JPG, GIF, WebP or anything your browser can open. Pasting from the clipboard works too.</p>
+            <span class="filebtn"><button class="primary" type="button" tabindex="-1">Choose image</button><input id="file2" type="file" accept="image/*" aria-label="Choose image"></span>
+          </div>
+          <canvas id="out" hidden></canvas>
+          <canvas id="orig" hidden></canvas>
+          <div class="busy" id="busy" hidden>Working…</div>
+        </div>
+        <div class="caption">Drag and drop, paste, or use Choose image in Settings.</div>
+      </section>
+
+      <section class="card" id="band" hidden>
+        <p class="label">Palette used</p>
+        <div class="strip" id="strip"></div>
+        <p class="small" style="margin:8px 0 0">Bar widths show how much of the picture each color covers. Click a color to copy it.</p>
+        <div class="swatches" id="swatches"></div>
+        <details><summary>Hex list</summary><textarea id="hexOut" readonly></textarea></details>
+      </section>
+    </div>
+
+    <aside class="card settings" aria-label="Settings">
+      <p class="label">Settings</p>
+      <div class="sect">
+        <div class="row">
+          <span class="filebtn"><button type="button" tabindex="-1">Choose image</button><input id="file" type="file" accept="image/*" aria-label="Choose image"></span>
+        </div>
+        <div class="small" id="srcInfo" style="margin-top:6px">None loaded</div>
+      </div>
+
+      <div class="sect">
+        <p class="label">Resolution</p>
+        <div class="field"><label for="w">Width</label><div class="row"><input id="w" type="number" min="1" max="4096" value="256"><span class="small">px</span></div></div>
+        <div class="field"><label for="h">Height</label><div class="row"><input id="h" type="number" min="1" max="4096" value="256"><span class="small">px</span></div></div>
+        <div class="field"><span></span><label class="check"><input id="lock" type="checkbox" checked>Keep aspect ratio</label></div>
+        <div class="field"><span>Scale</span><div class="row" id="scaleBtns">
+          <button class="tag" type="button" data-s="1">100%</button><button class="tag" type="button" data-s="0.5">50%</button>
+          <button class="tag" type="button" data-s="0.25">25%</button><button class="tag" type="button" data-s="0.125">12.5%</button></div></div>
+        <div class="field"><label for="resize">Resize</label><select id="resize">
+          <option value="smooth">Smooth (photos)</option>
+          <option value="nearest">Nearest pixel (pixel art)</option></select></div>
+      </div>
+
+      <div class="sect">
+        <p class="label">Colors</p>
+        <div class="field"><label for="n">Count</label><div class="row">
+          <input id="nRange" type="range" min="2" max="256" value="16" aria-label="Number of colors">
+          <input id="n" type="number" min="2" max="256" value="16" style="width:62px"></div></div>
+        <div class="field"><label for="dither">Dithering</label><select id="dither">
+          <option value="none">None</option>
+          <option value="fs" selected>Floyd–Steinberg</option>
+          <option value="atkinson">Atkinson</option>
+          <option value="bayer4">Ordered 4×4</option>
+          <option value="bayer8">Ordered 8×8</option></select></div>
+        <div class="field" id="strengthRow"><label for="strength">Strength</label><div class="row">
+          <input id="strength" type="range" min="0" max="100" value="80">
+          <span class="small" id="strengthVal" style="width:34px;text-align:right">80%</span></div></div>
+      </div>
+
+      <div class="sect">
+        <p class="label">Palette</p>
+        <label class="check"><input id="usePal" type="checkbox">Use a fixed palette</label>
+        <div id="palBox" hidden style="margin-top:10px">
+          <select id="preset" aria-label="Palette"></select>
+          <textarea id="custom" hidden placeholder="Paste hex colors, e.g. #000000 #FF0000 #FFFFFF" aria-label="Custom palette hex colors"></textarea>
+          <div class="chips" id="presetChips"></div>
+          <div class="hint" id="palHint"></div>
+        </div>
+        <div style="margin-top:12px"><label class="check"><input id="keepAlpha" type="checkbox" checked>Keep transparency</label></div>
+        <div class="row" id="bgRow" hidden style="margin-top:8px"><label for="bg" class="small">Fill with</label><input id="bg" type="color" value="#ffffff"></div>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="save" type="button" disabled>Download PNG</button>
+        <button id="copyHex" type="button" disabled>Copy hex codes</button>
+      </div>
+      <div class="hint" id="saveHint" aria-live="polite"></div>
+    </aside>
+  </div>
+</main>
+
+<footer><div class="inner">© 2026 Dekxtopia — Kavya's corner of the internet.</div></footer>
+
+<script>
+(function(){
+  const c=document.getElementById("sky"),x=c.getContext("2d");
+  const still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W=0,H=0,dpr=1,pts=[];
+  function size(){
+    dpr=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;
+    c.width=W*dpr;c.height=H*dpr;x.setTransform(dpr,0,0,dpr,0,0);
+    const n=Math.round(Math.min(90,W*H/16000));
+    pts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:Math.random()*1.4+.5}));
+  }
+  function draw(){
+    x.clearRect(0,0,W,H);
+    const L=140;
+    for(let i=0;i<pts.length;i++){const a=pts[i];
+      for(let j=i+1;j<pts.length;j++){const b=pts[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+        if(d<L){x.strokeStyle=`rgba(150,125,255,${(1-d/L)*.28})`;x.lineWidth=.7;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}}
+    for(const p of pts){x.fillStyle="rgba(170,145,255,.85)";x.beginPath();x.arc(p.x,p.y,p.r,0,Math.PI*2);x.fill()}
+  }
+  let looping=false;
+  function start(){if(!looping){looping=true;requestAnimationFrame(tick)}}
+  function tick(){
+    if(document.hidden){looping=false;return}
+    for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<-10)p.x=W+10;if(p.x>W+10)p.x=-10;if(p.y<-10)p.y=H+10;if(p.y>H+10)p.y=-10}
+    draw();requestAnimationFrame(tick);
+  }
+  size();
+  addEventListener("resize",()=>{size();if(still)draw()});
+  if(still)draw();else{start();document.addEventListener("visibilitychange",()=>{if(!document.hidden)start()})}
+})();
+</script>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+
+/* ---------- Palettes ---------- */
+const hexList=s=>s.trim().split(/\s+/);
+const gen=f=>{const a=[];f(a);return a};
+const toHex=(r,g,b)=>"#"+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,"0")).join("").toUpperCase();
+const PRESETS=[
+ ["win16","Windows 16-color (VGA)",hexList("000000 800000 008000 808000 000080 800080 008080 C0C0C0 808080 FF0000 00FF00 FFFF00 0000FF FF00FF 00FFFF FFFFFF")],
+ ["win20","Windows 20 system colors",hexList("000000 800000 008000 808000 000080 800080 008080 C0C0C0 C0DCC0 A6CAF0 FFFBF0 A0A0A4 808080 FF0000 00FF00 FFFF00 0000FF FF00FF 00FFFF FFFFFF")],
+ ["web","Web-safe 216",gen(a=>{for(let r=0;r<6;r++)for(let g=0;g<6;g++)for(let b=0;b<6;b++)a.push(toHex(r*51,g*51,b*51))})],
+ ["rgb332","8-bit RGB 3-3-2 (256)",gen(a=>{for(let r=0;r<8;r++)for(let g=0;g<8;g++)for(let b=0;b<4;b++)a.push(toHex(r*255/7,g*255/7,b*85))})],
+ ["cga","CGA / EGA 16",hexList("000000 0000AA 00AA00 00AAAA AA0000 AA00AA AA5500 AAAAAA 555555 5555FF 55FF55 55FFFF FF5555 FF55FF FFFF55 FFFFFF")],
+ ["c64","Commodore 64",hexList("000000 FFFFFF 68372B 70A4B2 6F3D86 588D43 352879 B8C76F 6F4F25 433900 9A6759 444444 6C6C6C 9AD284 6C5EB5 959595")],
+ ["pico8","PICO-8",hexList("000000 1D2B53 7E2553 008751 AB5236 5F574F C2C3C7 FFF1E8 FF004D FFA300 FFEC27 00E436 29ADFF 83769C FF77A8 FFCCAA")],
+ ["gb","Game Boy green",hexList("0F380F 306230 8BAC0F 9BBC0F")],
+ ["gray","Grayscale (256 levels)",gen(a=>{for(let i=0;i<256;i++)a.push(toHex(i,i,i))})],
+ ["bw","Black and white",hexList("000000 FFFFFF")],
+ ["custom","Custom…",null]
+];
+const presetSel=$("preset");
+PRESETS.forEach(([id,name])=>{const o=document.createElement("option");o.value=id;o.textContent=name;presetSel.appendChild(o)});
+
+function parseHexes(text){
+  const out=[],seen=new Set();
+  const re=/#?\b([0-9a-f]{6}|[0-9a-f]{3})\b/gi;let m;
+  while((m=re.exec(text))){
+    let h=m[1];if(h.length===3)h=h.split("").map(c=>c+c).join("");
+    h=h.toUpperCase();if(!seen.has(h)){seen.add(h);out.push(h)}
+  }
+  return out;
+}
+function currentFixed(){
+  const id=presetSel.value;
+  if(id==="custom")return parseHexes($("custom").value);
+  const p=PRESETS.find(x=>x[0]===id);return p[2].map(h=>h.replace("#","").toUpperCase());
+}
+
+/* ---------- State ---------- */
+let src=null;            // {bmp, w, h, name}
+let result=null;         // {canvas, pal:[{hex,count}], name}
+let zoom="fit";
+let timer=0, running=false, pending=false;
+
+/* ---------- Image loading ---------- */
+async function loadFile(file){
+  if(!file)return;
+  if(file.type && !file.type.startsWith("image/")){setStatusText("That file isn't an image. Choose a PNG, JPG, GIF or WebP.");return}
+  let bmp=null;
+  try{bmp=await createImageBitmap(file)}catch(e){
+    try{bmp=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+    catch(e2){setStatusText("This image couldn't be opened. Try saving it as PNG or JPG first.");return}
+  }
+  const w=bmp.width||bmp.naturalWidth,h=bmp.height||bmp.naturalHeight;
+  src={bmp,w,h,name:(file.name||"image").replace(/\.[^.]+$/,"")};
+  $("srcInfo").textContent=`${file.name||"Pasted image"} (${w}×${h})`;
+  // default size: original, capped
+  let s=Math.min(1,4096/Math.max(w,h),Math.sqrt(16e6/(w*h)));
+  $("w").value=Math.max(1,Math.round(w*s));$("h").value=Math.max(1,Math.round(h*s));
+  $("empty").hidden=true;
+  schedule(0);
+}
+$("file").addEventListener("change",e=>loadFile(e.target.files[0]));
+$("file2").addEventListener("change",e=>loadFile(e.target.files[0]));
+const view=$("view");
+["dragenter","dragover"].forEach(t=>view.addEventListener(t,e=>{e.preventDefault();view.classList.add("drag")}));
+["dragleave","drop"].forEach(t=>view.addEventListener(t,e=>{e.preventDefault();view.classList.remove("drag")}));
+view.addEventListener("drop",e=>{const f=e.dataTransfer&&e.dataTransfer.files[0];if(f)loadFile(f)});
+window.addEventListener("paste",e=>{
+  const items=e.clipboardData?e.clipboardData.items:[];
+  for(const it of items){if(it.type.startsWith("image/")){loadFile(it.getAsFile());e.preventDefault();return}}
+});
+
+/* ---------- Controls ---------- */
+const W=$("w"),H=$("h"),lock=$("lock");
+const clampDim=v=>Math.max(1,Math.min(4096,Math.round(+v||1)));
+W.addEventListener("input",()=>{if(lock.checked&&src)H.value=clampDim(+W.value*src.h/src.w);schedule()});
+H.addEventListener("input",()=>{if(lock.checked&&src)W.value=clampDim(+H.value*src.w/src.h);schedule()});
+$("scaleBtns").addEventListener("click",e=>{
+  const s=e.target.dataset&&e.target.dataset.s;if(!s||!src)return;
+  W.value=clampDim(src.w*s);H.value=clampDim(src.h*s);schedule(0);
+});
+$("nRange").addEventListener("input",()=>{$("n").value=$("nRange").value;schedule()});
+$("n").addEventListener("input",()=>{$("nRange").value=$("n").value;schedule()});
+$("strength").addEventListener("input",()=>{$("strengthVal").textContent=$("strength").value+"%";schedule()});
+$("dither").addEventListener("change",()=>{$("strengthRow").hidden=$("dither").value==="none";schedule(0)});
+$("usePal").addEventListener("change",()=>{$("palBox").hidden=!$("usePal").checked;updatePalUI();schedule(0)});
+presetSel.addEventListener("change",()=>{updatePalUI();schedule(0)});
+$("custom").addEventListener("input",()=>{updatePalUI();schedule()});
+$("keepAlpha").addEventListener("change",()=>{$("bgRow").hidden=$("keepAlpha").checked;schedule(0)});
+$("bg").addEventListener("input",()=>schedule());
+["resize","lock"].forEach(id=>$(id).addEventListener("change",()=>schedule(0)));
+
+function updatePalUI(){
+  $("custom").hidden=presetSel.value!=="custom";
+  const fx=currentFixed();
+  const chips=$("presetChips");chips.innerHTML="";
+  fx.slice(0,256).forEach(h=>{const s=document.createElement("span");s.style.background="#"+h;s.title="#"+h;chips.appendChild(s)});
+  const n=+$("n").value,hint=$("palHint");
+  hint.classList.toggle("err",fx.length<2);
+  if(fx.length<2)hint.textContent="Add at least 2 hex colors.";
+  else if(n>=fx.length)hint.textContent=`${fx.length} colors. Raise or lower the color count to use only the best-fitting ones.`;
+  else hint.textContent=`${fx.length} colors; the ${n} that fit your picture best are used.`;
+}
+$("n").addEventListener("input",()=>{if($("usePal").checked)updatePalUI()});
+$("nRange").addEventListener("input",()=>{if($("usePal").checked)updatePalUI()});
+
+$("zoomBtns").addEventListener("click",e=>{
+  const z=e.target.dataset&&e.target.dataset.z;if(!z)return;zoom=z;
+  [...$("zoomBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.z===z)));
+  applyZoom();
+});
+window.addEventListener("resize",()=>{if(zoom==="fit")applyZoom()});
+
+const cmp=$("compare");
+const showOrig=on=>{if(!result)return;$("orig").hidden=!on;$("out").hidden=on;cmp.setAttribute("aria-pressed",String(on))};
+cmp.addEventListener("pointerdown",e=>{e.preventDefault();cmp.setPointerCapture&&cmp.setPointerCapture(e.pointerId);showOrig(true)});
+["pointerup","pointercancel","lostpointercapture"].forEach(t=>cmp.addEventListener(t,()=>showOrig(false)));
+cmp.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();showOrig(true)}});
+cmp.addEventListener("keyup",()=>showOrig(false));
+cmp.addEventListener("blur",()=>showOrig(false));
+
+function schedule(delay=180){
+  if(!src)return;
+  clearTimeout(timer);timer=setTimeout(run,delay);
+}
+async function run(){
+  if(running){pending=true;return}
+  running=true;$("busy").hidden=false;
+  await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+  try{processImage()}catch(err){console.error(err);setStatusText("Something went wrong processing this image: "+err.message)}
+  $("busy").hidden=true;running=false;
+  if(pending){pending=false;run()}
+}
+
+/* ---------- Color math ---------- */
+function nearest(P,K,r,g,b){
+  let best=0,bd=Infinity;
+  for(let j=0,o=0;j<K;j++,o+=3){
+    const pr=P[o],pg=P[o+1],pb=P[o+2];
+    const rm=(r+pr)*0.5,dr=r-pr,dg=g-pg,db=b-pb;
+    const d=(2+rm/256)*dr*dr+4*dg*dg+(2+(255-rm)/256)*db*db;
+    if(d<bd){bd=d;best=j}
+  }
+  return best;
+}
+
+function buildHist(d,N){
+  const BINS=262144;
+  const cnt=new Uint32Array(BINS),sr=new Float64Array(BINS),sg=new Float64Array(BINS),sb=new Float64Array(BINS);
+  let exact=new Map(),total=0;
+  for(let i=0;i<d.length;i+=4){
+    if(d[i+3]<128)continue;
+    const r=d[i],g=d[i+1],b=d[i+2];
+    const k=((r>>2)<<12)|((g>>2)<<6)|(b>>2);
+    cnt[k]++;sr[k]+=r;sg[k]+=g;sb[k]+=b;total++;
+    if(exact){const ek=(r<<16)|(g<<8)|b;exact.set(ek,(exact.get(ek)||0)+1);if(exact.size>N)exact=null}
+  }
+  let nb=0;for(let k=0;k<BINS;k++)if(cnt[k])nb++;
+  const R=new Float32Array(nb),G=new Float32Array(nb),B=new Float32Array(nb),Wt=new Float32Array(nb);
+  for(let k=0,i=0;k<BINS;k++){const c=cnt[k];if(c){R[i]=sr[k]/c;G[i]=sg[k]/c;B[i]=sb[k]/c;Wt[i]=c;i++}}
+  return {nb,R,G,B,Wt,total,exact:exact?[...exact.keys()].map(k=>[k>>16,(k>>8)&255,k&255]):null};
+}
+
+function makeBox(idx,h){
+  let mn=[255,255,255],mx=[0,0,0],w=0;
+  for(const i of idx){
+    const v=[h.R[i],h.G[i],h.B[i]];
+    for(let c=0;c<3;c++){if(v[c]<mn[c])mn[c]=v[c];if(v[c]>mx[c])mx[c]=v[c]}
+    w+=h.Wt[i];
+  }
+  const rng=[(mx[0]-mn[0])*1.0,(mx[1]-mn[1])*1.2,(mx[2]-mn[2])*0.9];
+  let ch=0;if(rng[1]>rng[ch])ch=1;if(rng[2]>rng[ch])ch=2;
+  return {idx,w,ch,range:rng[ch]};
+}
+function medianCut(h,N){
+  const all=new Array(h.nb);for(let i=0;i<h.nb;i++)all[i]=i;
+  const boxes=[makeBox(all,h)];
+  const chan=[h.R,h.G,h.B];
+  while(boxes.length<N){
+    let bi=-1,bs=0;
+    for(let i=0;i<boxes.length;i++){const b=boxes[i];if(b.idx.length<2)continue;const s=b.range*Math.sqrt(b.w);if(s>bs){bs=s;bi=i}}
+    if(bi<0)break;
+    const b=boxes[bi],A=chan[b.ch];
+    b.idx.sort((x,y)=>A[x]-A[y]);
+    let acc=0,half=b.w/2,s=1;
+    for(let i=0;i<b.idx.length;i++){acc+=h.Wt[b.idx[i]];if(acc>=half){s=i+1;break}}
+    s=Math.max(1,Math.min(b.idx.length-1,s));
+    boxes.splice(bi,1,makeBox(b.idx.slice(0,s),h),makeBox(b.idx.slice(s),h));
+  }
+  const P=new Float32Array(boxes.length*3);
+  boxes.forEach((b,j)=>{let r=0,g=0,bl=0;for(const i of b.idx){const w=h.Wt[i];r+=h.R[i]*w;g+=h.G[i]*w;bl+=h.B[i]*w}P[j*3]=r/b.w;P[j*3+1]=g/b.w;P[j*3+2]=bl/b.w});
+  return P;
+}
+function kmeans(h,P,iters){
+  const K=P.length/3;
+  for(let it=0;it<iters;it++){
+    const s=new Float64Array(K*4);
+    for(let i=0;i<h.nb;i++){const j=nearest(P,K,h.R[i],h.G[i],h.B[i]),w=h.Wt[i];s[j*4]+=h.R[i]*w;s[j*4+1]+=h.G[i]*w;s[j*4+2]+=h.B[i]*w;s[j*4+3]+=w}
+    for(let j=0;j<K;j++){const w=s[j*4+3];if(w>0){P[j*3]=s[j*4]/w;P[j*3+1]=s[j*4+1]/w;P[j*3+2]=s[j*4+2]/w}}
+  }
+  return P;
+}
+function autoPalette(h,N){
+  if(h.exact){const P=new Float32Array(h.exact.length*3);h.exact.forEach((c,j)=>{P[j*3]=c[0];P[j*3+1]=c[1];P[j*3+2]=c[2]});return P}
+  const P=kmeans(h,medianCut(h,N),h.nb>60000?3:5);
+  for(let i=0;i<P.length;i++)P[i]=Math.round(P[i]);
+  return P;
+}
+function fixedPalette(h,hexes,N){
+  const F=new Float32Array(hexes.length*3);
+  hexes.forEach((x,j)=>{const v=parseInt(x,16);F[j*3]=v>>16;F[j*3+1]=(v>>8)&255;F[j*3+2]=v&255});
+  const FK=hexes.length;
+  if(N>=FK||h.nb===0)return F;
+  // weight each palette entry by how much of the picture lands on it,
+  // then cluster those entries and keep one representative per cluster
+  const use=new Float64Array(FK);
+  for(let i=0;i<h.nb;i++)use[nearest(F,FK,h.R[i],h.G[i],h.B[i])]+=h.Wt[i];
+  const live=[];for(let j=0;j<FK;j++)if(use[j]>0)live.push(j);
+  const chosen=new Set();
+  if(live.length<=N)live.forEach(j=>chosen.add(j));
+  else{
+    const L=live.length,LP=new Float32Array(L*3);
+    const hp={nb:L,R:new Float32Array(L),G:new Float32Array(L),B:new Float32Array(L),Wt:new Float32Array(L),exact:null};
+    live.forEach((j,k)=>{hp.R[k]=LP[k*3]=F[j*3];hp.G[k]=LP[k*3+1]=F[j*3+1];hp.B[k]=LP[k*3+2]=F[j*3+2];hp.Wt[k]=use[j]});
+    const C=kmeans(hp,medianCut(hp,N),6);
+    for(let c=0;c<C.length/3;c++)chosen.add(live[nearest(LP,L,C[c*3],C[c*3+1],C[c*3+2])]);
+  }
+  if(chosen.size<N){
+    const order=[...use.keys()].sort((a,b)=>use[b]-use[a]);
+    for(const j of order){if(chosen.size>=N)break;chosen.add(j)}
+  }
+  const ids=[...chosen],P=new Float32Array(ids.length*3);
+  ids.forEach((j,k)=>{P[k*3]=F[j*3];P[k*3+1]=F[j*3+1];P[k*3+2]=F[j*3+2]});
+  return P;
+}
+
+function bayer(n){
+  let m=[[0]];
+  while(m.length<n){const s=m.length,M=[];for(let y=0;y<s*2;y++){const row=[];for(let x=0;x<s*2;x++){const q=[0,2,3,1][(y>=s?2:0)+(x>=s?1:0)];row.push(m[y%s][x%s]*4+q)}M.push(row)}m=M}
+  return m;
+}
+const KERNELS={
+  fs:[[1,0,7/16],[-1,1,3/16],[0,1,5/16],[1,1,1/16]],
+  atkinson:[[1,0,1/8],[2,0,1/8],[-1,1,1/8],[0,1,1/8],[1,1,1/8],[0,2,1/8]]
+};
+
+function mapPixels(d,w,h,P,mode,strength){
+  const K=P.length/3,out=new Uint8ClampedArray(d.length),used=new Uint32Array(K);
+  let lookup;
+  if(mode==="none"){
+    const cache=new Map();
+    lookup=(r,g,b)=>{const k=(r<<16)|(g<<8)|b;let j=cache.get(k);if(j===undefined){j=nearest(P,K,r,g,b);cache.set(k,j)}return j};
+  }else{
+    const t=new Int16Array(262144).fill(-1);
+    lookup=(r,g,b)=>{const k=((r>>2)<<12)|((g>>2)<<6)|(b>>2);let j=t[k];if(j<0){j=nearest(P,K,(r&252)|2,(g&252)|2,(b&252)|2);t[k]=j}return j};
+  }
+  const put=(i,j)=>{out[i]=P[j*3];out[i+1]=P[j*3+1];out[i+2]=P[j*3+2];out[i+3]=255;used[j]++};
+
+  if(mode==="none"){
+    for(let i=0;i<d.length;i+=4){if(d[i+3]<128)continue;put(i,lookup(d[i],d[i+1],d[i+2]))}
+  }else if(mode==="bayer4"||mode==="bayer8"){
+    const n=mode==="bayer4"?4:8,M=bayer(n),nn=n*n;
+    const spread=(255/Math.max(1,Math.cbrt(K)-0.5))*strength;
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;if(d[i+3]<128)continue;
+      const o=((M[y%n][x%n]+0.5)/nn-0.5)*spread;
+      const r=Math.max(0,Math.min(255,d[i]+o|0)),g=Math.max(0,Math.min(255,d[i+1]+o|0)),b=Math.max(0,Math.min(255,d[i+2]+o|0));
+      put(i,lookup(r,g,b));
+    }
+  }else{
+    const ker=KERNELS[mode],RW=(w+4)*3;
+    let rows=[new Float32Array(RW),new Float32Array(RW),new Float32Array(RW)];
+    for(let y=0;y<h;y++){
+      const ltr=(y&1)===0,cur=rows[0];
+      for(let s=0;s<w;s++){
+        const x=ltr?s:w-1-s,i=(y*w+x)*4,e=(x+2)*3;
+        if(d[i+3]<128)continue;
+        const r=Math.max(0,Math.min(255,d[i]+cur[e])),g=Math.max(0,Math.min(255,d[i+1]+cur[e+1])),b=Math.max(0,Math.min(255,d[i+2]+cur[e+2]));
+        const j=lookup(r|0,g|0,b|0);put(i,j);
+        const er=(r-P[j*3])*strength,eg=(g-P[j*3+1])*strength,eb=(b-P[j*3+2])*strength;
+        for(const [dx,dy,f] of ker){
+          const xx=x+(ltr?dx:-dx);if(xx<0||xx>=w)continue;
+          const row=rows[dy],o=(xx+2)*3;row[o]+=er*f;row[o+1]+=eg*f;row[o+2]+=eb*f;
+        }
+      }
+      const r0=rows[0];r0.fill(0);rows=[rows[1],rows[2],r0];
+    }
+  }
+  return {out,used};
+}
+
+/* ---------- Pipeline ---------- */
+function drawResized(bmp,sw,sh,tw,th,smooth,keepAlpha,bg){
+  let cur=bmp,cw=sw,ch=sh;
+  if(smooth){ // step down by halves for clean large reductions
+    while(cw/2>=tw&&ch/2>=th){
+      const nw=Math.max(tw,Math.round(cw/2)),nh=Math.max(th,Math.round(ch/2));
+      const c=document.createElement("canvas");c.width=nw;c.height=nh;
+      const x=c.getContext("2d");x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";x.drawImage(cur,0,0,nw,nh);
+      cur=c;cw=nw;ch=nh;
+    }
+  }
+  const c=document.createElement("canvas");c.width=tw;c.height=th;
+  const x=c.getContext("2d",{willReadFrequently:true});
+  if(!keepAlpha){x.fillStyle=bg;x.fillRect(0,0,tw,th)}
+  x.imageSmoothingEnabled=smooth;x.imageSmoothingQuality="high";
+  x.drawImage(cur,0,0,tw,th);
+  return c;
+}
+
+function processImage(){
+  const t0=performance.now();
+  const tw=clampDim(W.value),th=clampDim(H.value);
+  if(tw*th>16e6){setStatusText("That's over 16 megapixels. Pick a smaller size.");return}
+  let N=Math.max(2,Math.min(256,Math.round(+$("n").value||16)));
+  const keepAlpha=$("keepAlpha").checked;
+  const smooth=$("resize").value==="smooth";
+  const base=drawResized(src.bmp,src.w,src.h,tw,th,smooth,keepAlpha,$("bg").value);
+  const id=base.getContext("2d").getImageData(0,0,tw,th),d=id.data;
+
+  // pixels that end up partly transparent become fully clear or fully solid
+  const hist=buildHist(d,N);
+  let P;
+  if($("usePal").checked){
+    const fx=currentFixed();
+    if(fx.length<2){setStatusText("Add at least 2 hex colors to the custom palette.");return}
+    P=fixedPalette(hist,fx,N);
+  }else P=autoPalette(hist,N);
+
+  const mode=$("dither").value,strength=+$("strength").value/100;
+  const {out,used}=hist.total?mapPixels(d,tw,th,P,mode,strength):{out:new Uint8ClampedArray(d.length),used:new Uint32Array(0)};
+
+  const oc=$("out");oc.width=tw;oc.height=th;
+  oc.getContext("2d").putImageData(new ImageData(out,tw,th),0,0);
+  const og=$("orig");og.width=tw;og.height=th;
+  const ogx=og.getContext("2d");ogx.clearRect(0,0,tw,th);ogx.drawImage(base,0,0);
+
+  const pal=[];for(let j=0;j<used.length;j++)if(used[j])pal.push({hex:toHex(P[j*3],P[j*3+1],P[j*3+2]),count:used[j]});
+  pal.sort((a,b)=>b.count-a.count);
+  result={canvas:oc,pal,name:src.name};
+  oc.hidden=false;$("orig").hidden=true;$("band").hidden=false;
+  $("save").disabled=false;$("copyHex").disabled=pal.length===0;cmp.disabled=false;
+  renderPalette(pal,hist.total);applyZoom();
+  const ms=Math.round(performance.now()-t0);
+  setStatus([["Size",`${tw}×${th}`],["Colors used",pal.length],["Time",ms+" ms"]]);
+}
+
+function renderPalette(pal,total){
+  const strip=$("strip"),sw=$("swatches");strip.innerHTML="";sw.innerHTML="";
+  pal.forEach(p=>{
+    const i=document.createElement("i");i.style.background=p.hex;i.style.flex=String(p.count);i.title=`${p.hex}  ${(p.count/total*100).toFixed(1)}%`;strip.appendChild(i);
+    const b=document.createElement("button");b.type="button";b.title="Copy "+p.hex;
+    const s=document.createElement("span");s.style.background=p.hex;b.appendChild(s);b.appendChild(document.createTextNode(p.hex));
+    b.addEventListener("click",()=>copyText(p.hex,`Copied ${p.hex}`));
+    sw.appendChild(b);
+  });
+  $("hexOut").value=pal.map(p=>p.hex).join("\n");
+}
+
+function applyZoom(){
+  if(!result)return;
+  const tw=result.canvas.width,th=result.canvas.height;let s;
+  if(zoom==="fit"){const r=view.getBoundingClientRect();s=Math.min((r.width-32)/tw,(r.height-32)/th);if(!(s>0))s=1;if(s>1)s=Math.max(1,Math.floor(s))}
+  else s=+zoom;
+  for(const c of [$("out"),$("orig")]){c.style.width=tw*s+"px";c.style.height=th*s+"px"}
+}
+
+function setStatus(pairs){
+  const el=$("status");el.innerHTML="";
+  pairs.forEach(([k,v])=>{const s=document.createElement("span");s.append(k+" ");const b=document.createElement("b");b.textContent=v;s.appendChild(b);el.appendChild(s)});
+}
+function setStatusText(t){$("status").textContent=t}
+
+/* ---------- Saving ---------- */
+let downloads=null;
+(async()=>{try{if(window.claude&&window.claude.use)downloads=await window.claude.use("downloads")}catch(e){}})();
+
+$("save").addEventListener("click",()=>{
+  if(!result)return;
+  const hint=$("saveHint");hint.classList.remove("err");
+  result.canvas.toBlob(async blob=>{
+    const n=result.pal.length;
+    const filename=`${result.name}-${result.canvas.width}x${result.canvas.height}-${n}c.png`;
+    if(downloads){
+      try{await downloads.save({filename,data:blob});hint.textContent="Saved "+filename}
+      catch(e){hint.textContent=e&&e.code==="declined"?"Download cancelled.":"Download isn't available here. Right-click or long-press the picture to save it.";}
+      return;
+    }
+    try{
+      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+      hint.textContent="If nothing downloaded, right-click or long-press the picture and save it.";
+    }catch(e){hint.textContent="Right-click or long-press the picture to save it."}
+  },"image/png");
+});
+
+async function copyText(t,msg){
+  const hint=$("saveHint");
+  try{await navigator.clipboard.writeText(t);hint.textContent=msg}
+  catch(e){const ta=$("hexOut");ta.closest("details").open=true;ta.focus();ta.select();hint.textContent="Copy from the hex list below the picture."}
+}
+$("copyHex").addEventListener("click",()=>{if(result)copyText(result.pal.map(p=>p.hex).join("\n"),`Copied ${result.pal.length} hex codes`)});
+
+updatePalUI();
+})();
+</script>
+</body>
+</html>
