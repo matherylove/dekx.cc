@@ -365,6 +365,111 @@ details.more > summary { cursor: pointer; color: var(--lav); }
 }
 @media (prefers-reduced-motion: reduce) { .soon .cursor { animation: none; } }
 
+/* ==========================================================================
+   Maximized program window (Pyx)
+   ========================================================================== */
+body.app { height: 100dvh; overflow: hidden; padding: 0; }
+.win-main.wide {
+  position: fixed; margin: 0; max-width: none;
+  top: 24px; bottom: 24px; left: max(24px, calc((100vw - 1480px) / 2)); right: max(24px, calc((100vw - 1480px) / 2));
+}
+.win-main.wide.maximized { inset: 0; padding: 0 0 2px; box-shadow: none; }
+.win-menu .menu-btn {
+  font: inherit; color: var(--text); background: none; box-shadow: none;
+  min-height: 0; padding: 2px 7px; cursor: pointer;
+}
+.win-menu .menu-btn:hover { box-shadow: var(--thin-up); color: var(--white); }
+.win-menu .menu-btn:active { box-shadow: var(--thin-in); padding: 2px 7px; }
+.win-menu .grow { flex: 1; }
+
+.app-body { flex: 1; min-height: 0; overflow: auto; padding: 0 2px; }
+.app-grid {
+  height: 100%; min-height: 0;
+  display: grid; grid-template-columns: 272px minmax(0, 1fr) 312px; gap: 4px;
+}
+.pane { min-height: 0; min-width: 0; overflow: auto; }
+.pane.left { padding: 12px 6px 6px 4px; }
+.pane.left .group + .group { margin-top: 14px; }
+.pane.center { display: flex; flex-direction: column; gap: 4px; padding-top: 2px; }
+.pane.center > .toolbar { padding: 2px 0; }
+.pane.center .view { flex: 1; height: auto; min-height: 160px; }
+.pane.right { display: flex; flex-direction: column; padding: 4px 4px 4px 2px; }
+.app .seg { flex-wrap: nowrap; }
+.app .seg button { flex: 1; min-width: 0; padding-left: 0; padding-right: 0; }
+.app .seg button:active { padding: 4px 0 2px 1px; }
+
+#band .strip { height: 20px; }
+#band .swatches { max-height: 52px; margin-top: 4px; }
+#band .win-body { padding: 4px 4px 2px; }
+#band details.more { margin-top: 4px; }
+#band textarea { min-height: 48px; }
+
+/* Tab control */
+.tabs { display: flex; align-items: flex-end; padding-left: 2px; position: relative; z-index: 1; }
+.tab {
+  margin-top: 2px; padding: 3px 10px 2px; min-height: 0;
+  background: var(--face); color: var(--text);
+  box-shadow: inset 1px 1px var(--light), inset -1px 0 var(--dark), inset 2px 2px var(--light-2), inset -2px 0 var(--dark-2);
+}
+.tab:active { box-shadow: inset 1px 1px var(--light), inset -1px 0 var(--dark), inset 2px 2px var(--light-2), inset -2px 0 var(--dark-2); padding: 3px 10px 2px; }
+.tab[aria-selected="true"] {
+  margin: 0 -2px -2px; padding: 3px 12px 5px; z-index: 2; color: var(--white);
+  background: var(--face);
+}
+.tabpanel {
+  flex: 1; min-height: 0; overflow: auto;
+  box-shadow: var(--raised); padding: 12px 9px 9px;
+}
+.tabpanel .tiles { max-height: none; }
+.tabpanel.pal { display: flex; flex-direction: column; }
+.tabpanel.pal .tiles { flex: 1; min-height: 120px; grid-auto-rows: min-content; }
+.tabpanel .group { margin-top: 6px; }
+
+/* Zoom animation ghost (maximize / restore) */
+.zoom-ghost {
+  position: fixed; z-index: 100000; pointer-events: none;
+  overflow: hidden; padding: 3px;
+}
+.zoom-ghost .win-title { flex-shrink: 0; }
+
+/* Modal dialog */
+.modal { position: fixed; inset: 0; z-index: 5000; display: grid; place-items: center; background: rgba(2, 1, 10, 0.35); padding: 16px; }
+.dialog { width: min(300px, 100%); box-shadow: var(--raised), 0 14px 40px rgba(0, 0, 0, 0.6); }
+.dialog .win-body { padding: 14px 12px 10px; }
+.dialog .about { display: flex; gap: 14px; }
+.dialog .about svg { width: 40px; height: 40px; flex-shrink: 0; }
+.dialog p + p { margin-top: 8px; }
+.dialog .buttons { display: flex; justify-content: flex-end; margin-top: 14px; }
+.dialog .buttons button { min-width: 75px; }
+
+@media (max-width: 1180px) {
+  .app-grid { grid-template-columns: 256px minmax(0, 1fr); grid-template-rows: minmax(420px, 1fr) auto; height: auto; min-height: 100%; }
+  .pane.right { grid-column: 1 / -1; }
+  .pane.right .tabpanel { max-height: none; }
+  .pane { overflow: visible; }
+}
+@media (max-width: 1180px), (max-height: 560px) {
+  body.app { overflow: auto; height: auto; }
+  .win-main.wide, .win-main.wide.maximized { position: relative; inset: auto; margin: 16px; min-height: calc(100dvh - 32px); }
+}
+@media (max-width: 760px) {
+  .win-main.wide, .win-main.wide.maximized { margin: 0; min-height: 100dvh; }
+  .app-body { overflow: visible; }
+  .app-grid { grid-template-columns: 1fr; grid-template-rows: none; }
+  .pane.center { order: -1; }
+  .pane.center .view { min-height: 46vh; }
+}
+@media (prefers-reduced-motion: reduce) { .zoom-ghost { display: none; } }
+
+a.cap-btn { text-decoration: none; }
+a.cap-btn:active { box-shadow: var(--sunken); }
+a.cap-btn:active svg { transform: translate(1px, 1px); }
+
+.dialog .about p + p { margin-top: 2px; }
+button.default:disabled { color: var(--faint); font-weight: normal; }
+.fxrow { grid-template-columns: 70px minmax(0, 1fr) 46px; }
+.fxrow .val { white-space: nowrap; }
+
 .toolbar button svg { display: inline-block; vertical-align: -1px; }
 .win-child > .win-body { padding: 3px 0 0; }
 .win-child > .win-body.win-pad { padding: 8px 6px 6px; }
