@@ -7,7 +7,7 @@
 <meta name="description" content="Reduce a picture's resolution and number of colors, optionally locked to a fixed palette.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg-0:#0C0A1E; --bg-1:#170D2B; --bg-2:#2A0F26;
@@ -98,7 +98,7 @@ button:hover{border-color:rgba(167,139,250,.5);background:rgba(124,106,242,.12)}
 button.primary{background:linear-gradient(90deg,#8E7CF6,#A78BFA);border-color:transparent;color:var(--accent-ink);font-weight:700;padding:7px 14px}
 button.primary:hover{filter:brightness(1.08)}
 button:disabled{opacity:.4;cursor:not-allowed;filter:none}
-button[aria-pressed="true"]{background:var(--pill);border-color:rgba(167,139,250,.55)}
+button[aria-pressed="true"]{background:rgba(124,106,242,.38);border-color:var(--accent);color:#fff;box-shadow:0 0 0 1px rgba(167,139,250,.35),0 0 14px rgba(124,106,242,.25)}
 .tag{font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 8px;min-height:24px;color:var(--muted);
   background:rgba(255,255,255,.03)}
 .filebtn{position:relative;overflow:hidden;display:inline-block}
@@ -149,6 +149,35 @@ footer .inner{max-width:1040px;margin:0 auto;padding:18px 20px;font-size:13px;co
   .hero-icon{width:64px;height:64px}.hero-icon svg{width:34px;height:34px}
   .site-nav a.hide-sm{display:none}
 }
+
+.layout{grid-template-columns:minmax(0,1fr) 340px}
+input[type=text]{font:inherit;font-size:14px;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:7px;padding:5px 8px;width:100%}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{min-width:44px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:360px;overflow-y:auto;padding:2px}
+.pal-tile{display:flex;flex-direction:column;align-items:center;gap:5px;padding:7px 6px 6px;min-height:0;font-weight:500;font-size:12.5px;color:var(--text)}
+.pal-tile .mini{display:flex;flex-wrap:wrap;justify-content:center;gap:1px;max-width:100%}
+.pal-tile .mini i{width:8px;height:8px;display:block;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.pal-tile .mini.auto{height:8px;width:96px;border-radius:2px;background:linear-gradient(90deg,#ff5f6d,#ffc371,#7cf29a,#4cc9f0,#a78bfa,#f72585)}
+.pal-tile[aria-pressed="true"]{color:var(--ink)}
+.fxgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.fxgrid button{font-size:12.5px;letter-spacing:.03em}
+.fxrow{display:grid;grid-template-columns:78px minmax(0,1fr) 38px;gap:8px;align-items:center;font-size:13.5px;margin-top:9px}
+.fxrow > span:first-child{color:var(--muted)}
+.fxrow .val{font-size:12.5px;color:var(--muted);text-align:right}
+.dlg-styles{display:flex;gap:6px;flex-wrap:wrap}
+.dlg-styles button{width:52px;height:40px;padding:4px;display:grid;place-items:center}
+.dlg-styles button span{display:block;width:100%;height:100%;border-radius:2px;position:relative}
+.dlg-styles button span::after{content:"";position:absolute;left:6px;right:10px;top:9px;height:2px;box-shadow:0 5px 0 currentColor,0 10px 0 currentColor;background:currentColor;opacity:.9}
+.dlg-styles [data-style="classic"] span{background:#000;outline:1px solid #fff;outline-offset:-3px;color:#fff}
+.dlg-styles [data-style="blue"] span{background:linear-gradient(#2B3FB8,#0B1450);outline:1px solid #fff;outline-offset:-3px;color:#fff}
+.dlg-styles [data-style="terminal"] span{background:#000;outline:1px solid #33FF66;outline-offset:-2px;color:#33FF66}
+.dlg-styles [data-style="parchment"] span{background:#E9D7AC;outline:2px solid #5A3A1E;outline-offset:-3px;color:#3A2412}
+.dlg-styles [data-style="dekx"] span{background:linear-gradient(#2A1F55,#140F2C);outline:1px solid #A78BFA;outline-offset:-3px;color:#ECE8F7}
+.dlg-body textarea{min-height:58px;font-family:"DotGothic16",var(--mono);font-size:14px}
+.progress{font-size:12.5px;color:var(--accent-2);margin-top:8px}
+
+@media (max-width:900px){.layout{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -174,10 +203,10 @@ footer .inner{max-width:1040px;margin:0 auto;padding:18px 20px;font-size:13px;co
       </div>
       <div>
         <h1>Color Reducer</h1>
-        <div class="sub">Resolution · Colors · Palettes</div>
+        <div class="sub">Pixel size · Palettes · Retro FX</div>
       </div>
     </div>
-    <p class="lead">Load a picture and shrink its <b>resolution</b> and <b>number of colors</b>, optionally locked to a <b>fixed palette</b> like the Windows 16-color set. Everything runs in your browser; nothing gets uploaded.</p>
+    <p class="lead">Turn any picture into <b>pixel art</b>: pick a pixel size, squeeze it into a <b>retro palette</b>, add <b>CRT, glitch and color-cycling</b> effects, and drop an RPG-style <b>dialog box</b> on top. Everything runs in your browser; nothing gets uploaded.</p>
   </section>
   <hr class="rule">
 
@@ -191,7 +220,6 @@ footer .inner{max-width:1040px;margin:0 auto;padding:18px 20px;font-size:13px;co
             <button type="button" data-z="1" aria-pressed="false">1×</button>
             <button type="button" data-z="2" aria-pressed="false">2×</button>
             <button type="button" data-z="4" aria-pressed="false">4×</button>
-            <button type="button" data-z="8" aria-pressed="false">8×</button>
           </div>
           <button type="button" id="compare" disabled>Hold to see original</button>
           <span class="spacer"></span>
@@ -207,7 +235,12 @@ footer .inner{max-width:1040px;margin:0 auto;padding:18px 20px;font-size:13px;co
           <canvas id="orig" hidden></canvas>
           <div class="busy" id="busy" hidden>Working…</div>
         </div>
-        <div class="caption">Drag and drop, paste, or use Choose image in Settings.</div>
+        <div class="actions" style="border-top:0;padding-top:0;margin-top:14px">
+          <button class="primary" id="save" type="button" disabled>Download PNG</button>
+          <button class="primary" id="saveGif" type="button" disabled hidden>Download GIF</button>
+          <button id="copyHex" type="button" disabled>Copy hex codes</button>
+        </div>
+        <div class="hint" id="saveHint" aria-live="polite"></div>
       </section>
 
       <section class="card" id="band" hidden>
@@ -222,23 +255,37 @@ footer .inner{max-width:1040px;margin:0 auto;padding:18px 20px;font-size:13px;co
     <aside class="card settings" aria-label="Settings">
       <p class="label">Settings</p>
       <div class="sect">
-        <div class="row">
-          <span class="filebtn"><button type="button" tabindex="-1">Choose image</button><input id="file" type="file" accept="image/*" aria-label="Choose image"></span>
-        </div>
+        <span class="filebtn"><button type="button" tabindex="-1">Choose image</button><input id="file" type="file" accept="image/*" aria-label="Choose image"></span>
         <div class="small" id="srcInfo" style="margin-top:6px">None loaded</div>
       </div>
 
       <div class="sect">
-        <p class="label">Resolution</p>
-        <div class="field"><label for="w">Width</label><div class="row"><input id="w" type="number" min="1" max="4096" value="256"><span class="small">px</span></div></div>
-        <div class="field"><label for="h">Height</label><div class="row"><input id="h" type="number" min="1" max="4096" value="256"><span class="small">px</span></div></div>
-        <div class="field"><span></span><label class="check"><input id="lock" type="checkbox" checked>Keep aspect ratio</label></div>
-        <div class="field"><span>Scale</span><div class="row" id="scaleBtns">
-          <button class="tag" type="button" data-s="1">100%</button><button class="tag" type="button" data-s="0.5">50%</button>
-          <button class="tag" type="button" data-s="0.25">25%</button><button class="tag" type="button" data-s="0.125">12.5%</button></div></div>
-        <div class="field"><label for="resize">Resize</label><select id="resize">
-          <option value="smooth">Smooth (photos)</option>
-          <option value="nearest">Nearest pixel (pixel art)</option></select></div>
+        <p class="label">Pixel size</p>
+        <div class="seg" id="pxBtns">
+          <button type="button" data-k="1">1px</button><button type="button" data-k="2">2px</button><button type="button" data-k="3">3px</button>
+          <button type="button" data-k="4">4px</button><button type="button" data-k="5">5px</button><button type="button" data-k="6">6px</button><button type="button" data-k="8">8px</button>
+        </div>
+        <details style="margin-top:10px"><summary>Grid size and resizing</summary>
+          <div style="margin-top:10px">
+            <div class="field"><label for="w">Width</label><div class="row"><input id="w" type="number" min="1" max="4096" value="256"><span class="small">pixels</span></div></div>
+            <div class="field"><label for="h">Height</label><div class="row"><input id="h" type="number" min="1" max="4096" value="256"><span class="small">pixels</span></div></div>
+            <div class="field"><span></span><label class="check"><input id="lock" type="checkbox" checked>Keep aspect ratio</label></div>
+            <div class="field"><label for="resize">Resize</label><select id="resize">
+              <option value="smooth">Smooth (photos)</option>
+              <option value="nearest">Nearest pixel (pixel art)</option></select></div>
+            <p class="small" style="margin:8px 0 0">Each grid pixel is drawn as a block of the chosen pixel size in the output.</p>
+          </div>
+        </details>
+      </div>
+
+      <div class="sect">
+        <p class="label">Adjust</p>
+        <div class="fxrow"><label for="bri">Brightness</label><input id="bri" type="range" min="-100" max="100" value="0"><span class="val" id="briV">0</span></div>
+        <div class="fxrow"><label for="con">Contrast</label><input id="con" type="range" min="-100" max="100" value="0"><span class="val" id="conV">0</span></div>
+        <div class="fxrow"><label for="sat">Saturation</label><input id="sat" type="range" min="0" max="200" value="100"><span class="val" id="satV">100%</span></div>
+        <div class="fxrow"><label for="hue">Hue</label><input id="hue" type="range" min="-180" max="180" value="0"><span class="val" id="hueV">0°</span></div>
+        <div class="fxrow"><label for="ero">Erosion</label><input id="ero" type="range" min="0" max="3" value="0"><span class="val" id="eroV">0</span></div>
+        <button type="button" id="resetAdj" style="margin-top:10px">Reset adjustments</button>
       </div>
 
       <div class="sect">
@@ -259,22 +306,60 @@ footer .inner{max-width:1040px;margin:0 auto;padding:18px 20px;font-size:13px;co
 
       <div class="sect">
         <p class="label">Palette</p>
-        <label class="check"><input id="usePal" type="checkbox">Use a fixed palette</label>
-        <div id="palBox" hidden style="margin-top:10px">
-          <select id="preset" aria-label="Palette"></select>
-          <textarea id="custom" hidden placeholder="Paste hex colors, e.g. #000000 #FF0000 #FFFFFF" aria-label="Custom palette hex colors"></textarea>
-          <div class="chips" id="presetChips"></div>
-          <div class="hint" id="palHint"></div>
-        </div>
-        <div style="margin-top:12px"><label class="check"><input id="keepAlpha" type="checkbox" checked>Keep transparency</label></div>
-        <div class="row" id="bgRow" hidden style="margin-top:8px"><label for="bg" class="small">Fill with</label><input id="bg" type="color" value="#ffffff"></div>
+        <div class="tiles" id="palTiles"></div>
+        <textarea id="custom" hidden placeholder="Paste hex colors, e.g. #000000 #FF0000 #FFFFFF" aria-label="Custom palette hex colors"></textarea>
+        <div class="hint" id="palHint"></div>
       </div>
 
-      <div class="actions">
-        <button class="primary" id="save" type="button" disabled>Download PNG</button>
-        <button id="copyHex" type="button" disabled>Copy hex codes</button>
+      <div class="sect">
+        <p class="label">FX</p>
+        <div class="fxgrid" id="fxBtns">
+          <button type="button" data-fx="crt" aria-pressed="false">CRT</button>
+          <button type="button" data-fx="glitch" aria-pressed="false">Glitch</button>
+          <button type="button" data-fx="cycle" aria-pressed="false">Cycle</button>
+          <button type="button" data-fx="ghost" aria-pressed="false">Ghost</button>
+          <button type="button" data-fx="rgb" aria-pressed="false">RGB split</button>
+          <button type="button" data-fx="grain" aria-pressed="false">Grain</button>
+        </div>
+        <div class="fxrow" data-for="crt" hidden><label for="fx-crt">CRT</label><input id="fx-crt" type="range" min="5" max="100" value="60"><span class="val">60</span></div>
+        <div class="fxrow" data-for="glitch" hidden><label for="fx-glitch">Glitch</label><input id="fx-glitch" type="range" min="5" max="100" value="40"><span class="val">40</span></div>
+        <div data-for="glitch" hidden style="margin-top:6px;text-align:right"><button type="button" id="reseed">Shuffle glitch</button></div>
+        <div class="fxrow" data-for="cycle" hidden><label for="fx-cycle">Speed</label><input id="fx-cycle" type="range" min="2" max="24" value="8"><span class="val">8 fps</span></div>
+        <div class="fxrow" data-for="ghost" hidden><label for="fx-ghost">Ghost</label><input id="fx-ghost" type="range" min="5" max="100" value="40"><span class="val">40</span></div>
+        <div class="fxrow" data-for="rgb" hidden><label for="fx-rgb">RGB split</label><input id="fx-rgb" type="range" min="5" max="100" value="40"><span class="val">40</span></div>
+        <div class="fxrow" data-for="grain" hidden><label for="fx-grain">Grain</label><input id="fx-grain" type="range" min="5" max="100" value="30"><span class="val">30</span></div>
+        <p class="small" id="cycleNote" hidden style="margin:8px 0 0">Cycle rotates the palette to animate the picture. Save it with Download GIF.</p>
       </div>
-      <div class="hint" id="saveHint" aria-live="polite"></div>
+
+      <div class="sect">
+        <p class="label">Dialog box</p>
+        <label class="check"><input id="dlgOn" type="checkbox">Show a dialog box</label>
+        <div class="dlg-body" id="dlgBox" hidden style="margin-top:12px">
+          <div class="dlg-styles" id="dlgStyles">
+            <button type="button" data-style="classic" aria-pressed="true" aria-label="Classic"><span></span></button>
+            <button type="button" data-style="blue" aria-pressed="false" aria-label="Blue"><span></span></button>
+            <button type="button" data-style="terminal" aria-pressed="false" aria-label="Terminal"><span></span></button>
+            <button type="button" data-style="parchment" aria-pressed="false" aria-label="Parchment"><span></span></button>
+            <button type="button" data-style="dekx" aria-pressed="false" aria-label="Dekxtopia"><span></span></button>
+          </div>
+          <div class="field" style="margin-top:12px"><label for="dlgName">Name</label><input id="dlgName" type="text" maxlength="24" placeholder="Optional"></div>
+          <div style="margin-top:9px"><label for="dlgText" class="small">Text</label>
+            <textarea id="dlgText" maxlength="200">...Where am I?</textarea></div>
+          <div class="field" style="margin-top:9px"><label for="dlgPos">Position</label><select id="dlgPos">
+            <option value="bottom">Bottom</option><option value="middle">Middle</option><option value="top">Top</option></select></div>
+          <div class="field"><label for="dlgSize">Text size</label><select id="dlgSize">
+            <option value="s">Small</option><option value="m" selected>Medium</option><option value="l">Large</option></select></div>
+          <div style="margin-top:10px;display:grid;gap:8px">
+            <label class="check"><input id="dlgArrow" type="checkbox" checked>Show the ▼ prompt</label>
+            <label class="check"><input id="dlgMatch" type="checkbox" checked>Use the picture's palette</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <label class="check"><input id="keepAlpha" type="checkbox" checked>Keep transparency</label>
+        <div class="row" id="bgRow" hidden style="margin-top:8px"><label for="bg" class="small">Fill with</label><input id="bg" type="color" value="#ffffff"></div>
+      </div>
     </aside>
   </div>
 </main>
@@ -316,140 +401,6 @@ footer .inner{max-width:1040px;margin:0 auto;padding:18px 20px;font-size:13px;co
 (function(){
 "use strict";
 const $=id=>document.getElementById(id);
-
-/* ---------- Palettes ---------- */
-const hexList=s=>s.trim().split(/\s+/);
-const gen=f=>{const a=[];f(a);return a};
-const toHex=(r,g,b)=>"#"+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,"0")).join("").toUpperCase();
-const PRESETS=[
- ["win16","Windows 16-color (VGA)",hexList("000000 800000 008000 808000 000080 800080 008080 C0C0C0 808080 FF0000 00FF00 FFFF00 0000FF FF00FF 00FFFF FFFFFF")],
- ["win20","Windows 20 system colors",hexList("000000 800000 008000 808000 000080 800080 008080 C0C0C0 C0DCC0 A6CAF0 FFFBF0 A0A0A4 808080 FF0000 00FF00 FFFF00 0000FF FF00FF 00FFFF FFFFFF")],
- ["web","Web-safe 216",gen(a=>{for(let r=0;r<6;r++)for(let g=0;g<6;g++)for(let b=0;b<6;b++)a.push(toHex(r*51,g*51,b*51))})],
- ["rgb332","8-bit RGB 3-3-2 (256)",gen(a=>{for(let r=0;r<8;r++)for(let g=0;g<8;g++)for(let b=0;b<4;b++)a.push(toHex(r*255/7,g*255/7,b*85))})],
- ["cga","CGA / EGA 16",hexList("000000 0000AA 00AA00 00AAAA AA0000 AA00AA AA5500 AAAAAA 555555 5555FF 55FF55 55FFFF FF5555 FF55FF FFFF55 FFFFFF")],
- ["c64","Commodore 64",hexList("000000 FFFFFF 68372B 70A4B2 6F3D86 588D43 352879 B8C76F 6F4F25 433900 9A6759 444444 6C6C6C 9AD284 6C5EB5 959595")],
- ["pico8","PICO-8",hexList("000000 1D2B53 7E2553 008751 AB5236 5F574F C2C3C7 FFF1E8 FF004D FFA300 FFEC27 00E436 29ADFF 83769C FF77A8 FFCCAA")],
- ["gb","Game Boy green",hexList("0F380F 306230 8BAC0F 9BBC0F")],
- ["gray","Grayscale (256 levels)",gen(a=>{for(let i=0;i<256;i++)a.push(toHex(i,i,i))})],
- ["bw","Black and white",hexList("000000 FFFFFF")],
- ["custom","Custom…",null]
-];
-const presetSel=$("preset");
-PRESETS.forEach(([id,name])=>{const o=document.createElement("option");o.value=id;o.textContent=name;presetSel.appendChild(o)});
-
-function parseHexes(text){
-  const out=[],seen=new Set();
-  const re=/#?\b([0-9a-f]{6}|[0-9a-f]{3})\b/gi;let m;
-  while((m=re.exec(text))){
-    let h=m[1];if(h.length===3)h=h.split("").map(c=>c+c).join("");
-    h=h.toUpperCase();if(!seen.has(h)){seen.add(h);out.push(h)}
-  }
-  return out;
-}
-function currentFixed(){
-  const id=presetSel.value;
-  if(id==="custom")return parseHexes($("custom").value);
-  const p=PRESETS.find(x=>x[0]===id);return p[2].map(h=>h.replace("#","").toUpperCase());
-}
-
-/* ---------- State ---------- */
-let src=null;            // {bmp, w, h, name}
-let result=null;         // {canvas, pal:[{hex,count}], name}
-let zoom="fit";
-let timer=0, running=false, pending=false;
-
-/* ---------- Image loading ---------- */
-async function loadFile(file){
-  if(!file)return;
-  if(file.type && !file.type.startsWith("image/")){setStatusText("That file isn't an image. Choose a PNG, JPG, GIF or WebP.");return}
-  let bmp=null;
-  try{bmp=await createImageBitmap(file)}catch(e){
-    try{bmp=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
-    catch(e2){setStatusText("This image couldn't be opened. Try saving it as PNG or JPG first.");return}
-  }
-  const w=bmp.width||bmp.naturalWidth,h=bmp.height||bmp.naturalHeight;
-  src={bmp,w,h,name:(file.name||"image").replace(/\.[^.]+$/,"")};
-  $("srcInfo").textContent=`${file.name||"Pasted image"} (${w}×${h})`;
-  // default size: original, capped
-  let s=Math.min(1,4096/Math.max(w,h),Math.sqrt(16e6/(w*h)));
-  $("w").value=Math.max(1,Math.round(w*s));$("h").value=Math.max(1,Math.round(h*s));
-  $("empty").hidden=true;
-  schedule(0);
-}
-$("file").addEventListener("change",e=>loadFile(e.target.files[0]));
-$("file2").addEventListener("change",e=>loadFile(e.target.files[0]));
-const view=$("view");
-["dragenter","dragover"].forEach(t=>view.addEventListener(t,e=>{e.preventDefault();view.classList.add("drag")}));
-["dragleave","drop"].forEach(t=>view.addEventListener(t,e=>{e.preventDefault();view.classList.remove("drag")}));
-view.addEventListener("drop",e=>{const f=e.dataTransfer&&e.dataTransfer.files[0];if(f)loadFile(f)});
-window.addEventListener("paste",e=>{
-  const items=e.clipboardData?e.clipboardData.items:[];
-  for(const it of items){if(it.type.startsWith("image/")){loadFile(it.getAsFile());e.preventDefault();return}}
-});
-
-/* ---------- Controls ---------- */
-const W=$("w"),H=$("h"),lock=$("lock");
-const clampDim=v=>Math.max(1,Math.min(4096,Math.round(+v||1)));
-W.addEventListener("input",()=>{if(lock.checked&&src)H.value=clampDim(+W.value*src.h/src.w);schedule()});
-H.addEventListener("input",()=>{if(lock.checked&&src)W.value=clampDim(+H.value*src.w/src.h);schedule()});
-$("scaleBtns").addEventListener("click",e=>{
-  const s=e.target.dataset&&e.target.dataset.s;if(!s||!src)return;
-  W.value=clampDim(src.w*s);H.value=clampDim(src.h*s);schedule(0);
-});
-$("nRange").addEventListener("input",()=>{$("n").value=$("nRange").value;schedule()});
-$("n").addEventListener("input",()=>{$("nRange").value=$("n").value;schedule()});
-$("strength").addEventListener("input",()=>{$("strengthVal").textContent=$("strength").value+"%";schedule()});
-$("dither").addEventListener("change",()=>{$("strengthRow").hidden=$("dither").value==="none";schedule(0)});
-$("usePal").addEventListener("change",()=>{$("palBox").hidden=!$("usePal").checked;updatePalUI();schedule(0)});
-presetSel.addEventListener("change",()=>{updatePalUI();schedule(0)});
-$("custom").addEventListener("input",()=>{updatePalUI();schedule()});
-$("keepAlpha").addEventListener("change",()=>{$("bgRow").hidden=$("keepAlpha").checked;schedule(0)});
-$("bg").addEventListener("input",()=>schedule());
-["resize","lock"].forEach(id=>$(id).addEventListener("change",()=>schedule(0)));
-
-function updatePalUI(){
-  $("custom").hidden=presetSel.value!=="custom";
-  const fx=currentFixed();
-  const chips=$("presetChips");chips.innerHTML="";
-  fx.slice(0,256).forEach(h=>{const s=document.createElement("span");s.style.background="#"+h;s.title="#"+h;chips.appendChild(s)});
-  const n=+$("n").value,hint=$("palHint");
-  hint.classList.toggle("err",fx.length<2);
-  if(fx.length<2)hint.textContent="Add at least 2 hex colors.";
-  else if(n>=fx.length)hint.textContent=`${fx.length} colors. Raise or lower the color count to use only the best-fitting ones.`;
-  else hint.textContent=`${fx.length} colors; the ${n} that fit your picture best are used.`;
-}
-$("n").addEventListener("input",()=>{if($("usePal").checked)updatePalUI()});
-$("nRange").addEventListener("input",()=>{if($("usePal").checked)updatePalUI()});
-
-$("zoomBtns").addEventListener("click",e=>{
-  const z=e.target.dataset&&e.target.dataset.z;if(!z)return;zoom=z;
-  [...$("zoomBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.z===z)));
-  applyZoom();
-});
-window.addEventListener("resize",()=>{if(zoom==="fit")applyZoom()});
-
-const cmp=$("compare");
-const showOrig=on=>{if(!result)return;$("orig").hidden=!on;$("out").hidden=on;cmp.setAttribute("aria-pressed",String(on))};
-cmp.addEventListener("pointerdown",e=>{e.preventDefault();cmp.setPointerCapture&&cmp.setPointerCapture(e.pointerId);showOrig(true)});
-["pointerup","pointercancel","lostpointercapture"].forEach(t=>cmp.addEventListener(t,()=>showOrig(false)));
-cmp.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();showOrig(true)}});
-cmp.addEventListener("keyup",()=>showOrig(false));
-cmp.addEventListener("blur",()=>showOrig(false));
-
-function schedule(delay=180){
-  if(!src)return;
-  clearTimeout(timer);timer=setTimeout(run,delay);
-}
-async function run(){
-  if(running){pending=true;return}
-  running=true;$("busy").hidden=false;
-  await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
-  try{processImage()}catch(err){console.error(err);setStatusText("Something went wrong processing this image: "+err.message)}
-  $("busy").hidden=true;running=false;
-  if(pending){pending=false;run()}
-}
-
-/* ---------- Color math ---------- */
 function nearest(P,K,r,g,b){
   let best=0,bd=Infinity;
   for(let j=0,o=0;j<K;j++,o+=3){
@@ -562,7 +513,7 @@ const KERNELS={
 };
 
 function mapPixels(d,w,h,P,mode,strength){
-  const K=P.length/3,out=new Uint8ClampedArray(d.length),used=new Uint32Array(K);
+  const K=P.length/3,out=new Uint8ClampedArray(d.length),used=new Uint32Array(K),idx=new Int16Array(w*h).fill(-1);
   let lookup;
   if(mode==="none"){
     const cache=new Map();
@@ -571,7 +522,7 @@ function mapPixels(d,w,h,P,mode,strength){
     const t=new Int16Array(262144).fill(-1);
     lookup=(r,g,b)=>{const k=((r>>2)<<12)|((g>>2)<<6)|(b>>2);let j=t[k];if(j<0){j=nearest(P,K,(r&252)|2,(g&252)|2,(b&252)|2);t[k]=j}return j};
   }
-  const put=(i,j)=>{out[i]=P[j*3];out[i+1]=P[j*3+1];out[i+2]=P[j*3+2];out[i+3]=255;used[j]++};
+  const put=(i,j)=>{out[i]=P[j*3];out[i+1]=P[j*3+1];out[i+2]=P[j*3+2];out[i+3]=255;used[j]++;idx[i>>2]=j};
 
   if(mode==="none"){
     for(let i=0;i<d.length;i+=4){if(d[i+3]<128)continue;put(i,lookup(d[i],d[i+1],d[i+2]))}
@@ -603,10 +554,10 @@ function mapPixels(d,w,h,P,mode,strength){
       const r0=rows[0];r0.fill(0);rows=[rows[1],rows[2],r0];
     }
   }
-  return {out,used};
+  return {out,used,idx};
 }
 
-/* ---------- Pipeline ---------- */
+
 function drawResized(bmp,sw,sh,tw,th,smooth,keepAlpha,bg){
   let cur=bmp,cw=sw,ch=sh;
   if(smooth){ // step down by halves for clean large reductions
@@ -625,41 +576,480 @@ function drawResized(bmp,sw,sh,tw,th,smooth,keepAlpha,bg){
   return c;
 }
 
-function processImage(){
+
+
+/* ---------- Palettes ---------- */
+const hexList=s=>s.trim().split(/\s+/);
+const gen=f=>{const a=[];f(a);return a};
+const toHex=(r,g,b)=>"#"+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,"0")).join("").toUpperCase();
+const PRESETS=[
+ ["auto","Auto",null],
+ ["dekx","Dekxtopia",hexList("0C0A1E 1E1638 3A2A6E 6A50C8 A78BFA E3D9FF FFFFFF FF7AA8 B5426E 5E1E44 2A0F26 7FD3FF")],
+ ["gb","Game Boy",hexList("0F380F 306230 8BAC0F 9BBC0F")],
+ ["nes","NES",hexList("7C7C7C 0000FC 0000BC 4428BC 940084 A80020 A81000 881400 503000 007800 006800 005800 004058 000000 BCBCBC 0078F8 0058F8 6844FC D800CC E40058 F83800 E45C10 AC7C00 00B800 00A800 00A844 008888 F8F8F8 3CBCFC 6888FC 9878F8 F878F8 F85898 F87858 FCA044 F8B800 B8F818 58D854 58F898 00E8D8 787878 FCFCFC A4E4FC B8B8F8 D8B8F8 F8B8F8 F8A4C0 F0D0B0 FCE0A8 F8D878 D8F878 B8F8B8 B8F8D8 00FCFC F8D8F8")],
+ ["cga4","CGA",hexList("000000 55FFFF FF55FF FFFFFF")],
+ ["ega","CGA / EGA 16",hexList("000000 0000AA 00AA00 00AAAA AA0000 AA00AA AA5500 AAAAAA 555555 5555FF 55FF55 55FFFF FF5555 FF55FF FFFF55 FFFFFF")],
+ ["c64","C64",hexList("000000 FFFFFF 68372B 70A4B2 6F3D86 588D43 352879 B8C76F 6F4F25 433900 9A6759 444444 6C6C6C 9AD284 6C5EB5 959595")],
+ ["pico8","PICO-8",hexList("000000 1D2B53 7E2553 008751 AB5236 5F574F C2C3C7 FFF1E8 FF004D FFA300 FFEC27 00E436 29ADFF 83769C FF77A8 FFCCAA")],
+ ["sweetie","Sweetie 16",hexList("1A1C2C 5D275D B13E53 EF7D57 FFCD75 A7F070 38B764 257179 29366F 3B5DC9 41A6F6 73EFF7 F4F4F4 94B0C2 566C86 333C57")],
+ ["win16","Windows 16",hexList("000000 800000 008000 808000 000080 800080 008080 C0C0C0 808080 FF0000 00FF00 FFFF00 0000FF FF00FF 00FFFF FFFFFF")],
+ ["win20","Windows 20",hexList("000000 800000 008000 808000 000080 800080 008080 C0C0C0 C0DCC0 A6CAF0 FFFBF0 A0A0A4 808080 FF0000 00FF00 FFFF00 0000FF FF00FF 00FFFF FFFFFF")],
+ ["pastel","Pastel",hexList("FFFFFF FFD6E0 FFB5C2 FFC8A2 FFEDB3 D4F0C0 B8E6D8 B5D8F5 C9C1F0 E6C6F0 8A86A8 4A4560")],
+ ["mono","Mono",hexList("1A1A1A 5C5C5C A8A8A8 F2F2F2")],
+ ["sepia","Sepia",hexList("2B1D0E 4A3420 6E5033 937048 B8946A D6B88E EFDDB7 FFF5E1")],
+ ["sunset","Sunset",hexList("1B0F2E 3D1A4F 6B2367 A2306E D64C5E F27A4E FBAB5A FFD97A FFF3C4")],
+ ["ocean","Ocean",hexList("06131F 0B2A3F 0F4566 14628A 1C82A8 2EA6C4 5CC8D8 9BE3E3 D7F7F3")],
+ ["earth","Earth",hexList("1E1A14 3B2E21 5C4630 7D6142 6B7A3A 8E9E4E B5A36A D8C9A0 F2EAD3")],
+ ["sakura","Sakura",hexList("2E1A2A 5A2C4A 8C3F66 C2577F E77F9E F4A7BB FAD0DA FFF0F3 7C9A5C B8D18A")],
+ ["cyber","Cyber",hexList("0A0614 1A0B33 3A0CA3 7209B7 F72585 FF5DA2 4CC9F0 00F5D4 FEE440 FFFFFF")],
+ ["horror","Horror",hexList("000000 120A0A 2B0F0F 4F0D0D 7A0F0F A61B1B 3A3A2E 5E5E4A 8C8C6E C9C2A3")],
+ ["riso","RISO",hexList("FFFFFF FF48B0 0078BF FFE800 00A95C 000000")],
+ ["cmyk","CMYK",hexList("FFFFFF 00FFFF FF00FF FFFF00 FF0000 00FF00 0000FF 000000")],
+ ["bw","1-bit",hexList("000000 FFFFFF")],
+ ["gray","Grayscale",gen(a=>{for(let i=0;i<256;i++)a.push(toHex(i,i,i))})],
+ ["web","Web-safe 216",gen(a=>{for(let r=0;r<6;r++)for(let g=0;g<6;g++)for(let b=0;b<6;b++)a.push(toHex(r*51,g*51,b*51))})],
+ ["rgb332","8-bit 3-3-2",gen(a=>{for(let r=0;r<8;r++)for(let g=0;g<8;g++)for(let b=0;b<4;b++)a.push(toHex(r*255/7,g*255/7,b*85))})],
+ ["custom","Custom",null]
+];
+let palId="auto";
+
+function parseHexes(text){
+  const out=[],seen=new Set();
+  const re=/#?\b([0-9a-f]{6}|[0-9a-f]{3})\b/gi;let m;
+  while((m=re.exec(text))){
+    let h=m[1];if(h.length===3)h=h.split("").map(c=>c+c).join("");
+    h=h.toUpperCase();if(!seen.has(h)){seen.add(h);out.push(h)}
+  }
+  return out;
+}
+function currentFixed(){
+  if(palId==="custom")return parseHexes($("custom").value);
+  const p=PRESETS.find(x=>x[0]===palId);return p&&p[2]?p[2].map(h=>h.replace("#","").toUpperCase()):null;
+}
+
+function buildPalTiles(){
+  const box=$("palTiles");
+  PRESETS.forEach(([id,name,cols])=>{
+    const b=document.createElement("button");b.type="button";b.className="pal-tile";b.dataset.pal=id;
+    b.setAttribute("aria-pressed",String(id===palId));
+    const mini=document.createElement("span");mini.className="mini";
+    if(id==="auto")mini.classList.add("auto");
+    else if(id==="custom"){mini.id="customMini";}
+    else{
+      const show=cols.length>12?cols.filter((_,i)=>i%Math.ceil(cols.length/12)===0).slice(0,12):cols;
+      show.forEach(h=>{const i=document.createElement("i");i.style.background=h.startsWith("#")?h:"#"+h;mini.appendChild(i)});
+    }
+    b.appendChild(mini);b.appendChild(document.createTextNode(id==="auto"?"Auto (best fit)":name));
+    b.addEventListener("click",()=>selectPalette(id));
+    box.appendChild(b);
+  });
+}
+function selectPalette(id){
+  palId=id;
+  [...$("palTiles").children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.pal===id)));
+  const fx=currentFixed();
+  if(fx&&fx.length>=2)setCount(Math.min(256,fx.length));
+  updatePalUI();schedule(0);
+}
+function setCount(n){$("n").value=n;$("nRange").value=n}
+function updatePalUI(){
+  $("custom").hidden=palId!=="custom";
+  const hint=$("palHint");hint.classList.remove("err");
+  const cm=$("customMini");
+  if(cm){cm.innerHTML="";parseHexes($("custom").value).slice(0,12).forEach(h=>{const i=document.createElement("i");i.style.background="#"+h;cm.appendChild(i)})}
+  if(palId==="auto"){hint.textContent="Picks the best colors for this picture.";return}
+  const fx=currentFixed(),n=+$("n").value;
+  if(!fx||fx.length<2){hint.classList.add("err");hint.textContent="Add at least 2 hex colors.";return}
+  hint.textContent=n>=fx.length?`${fx.length} colors. Lower the count to keep only the best-fitting ones.`:`${fx.length} colors; the ${n} that fit your picture best are used.`;
+}
+
+/* ---------- State ---------- */
+let src=null,base=null,result=null,zoom="fit",timer=0,running=false,pending=false,seed=1337;
+let k=2;
+const FX={crt:false,glitch:false,cycle:false,ghost:false,rgb:false,grain:false};
+let dlgStyle="classic",dlgLayer=null;
+let anim={raf:0,frame:0,last:0,frames:1};
+
+/* ---------- Image loading ---------- */
+async function loadFile(file){
+  if(!file)return;
+  if(file.type && !file.type.startsWith("image/")){setStatusText("That file isn't an image. Choose a PNG, JPG, GIF or WebP.");return}
+  let bmp=null;
+  try{bmp=await createImageBitmap(file)}catch(e){
+    try{bmp=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+    catch(e2){setStatusText("This image couldn't be opened. Try saving it as PNG or JPG first.");return}
+  }
+  const w=bmp.width||bmp.naturalWidth,h=bmp.height||bmp.naturalHeight;
+  src={bmp,w,h,name:(file.name||"image").replace(/\.[^.]+$/,"")};
+  $("srcInfo").textContent=`${file.name||"Pasted image"} (${w}×${h})`;
+  $("empty").hidden=true;
+  setPixelSize(k);
+}
+$("file").addEventListener("change",e=>loadFile(e.target.files[0]));
+$("file2").addEventListener("change",e=>loadFile(e.target.files[0]));
+const view=$("view");
+["dragenter","dragover"].forEach(t=>view.addEventListener(t,e=>{e.preventDefault();view.classList.add("drag")}));
+["dragleave","drop"].forEach(t=>view.addEventListener(t,e=>{e.preventDefault();view.classList.remove("drag")}));
+view.addEventListener("drop",e=>{const f=e.dataTransfer&&e.dataTransfer.files[0];if(f)loadFile(f)});
+window.addEventListener("paste",e=>{
+  const items=e.clipboardData?e.clipboardData.items:[];
+  for(const it of items){if(it.type.startsWith("image/")){loadFile(it.getAsFile());e.preventDefault();return}}
+});
+
+/* ---------- Controls ---------- */
+const W=$("w"),H=$("h"),lock=$("lock");
+const clampDim=v=>Math.max(1,Math.min(4096,Math.round(+v||1)));
+const MAX_OUT=16e6;
+function setPixelSize(nk){
+  k=nk;
+  [...$("pxBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.k===k)));
+  if(src){
+    const s=Math.min(1,Math.sqrt(MAX_OUT/(src.w*src.h)),8192/Math.max(src.w,src.h));
+    W.value=clampDim(src.w*s/k);H.value=clampDim(src.h*s/k);
+  }
+  schedule(0);
+}
+$("pxBtns").addEventListener("click",e=>{const b=e.target.closest("button");if(b)setPixelSize(+b.dataset.k)});
+W.addEventListener("input",()=>{if(lock.checked&&src)H.value=clampDim(+W.value*src.h/src.w);schedule()});
+H.addEventListener("input",()=>{if(lock.checked&&src)W.value=clampDim(+H.value*src.w/src.h);schedule()});
+$("nRange").addEventListener("input",()=>{$("n").value=$("nRange").value;updatePalUI();schedule()});
+$("n").addEventListener("input",()=>{$("nRange").value=$("n").value;updatePalUI();schedule()});
+$("strength").addEventListener("input",()=>{$("strengthVal").textContent=$("strength").value+"%";schedule()});
+$("dither").addEventListener("change",()=>{$("strengthRow").hidden=$("dither").value==="none";schedule(0)});
+$("custom").addEventListener("input",()=>{const n=parseHexes($("custom").value).length;if(n>=2)setCount(Math.min(256,n));updatePalUI();schedule()});
+$("keepAlpha").addEventListener("change",()=>{$("bgRow").hidden=$("keepAlpha").checked;schedule(0)});
+$("bg").addEventListener("input",()=>schedule());
+["resize","lock"].forEach(id=>$(id).addEventListener("change",()=>schedule(0)));
+
+const ADJ=[["bri",v=>v],["con",v=>v],["sat",v=>v+"%"],["hue",v=>v+"°"],["ero",v=>v]];
+ADJ.forEach(([id,f])=>$(id).addEventListener("input",()=>{$(id+"V").textContent=f($(id).value);schedule()}));
+$("resetAdj").addEventListener("click",()=>{[["bri",0],["con",0],["sat",100],["hue",0],["ero",0]].forEach(([id,v])=>{$(id).value=v});ADJ.forEach(([id,f])=>$(id+"V").textContent=f($(id).value));schedule(0)});
+
+$("fxBtns").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;const f=b.dataset.fx;FX[f]=!FX[f];
+  b.setAttribute("aria-pressed",String(FX[f]));
+  document.querySelectorAll(`[data-for="${f}"]`).forEach(r=>r.hidden=!FX[f]);
+  $("cycleNote").hidden=!FX.cycle;
+  if(f==="cycle")refreshOutput();else refreshFrame();
+});
+document.querySelectorAll(".fxrow[data-for] input").forEach(inp=>{
+  inp.addEventListener("input",()=>{
+    inp.nextElementSibling.textContent=inp.id==="fx-cycle"?inp.value+" fps":inp.value;
+    if(inp.id!=="fx-cycle")refreshFrame();
+  });
+});
+$("reseed").addEventListener("click",()=>{seed=(Math.random()*1e9)|0;refreshFrame()});
+
+$("dlgOn").addEventListener("change",()=>{$("dlgBox").hidden=!$("dlgOn").checked;refreshOutput()});
+$("dlgStyles").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;dlgStyle=b.dataset.style;
+  [...$("dlgStyles").children].forEach(x=>x.setAttribute("aria-pressed",String(x===b)));refreshOutput()});
+["dlgName","dlgText"].forEach(id=>$(id).addEventListener("input",()=>{clearTimeout(dlgTimer);dlgTimer=setTimeout(refreshOutput,150)}));
+["dlgPos","dlgSize","dlgArrow","dlgMatch"].forEach(id=>$(id).addEventListener("change",refreshOutput));
+let dlgTimer=0;
+
+$("zoomBtns").addEventListener("click",e=>{
+  const z=e.target.dataset&&e.target.dataset.z;if(!z)return;zoom=z;
+  [...$("zoomBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.z===z)));
+  applyZoom();
+});
+window.addEventListener("resize",()=>{if(zoom==="fit")applyZoom()});
+
+const cmp=$("compare");
+const showOrig=on=>{if(!result)return;$("orig").hidden=!on;$("out").hidden=on;cmp.setAttribute("aria-pressed",String(on))};
+cmp.addEventListener("pointerdown",e=>{e.preventDefault();cmp.setPointerCapture&&cmp.setPointerCapture(e.pointerId);showOrig(true)});
+["pointerup","pointercancel","lostpointercapture"].forEach(t=>cmp.addEventListener(t,()=>showOrig(false)));
+cmp.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();showOrig(true)}});
+cmp.addEventListener("keyup",()=>showOrig(false));
+cmp.addEventListener("blur",()=>showOrig(false));
+
+function schedule(delay=180){
+  if(!src)return;
+  clearTimeout(timer);timer=setTimeout(run,delay);
+}
+async function run(){
+  if(running){pending=true;return}
+  running=true;$("busy").hidden=false;
+  await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+  try{if(await processBase())await refreshOutput()}catch(err){console.error(err);setStatusText("Something went wrong processing this image: "+err.message)}
+  $("busy").hidden=true;running=false;
+  if(pending){pending=false;run()}
+}
+
+/* ---------- Adjustments ---------- */
+function adjust(d){
+  const b=+$("bri").value,c=+$("con").value,s=+$("sat").value/100,hdeg=+$("hue").value;
+  if(!b&&!c&&s===1&&!hdeg)return;
+  const cf=(259*(c*2.55+255))/(255*(259-c*2.55)),bo=b*1.28;
+  const th=hdeg*Math.PI/180,cs=Math.cos(th),sn=Math.sin(th);
+  for(let i=0;i<d.length;i+=4){
+    if(d[i+3]===0)continue;
+    let r=d[i],g=d[i+1],bl=d[i+2];
+    if(hdeg){ // rotate hue in YIQ space
+      const y=.299*r+.587*g+.114*bl,ii=.596*r-.274*g-.322*bl,q=.211*r-.523*g+.312*bl;
+      const i2=ii*cs-q*sn,q2=ii*sn+q*cs;
+      r=y+.956*i2+.621*q2;g=y-.272*i2-.647*q2;bl=y-1.106*i2+1.703*q2;
+    }
+    if(s!==1){const L=.299*r+.587*g+.114*bl;r=L+(r-L)*s;g=L+(g-L)*s;bl=L+(bl-L)*s}
+    if(c){r=cf*(r-128)+128;g=cf*(g-128)+128;bl=cf*(bl-128)+128}
+    d[i]=r+bo;d[i+1]=g+bo;d[i+2]=bl+bo;
+  }
+}
+function erode(d,w,h,passes){
+  for(let p=0;p<passes;p++){
+    const c=d.slice();
+    const lum=i=>c[i]*.299+c[i+1]*.587+c[i+2]*.114;
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;if(c[i+3]<128)continue;
+      let best=i,bl=lum(i);
+      for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=w||yy>=h)continue;
+        const j=(yy*w+xx)*4;if(c[j+3]<128)continue;const l=lum(j);if(l<bl){bl=l;best=j}
+      }
+      d[i]=c[best];d[i+1]=c[best+1];d[i+2]=c[best+2];
+    }
+  }
+}
+
+/* ---------- Base pass: resize, adjust, quantize ---------- */
+async function processBase(){
   const t0=performance.now();
   const tw=clampDim(W.value),th=clampDim(H.value);
-  if(tw*th>16e6){setStatusText("That's over 16 megapixels. Pick a smaller size.");return}
+  if(tw*th*k*k>MAX_OUT){setStatusText(`Output would be ${tw*k}×${th*k}, over 16 megapixels. Pick a smaller pixel grid or pixel size.`);return false}
   let N=Math.max(2,Math.min(256,Math.round(+$("n").value||16)));
-  const keepAlpha=$("keepAlpha").checked;
-  const smooth=$("resize").value==="smooth";
-  const base=drawResized(src.bmp,src.w,src.h,tw,th,smooth,keepAlpha,$("bg").value);
-  const id=base.getContext("2d").getImageData(0,0,tw,th),d=id.data;
-
-  // pixels that end up partly transparent become fully clear or fully solid
-  const hist=buildHist(d,N);
+  const keepAlpha=$("keepAlpha").checked,smooth=$("resize").value==="smooth";
+  const baseC=drawResized(src.bmp,src.w,src.h,tw,th,smooth,keepAlpha,$("bg").value);
+  const og=$("orig");og.width=tw;og.height=th;const ogx=og.getContext("2d");ogx.clearRect(0,0,tw,th);ogx.drawImage(baseC,0,0);
+  const d=baseC.getContext("2d").getImageData(0,0,tw,th).data;
+  // work in a float copy so adjustments don't clip early
+  const wd=new Float32Array(d.length);for(let i=0;i<d.length;i++)wd[i]=d[i];
+  adjust(wd);
+  const cd=new Uint8ClampedArray(wd);
+  const ero=+$("ero").value;if(ero)erode(cd,tw,th,ero);
+  const hist=buildHist(cd,N);
   let P;
-  if($("usePal").checked){
+  if(palId!=="auto"){
     const fx=currentFixed();
-    if(fx.length<2){setStatusText("Add at least 2 hex colors to the custom palette.");return}
+    if(!fx||fx.length<2){setStatusText("Add at least 2 hex colors to the custom palette.");return false}
     P=fixedPalette(hist,fx,N);
   }else P=autoPalette(hist,N);
-
   const mode=$("dither").value,strength=+$("strength").value/100;
-  const {out,used}=hist.total?mapPixels(d,tw,th,P,mode,strength):{out:new Uint8ClampedArray(d.length),used:new Uint32Array(0)};
+  const K=P.length/3;
+  const m=hist.total?mapPixels(cd,tw,th,P,mode,strength):{used:new Uint32Array(K),idx:new Int16Array(tw*th).fill(-1)};
+  const order=[...Array(K).keys()].sort((a,b)=>(P[a*3]*.299+P[a*3+1]*.587+P[a*3+2]*.114)-(P[b*3]*.299+P[b*3+1]*.587+P[b*3+2]*.114));
+  const rank=new Int16Array(K);order.forEach((j,r)=>rank[j]=r);
+  const grid=document.createElement("canvas");grid.width=tw;grid.height=th;
+  base={gw:tw,gh:th,k,P,K,idx:m.idx,used:m.used,order,rank,total:hist.total,grid,gimg:new ImageData(tw,th),ms:performance.now()-t0};
+  return true;
+}
 
-  const oc=$("out");oc.width=tw;oc.height=th;
-  oc.getContext("2d").putImageData(new ImageData(out,tw,th),0,0);
-  const og=$("orig");og.width=tw;og.height=th;
-  const ogx=og.getContext("2d");ogx.clearRect(0,0,tw,th);ogx.drawImage(base,0,0);
+/* ---------- Dialog box ---------- */
+const DLG={
+  classic:{bg:["#000000"],border:"#FFFFFF",kind:"double",text:"#FFFFFF"},
+  blue:{bg:["#2B3FB8","#0B1450"],border:"#FFFFFF",kind:"double",text:"#FFFFFF"},
+  terminal:{bg:["#000000"],border:"#33FF66",kind:"single",text:"#33FF66",prompt:"> "},
+  parchment:{bg:["#E9D7AC"],border:"#5A3A1E",kind:"thick",text:"#3A2412"},
+  dekx:{bg:["#2A1F55","#140F2C"],border:"#A78BFA",kind:"double",text:"#ECE8F7"}
+};
+let fontReady=null;
+function ensureFont(){
+  if(!fontReady)fontReady=(document.fonts&&document.fonts.load?document.fonts.load('16px "DotGothic16"').catch(()=>{}):Promise.resolve());
+  return fontReady;
+}
+function frameRect(c,x,y,w,h,t){c.fillRect(x,y,w,t);c.fillRect(x,y+h-t,w,t);c.fillRect(x,y,t,h);c.fillRect(x+w-t,y,t,h)}
+function crispText(dw,dh,lines,color,font){
+  const t=document.createElement("canvas");t.width=dw;t.height=dh;const c=t.getContext("2d");
+  c.font=font;c.textBaseline="top";c.fillStyle=color;
+  lines.forEach(([s,x,y])=>c.fillText(s,x,y));
+  const im=c.getImageData(0,0,dw,dh),d=im.data;
+  for(let i=3;i<d.length;i+=4)d[i]=d[i]>=110?255:0;
+  c.putImageData(im,0,0);return t;
+}
+function wrap(c,text,maxW){
+  const out=[];
+  for(const para of text.split("\n")){
+    let line="";
+    for(const word of para.split(/(\s+)/)){
+      if(!word)continue;
+      const test=line+word;
+      if(c.measureText(test).width<=maxW||!line.trim()){
+        if(c.measureText(test).width>maxW){ // single long word: break by characters
+          for(const ch of word){if(c.measureText(line+ch).width>maxW&&line){out.push(line);line=""}line+=ch}
+        }else line=test;
+      }else{out.push(line.trimEnd());line=word.trimStart()}
+    }
+    out.push(line.trimEnd());
+  }
+  return out;
+}
+function buildDialog(outW,outH){
+  dlgLayer=null;
+  if(!$("dlgOn").checked)return;
+  const st=DLG[dlgStyle],target={s:400,m:320,l:240}[$("dlgSize").value];
+  const u=Math.max(1,Math.round(outW/target)),dw=Math.floor(outW/u),dh=Math.floor(outH/u);
+  const font='16px "DotGothic16", ui-monospace, monospace';
+  const m=6,pad=8,lineH=18,boxH=pad*2+lineH*3-2,boxW=dw-m*2;
+  const name=$("dlgName").value.trim();
+  const nameH=name?20:0;
+  if(dw<120||dh<boxH+m*2+nameH){$("saveHint").textContent="The picture is too small for a dialog box at this text size. Try Small text or a bigger output.";return}
+  const cv=document.createElement("canvas");cv.width=dw;cv.height=dh;const c=cv.getContext("2d");
+  const pos=$("dlgPos").value;
+  const x=m,y=pos==="top"?m+nameH:pos==="middle"?Math.round((dh-boxH+nameH)/2):dh-m-boxH;
+  const fill=(bx,by,bw,bh)=>{
+    if(st.bg.length>1){const g=c.createLinearGradient(0,by,0,by+bh);g.addColorStop(0,st.bg[0]);g.addColorStop(1,st.bg[1]);c.fillStyle=g}else c.fillStyle=st.bg[0];
+    c.fillRect(bx,by,bw,bh);
+  };
+  const border=(bx,by,bw,bh)=>{
+    c.fillStyle=st.border;
+    if(st.kind==="double"){frameRect(c,bx,by,bw,bh,1);frameRect(c,bx+2,by+2,bw-4,bh-4,1)}
+    else if(st.kind==="thick")frameRect(c,bx,by,bw,bh,2);
+    else frameRect(c,bx,by,bw,bh,1);
+    c.clearRect(bx,by,1,1);c.clearRect(bx+bw-1,by,1,1);c.clearRect(bx,by+bh-1,1,1);c.clearRect(bx+bw-1,by+bh-1,1,1);
+  };
+  c.font=font;
+  const texts=[];
+  if(name){
+    const nw=Math.min(boxW-20,Math.ceil(c.measureText(name).width)+16),nx=x+8,ny=y-nameH+1;
+    fill(nx,ny,nw,nameH);border(nx,ny,nw,nameH);texts.push([name,nx+8,ny+2]);
+  }
+  fill(x,y,boxW,boxH);border(x,y,boxW,boxH);
+  const raw=(st.prompt||"")+$("dlgText").value;
+  const lines=wrap(c,raw,boxW-pad*2-14).slice(0,3);
+  lines.forEach((s,i)=>texts.push([s,x+pad+2,y+pad+i*lineH]));
+  c.drawImage(crispText(dw,dh,texts,st.text,font),0,0);
+  if($("dlgArrow").checked){
+    c.fillStyle=st.text;const ax=x+boxW-pad-9,ay=y+boxH-pad-6;
+    if(dlgStyle==="terminal")c.fillRect(ax+1,ay-4,6,9);
+    else for(let r=0;r<4;r++)c.fillRect(ax+r,ay+r,7-r*2,1);
+  }
+  if($("dlgMatch").checked&&base){
+    const im=c.getImageData(0,0,dw,dh),d=im.data,cache=new Map();
+    for(let i=0;i<d.length;i+=4){
+      if(d[i+3]<128){d[i+3]=0;continue}
+      const key=(d[i]<<16)|(d[i+1]<<8)|d[i+2];let j=cache.get(key);
+      if(j===undefined){j=nearest(base.P,base.K,d[i],d[i+1],d[i+2]);cache.set(key,j)}
+      d[i]=base.P[j*3];d[i+1]=base.P[j*3+1];d[i+2]=base.P[j*3+2];d[i+3]=255;
+    }
+    c.putImageData(im,0,0);
+  }
+  dlgLayer={canvas:cv,u};
+}
 
-  const pal=[];for(let j=0;j<used.length;j++)if(used[j])pal.push({hex:toHex(P[j*3],P[j*3+1],P[j*3+2]),count:used[j]});
+/* ---------- FX ---------- */
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const val=id=>+$("fx-"+id).value/100;
+function fxGhost(d,w,h,a,kk){
+  const c=d.slice(),al=a*.55,dx=Math.max(kk*2,Math.round(w*.02)),dy=Math.max(0,Math.round(kk*0.5));
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const sx=x-dx,sy=y-dy;if(sx<0||sy<0)continue;
+    const i=(y*w+x)*4,j=(sy*w+sx)*4;if(c[j+3]<128||d[i+3]<128)continue;
+    for(let ch=0;ch<3;ch++){const v=c[i+ch]*(1-al)+c[j+ch]*al;if(v>d[i+ch])d[i+ch]=v}
+  }
+}
+function fxRGB(d,w,h,a,kk){
+  const c=d.slice(),s=Math.max(1,Math.round(a*kk*2.5));
+  for(let y=0;y<h;y++){const row=y*w;
+    for(let x=0;x<w;x++){const i=(row+x)*4;if(d[i+3]<128)continue;
+      const xr=Math.min(w-1,x+s),xb=Math.max(0,x-s);
+      d[i]=c[(row+xr)*4];d[i+2]=c[(row+xb)*4+2];
+    }}
+}
+function fxGlitch(d,w,h,a,kk,sd){
+  const r=rng(sd),c=d.slice(),n=3+Math.round(a*14);
+  for(let s=0;s<n;s++){
+    const y0=(r()*h)|0,bh=Math.max(kk,(r()*h*.06*(.4+a))|0);
+    const dx=Math.round(((r()-.5)*w*.18*a)/kk)*kk,split=r()<.5?Math.max(kk,Math.round(kk*2*a)):0;
+    for(let y=y0;y<Math.min(h,y0+bh);y++){const row=y*w;
+      for(let x=0;x<w;x++){
+        const sx=((x-dx)%w+w)%w,i=(row+x)*4,j=(row+sx)*4;
+        d[i]=c[((row+Math.min(w-1,sx+split)))*4];d[i+1]=c[j+1];d[i+2]=c[j+2];d[i+3]=c[j+3];
+      }}
+  }
+  const blocks=Math.round(a*5);
+  for(let b=0;b<blocks;b++){
+    const bw=Math.max(kk*2,(r()*w*.2)|0),bh=Math.max(kk*2,(r()*h*.05)|0);
+    const sx=(r()*(w-bw))|0,sy=(r()*(h-bh))|0,tx=(r()*(w-bw))|0,ty=(r()*(h-bh))|0;
+    for(let y=0;y<bh;y++)for(let x=0;x<bw;x++){const i=((ty+y)*w+tx+x)*4,j=((sy+y)*w+sx+x)*4;d[i]=c[j];d[i+1]=c[j+1];d[i+2]=c[j+2];d[i+3]=c[j+3]}
+  }
+}
+function fxGrain(d,w,h,a,kk,sd){
+  const r=rng(sd^0x5bd1e995),amt=a*90;
+  for(let by=0;by<h;by+=kk)for(let bx=0;bx<w;bx+=kk){
+    const n=(r()-.5)*amt;
+    for(let y=by;y<Math.min(h,by+kk);y++)for(let x=bx;x<Math.min(w,bx+kk);x++){const i=(y*w+x)*4;d[i]+=n;d[i+1]+=n;d[i+2]+=n}
+  }
+}
+function fxCRT(d,w,h,a,kk){
+  const p=Math.max(2,kk),dark=1-.55*a,boost=1+.12*a,mask=kk>=3?.22*a:0;
+  for(let y=0;y<h;y++){
+    const sl=(y%p)===p-1?dark:1,ny=(y/h-.5);
+    for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;if(d[i+3]<128)continue;
+      const nx=(x/w-.5),r2=(nx*nx+ny*ny)*2,vig=1-a*.55*Math.pow(r2,1.5);
+      const f=sl*vig*boost,ph=x%3;
+      d[i]*=f*(ph===0?1:1-mask);d[i+1]*=f*(ph===1?1:1-mask);d[i+2]*=f*(ph===2?1:1-mask);
+    }
+  }
+}
+const anyStillFX=()=>FX.crt||FX.glitch||FX.ghost||FX.rgb||FX.grain;
+
+/* ---------- Frame rendering ---------- */
+function cycleInfo(){
+  if(!FX.cycle||!base||base.K<2)return {frames:1,step:0};
+  const step=Math.max(1,Math.ceil(base.K/32));return {frames:Math.ceil(base.K/step),step};
+}
+function renderFrame(f,target){
+  const {gw,gh,idx,P,K,order,rank,grid,gimg,k:kk}=base;
+  const ci=cycleInfo(),cols=new Uint8Array(K*3);
+  for(let j=0;j<K;j++){const s=ci.step?order[(rank[j]+f*ci.step)%K]:j;cols[j*3]=P[s*3];cols[j*3+1]=P[s*3+1];cols[j*3+2]=P[s*3+2]}
+  const gd=gimg.data;
+  for(let p=0,i=0;p<idx.length;p++,i+=4){const j=idx[p];if(j<0){gd[i+3]=0;continue}gd[i]=cols[j*3];gd[i+1]=cols[j*3+1];gd[i+2]=cols[j*3+2];gd[i+3]=255}
+  grid.getContext("2d").putImageData(gimg,0,0);
+  const ow=gw*kk,oh=gh*kk;
+  if(target.width!==ow||target.height!==oh){target.width=ow;target.height=oh}
+  const c=target.getContext("2d",{willReadFrequently:true});
+  c.imageSmoothingEnabled=false;c.clearRect(0,0,ow,oh);c.drawImage(grid,0,0,ow,oh);
+  if(dlgLayer)c.drawImage(dlgLayer.canvas,0,0,dlgLayer.canvas.width*dlgLayer.u,dlgLayer.canvas.height*dlgLayer.u);
+  if(anyStillFX()){
+    const im=c.getImageData(0,0,ow,oh),fd=new Float32Array(im.data);
+    const sd=seed+(ci.frames>1?f*7919:0);
+    if(FX.ghost)fxGhost(fd,ow,oh,val("ghost"),kk);
+    if(FX.rgb)fxRGB(fd,ow,oh,val("rgb"),kk);
+    if(FX.glitch)fxGlitch(fd,ow,oh,val("glitch"),kk,sd);
+    if(FX.grain)fxGrain(fd,ow,oh,val("grain"),kk,sd);
+    if(FX.crt)fxCRT(fd,ow,oh,val("crt"),kk);
+    im.data.set(fd);c.putImageData(im,0,0);
+  }
+}
+function stopAnim(){cancelAnimationFrame(anim.raf);anim.raf=0}
+function loop(ts){
+  const fps=+$("fx-cycle").value;
+  if(ts-anim.last>=1000/fps){anim.last=ts;anim.frame=(anim.frame+1)%anim.frames;renderFrame(anim.frame,$("out"))}
+  anim.raf=requestAnimationFrame(loop);
+}
+async function refreshOutput(){
+  if(!base)return;
+  if($("dlgOn").checked)await ensureFont();
+  $("saveHint").textContent="";
+  buildDialog(base.gw*base.k,base.gh*base.k);
+  refreshFrame(true);
+}
+function refreshFrame(full){
+  if(!base)return;
+  stopAnim();
+  const t0=performance.now();
+  const ci=cycleInfo();anim.frames=ci.frames;if(anim.frame>=ci.frames)anim.frame=0;
+  renderFrame(anim.frame,$("out"));
+  const oc=$("out");
+  const pal=[];for(let j=0;j<base.K;j++)if(base.used[j])pal.push({hex:toHex(base.P[j*3],base.P[j*3+1],base.P[j*3+2]),count:base.used[j]});
   pal.sort((a,b)=>b.count-a.count);
   result={canvas:oc,pal,name:src.name};
   oc.hidden=false;$("orig").hidden=true;$("band").hidden=false;
   $("save").disabled=false;$("copyHex").disabled=pal.length===0;cmp.disabled=false;
-  renderPalette(pal,hist.total);applyZoom();
-  const ms=Math.round(performance.now()-t0);
-  setStatus([["Size",`${tw}×${th}`],["Colors used",pal.length],["Time",ms+" ms"]]);
+  $("saveGif").hidden=!FX.cycle;$("saveGif").disabled=!FX.cycle;
+  if(full!==false)renderPalette(pal,base.total);
+  applyZoom();
+  setStatus([["Grid",`${base.gw}×${base.gh}`],["Output",`${oc.width}×${oc.height}`],["Colors",pal.length],["Time",Math.round(base.ms+performance.now()-t0)+" ms"]]);
+  if(ci.frames>1&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){anim.last=performance.now();anim.raf=requestAnimationFrame(loop)}
 }
 
 function renderPalette(pal,total){
@@ -673,52 +1063,132 @@ function renderPalette(pal,total){
   });
   $("hexOut").value=pal.map(p=>p.hex).join("\n");
 }
-
 function applyZoom(){
   if(!result)return;
-  const tw=result.canvas.width,th=result.canvas.height;let s;
-  if(zoom==="fit"){const r=view.getBoundingClientRect();s=Math.min((r.width-32)/tw,(r.height-32)/th);if(!(s>0))s=1;if(s>1)s=Math.max(1,Math.floor(s))}
+  const ow=result.canvas.width,oh=result.canvas.height;let s;
+  if(zoom==="fit"){const r=view.getBoundingClientRect();s=Math.min((r.width-32)/ow,(r.height-32)/oh);if(!(s>0))s=1;if(s>1)s=Math.max(1,Math.floor(s))}
   else s=+zoom;
-  for(const c of [$("out"),$("orig")]){c.style.width=tw*s+"px";c.style.height=th*s+"px"}
+  for(const c of [$("out"),$("orig")]){c.style.width=ow*s+"px";c.style.height=oh*s+"px"}
 }
-
 function setStatus(pairs){
   const el=$("status");el.innerHTML="";
-  pairs.forEach(([k,v])=>{const s=document.createElement("span");s.append(k+" ");const b=document.createElement("b");b.textContent=v;s.appendChild(b);el.appendChild(s)});
+  pairs.forEach(([k2,v])=>{const s=document.createElement("span");s.append(k2+" ");const b=document.createElement("b");b.textContent=v;s.appendChild(b);el.appendChild(s)});
 }
 function setStatusText(t){$("status").textContent=t}
+
+/* ---------- GIF encoder ---------- */
+function lzw(ix,mcs,push){
+  const clear=1<<mcs,eoi=clear+1;let size=mcs+1,next=eoi+1,dict=new Map();
+  let cur=0,bits=0;
+  const emit=code=>{cur|=code<<bits;bits+=size;while(bits>=8){push(cur&255);cur>>>=8;bits-=8}};
+  emit(clear);
+  let prefix=ix[0];
+  for(let i=1;i<ix.length;i++){
+    const kk=ix[i],key=(prefix<<8)|kk,c=dict.get(key);
+    if(c!==undefined){prefix=c;continue}
+    emit(prefix);
+    if(next===4096){emit(clear);next=eoi+1;size=mcs+1;dict=new Map()}
+    else{if(next>=(1<<size))size++;dict.set(key,next++)}
+    prefix=kk;
+  }
+  emit(prefix);emit(eoi);
+  if(bits>0)push(cur&255);
+}
+class ByteOut{constructor(){this.chunks=[];this.buf=new Uint8Array(1<<16);this.n=0}
+  b(v){if(this.n===this.buf.length){this.chunks.push(this.buf);this.buf=new Uint8Array(1<<16);this.n=0}this.buf[this.n++]=v}
+  w(v){this.b(v&255);this.b((v>>8)&255)}
+  s(t){for(const ch of t)this.b(ch.charCodeAt(0))}
+  blob(){return new Blob([...this.chunks,this.buf.slice(0,this.n)],{type:"image/gif"})}}
+async function makeGIF(progress){
+  const ci=cycleInfo(),frames=ci.frames,fps=+$("fx-cycle").value,delay=Math.max(2,Math.round(100/fps));
+  const cv=document.createElement("canvas");
+  // pass 1: collect colors
+  let colors=new Map(),overflow=false,hasT=false;
+  for(let f=0;f<frames;f++){
+    renderFrame(f,cv);const d=cv.getContext("2d").getImageData(0,0,cv.width,cv.height).data;
+    for(let i=0;i<d.length;i+=4){
+      if(d[i+3]<128){hasT=true;continue}
+      if(overflow)continue;
+      const key=(d[i]<<16)|(d[i+1]<<8)|d[i+2];
+      if(!colors.has(key)){colors.set(key,colors.size);if(colors.size>255)overflow=true}
+    }
+    progress(`Reading frame ${f+1} of ${frames}`);await new Promise(r=>setTimeout(r,0));
+  }
+  let pal;
+  if(!overflow&&colors.size+(hasT?1:0)<=256){pal=[...colors.keys()].map(k2=>[k2>>16,(k2>>8)&255,k2&255])}
+  else{
+    renderFrame(0,cv);const h=buildHist(cv.getContext("2d").getImageData(0,0,cv.width,cv.height).data,255);
+    const P=autoPalette(h,255);pal=[];for(let j=0;j<P.length/3;j++)pal.push([P[j*3],P[j*3+1],P[j*3+2]]);
+  }
+  const PF=new Float32Array(pal.length*3);pal.forEach((c,j)=>{PF[j*3]=c[0];PF[j*3+1]=c[1];PF[j*3+2]=c[2]});
+  const tIndex=hasT?pal.length:-1,count=pal.length+(hasT?1:0);
+  let bits=1;while((1<<bits)<count)bits++;
+  const mcs=Math.max(2,bits),w=cv.width,h=cv.height;
+  const o=new ByteOut();
+  o.s("GIF89a");o.w(w);o.w(h);o.b(0x80|((bits-1)<<4)|(bits-1));o.b(0);o.b(0);
+  for(let j=0;j<(1<<bits);j++){const c=pal[j]||[0,0,0];o.b(c[0]);o.b(c[1]);o.b(c[2])}
+  if(frames>1){o.b(0x21);o.b(0xFF);o.b(11);o.s("NETSCAPE2.0");o.b(3);o.b(1);o.w(0);o.b(0)}
+  const cache=new Map(),ix=new Uint8Array(w*h);
+  for(let f=0;f<frames;f++){
+    renderFrame(f,cv);const d=cv.getContext("2d").getImageData(0,0,w,h).data;
+    for(let p=0,i=0;p<ix.length;p++,i+=4){
+      if(d[i+3]<128){ix[p]=tIndex;continue}
+      const key=(d[i]<<16)|(d[i+1]<<8)|d[i+2];let j=cache.get(key);
+      if(j===undefined){j=nearest(PF,pal.length,d[i],d[i+1],d[i+2]);cache.set(key,j)}
+      ix[p]=j;
+    }
+    o.b(0x21);o.b(0xF9);o.b(4);o.b(((hasT?2:1)<<2)|(hasT?1:0));o.w(delay);o.b(hasT?tIndex:0);o.b(0);
+    o.b(0x2C);o.w(0);o.w(0);o.w(w);o.w(h);o.b(0);
+    o.b(mcs);
+    let block=[];
+    lzw(ix,mcs,v=>{block.push(v);if(block.length===255){o.b(255);for(const x of block)o.b(x);block=[]}});
+    if(block.length){o.b(block.length);for(const x of block)o.b(x)}
+    o.b(0);
+    progress(`Encoding frame ${f+1} of ${frames}`);await new Promise(r=>setTimeout(r,0));
+  }
+  o.b(0x3B);
+  return o.blob();
+}
 
 /* ---------- Saving ---------- */
 let downloads=null;
 (async()=>{try{if(window.claude&&window.claude.use)downloads=await window.claude.use("downloads")}catch(e){}})();
-
+async function offer(blob,filename){
+  const hint=$("saveHint");hint.classList.remove("err");
+  if(downloads){
+    try{await downloads.save({filename,data:blob});hint.textContent="Saved "+filename}
+    catch(e){hint.textContent=e&&e.code==="declined"?"Download cancelled.":"Download isn't available here. Right-click or long-press the picture to save it.";}
+    return;
+  }
+  try{
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    hint.textContent="If nothing downloaded, right-click or long-press the picture and save it.";
+  }catch(e){hint.textContent="Right-click or long-press the picture to save it."}
+}
+const fileBase=()=>`${result.name}-${result.canvas.width}x${result.canvas.height}-${result.pal.length}c`;
 $("save").addEventListener("click",()=>{
   if(!result)return;
-  const hint=$("saveHint");hint.classList.remove("err");
-  result.canvas.toBlob(async blob=>{
-    const n=result.pal.length;
-    const filename=`${result.name}-${result.canvas.width}x${result.canvas.height}-${n}c.png`;
-    if(downloads){
-      try{await downloads.save({filename,data:blob});hint.textContent="Saved "+filename}
-      catch(e){hint.textContent=e&&e.code==="declined"?"Download cancelled.":"Download isn't available here. Right-click or long-press the picture to save it.";}
-      return;
-    }
-    try{
-      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();
-      setTimeout(()=>URL.revokeObjectURL(a.href),5000);
-      hint.textContent="If nothing downloaded, right-click or long-press the picture and save it.";
-    }catch(e){hint.textContent="Right-click or long-press the picture to save it."}
-  },"image/png");
+  result.canvas.toBlob(blob=>offer(blob,fileBase()+".png"),"image/png");
 });
-
+$("saveGif").addEventListener("click",async()=>{
+  if(!result||!base)return;
+  const btn=$("saveGif"),hint=$("saveHint");btn.disabled=true;stopAnim();
+  try{const blob=await makeGIF(t=>hint.textContent=t);await offer(blob,fileBase()+".gif")}
+  catch(e){console.error(e);hint.textContent="The GIF couldn't be made: "+e.message}
+  btn.disabled=false;refreshFrame(false);
+});
 async function copyText(t,msg){
   const hint=$("saveHint");
   try{await navigator.clipboard.writeText(t);hint.textContent=msg}
-  catch(e){const ta=$("hexOut");ta.closest("details").open=true;ta.focus();ta.select();hint.textContent="Copy from the hex list below the picture."}
+  catch(e){const ta=$("hexOut");ta.closest("details").open=true;ta.focus();ta.select();hint.textContent="Copy from the hex list in the palette panel."}
 }
 $("copyHex").addEventListener("click",()=>{if(result)copyText(result.pal.map(p=>p.hex).join("\n"),`Copied ${result.pal.length} hex codes`)});
 
+buildPalTiles();
+[...$("pxBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.k===k)));
 updatePalUI();
+
 })();
 </script>
 </body>
