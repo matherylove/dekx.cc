@@ -12,6 +12,15 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="favicon.ico">
 <title>Pyx — Dekxtopia</title>
+<script>
+addEventListener("pagereveal", function (e) {
+  if (!e.viewTransition || !e.viewTransition.types) return;
+  var from = (window.navigation && navigation.activation && navigation.activation.from) ? navigation.activation.from.url : document.referrer;
+  if (/pyx\.html/.test(location.pathname)) e.viewTransition.types.add("open");
+  else if (/pyx\.html/.test(from || "")) e.viewTransition.types.add("close");
+});
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap" rel="stylesheet">
@@ -24,13 +33,13 @@
     <span class="win-icon"><svg viewBox="0 0 46 46" width="14" height="14" aria-hidden="true"><rect x="3" y="3" width="12" height="12" fill="#8E7CF6"/><rect x="17" y="3" width="12" height="12" fill="#C4B0FF"/><rect x="31" y="3" width="12" height="12" fill="#FF7AA8"/><rect x="3" y="17" width="12" height="12" fill="#5B4BC4"/><rect x="17" y="17" width="12" height="12" fill="#A78BFA"/><rect x="31" y="17" width="12" height="12" fill="#B5426E"/><rect x="3" y="31" width="12" height="12" fill="#2E2466"/><rect x="17" y="31" width="12" height="12" fill="#6A50C8"/><rect x="31" y="31" width="12" height="12" fill="#5E1E44"/></svg></span>
     <span class="win-text">Pyx — Dekxtopia</span>
     <span class="win-ctl">
-      <a class="cap-btn" href="index.html" data-zoom="min" data-title="Pyx — Dekxtopia" aria-label="Minimize"><svg viewBox="0 0 6 7" width="6" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="5" width="6" height="1" fill="currentColor"/><rect x="0" y="6" width="6" height="1" fill="currentColor"/></svg></a>
+      <a class="cap-btn" href="index.html" aria-label="Minimize"><svg viewBox="0 0 6 7" width="6" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="5" width="6" height="1" fill="currentColor"/><rect x="0" y="6" width="6" height="1" fill="currentColor"/></svg></a>
       <button class="cap-btn" type="button" id="maxBtn" aria-label="Maximize"><svg viewBox="0 0 9 9" width="9" height="9" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="9" height="1" fill="currentColor"/><rect x="0" y="1" width="9" height="1" fill="currentColor"/><rect x="0" y="2" width="1" height="1" fill="currentColor"/><rect x="8" y="2" width="1" height="1" fill="currentColor"/><rect x="0" y="3" width="1" height="1" fill="currentColor"/><rect x="8" y="3" width="1" height="1" fill="currentColor"/><rect x="0" y="4" width="1" height="1" fill="currentColor"/><rect x="8" y="4" width="1" height="1" fill="currentColor"/><rect x="0" y="5" width="1" height="1" fill="currentColor"/><rect x="8" y="5" width="1" height="1" fill="currentColor"/><rect x="0" y="6" width="1" height="1" fill="currentColor"/><rect x="8" y="6" width="1" height="1" fill="currentColor"/><rect x="0" y="7" width="1" height="1" fill="currentColor"/><rect x="8" y="7" width="1" height="1" fill="currentColor"/><rect x="0" y="8" width="9" height="1" fill="currentColor"/></svg></button>
       <a class="cap-btn close" href="index.html" aria-label="Close"><svg viewBox="0 0 8 7" width="8" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="2" height="1" fill="currentColor"/><rect x="6" y="0" width="2" height="1" fill="currentColor"/><rect x="1" y="1" width="2" height="1" fill="currentColor"/><rect x="5" y="1" width="2" height="1" fill="currentColor"/><rect x="2" y="2" width="4" height="1" fill="currentColor"/><rect x="3" y="3" width="2" height="1" fill="currentColor"/><rect x="2" y="4" width="4" height="1" fill="currentColor"/><rect x="1" y="5" width="2" height="1" fill="currentColor"/><rect x="5" y="5" width="2" height="1" fill="currentColor"/><rect x="0" y="6" width="2" height="1" fill="currentColor"/><rect x="6" y="6" width="2" height="1" fill="currentColor"/></svg></a>
     </span>
   </div>
   <nav class="win-menu" aria-label="Site">
-    <a href="index.html" data-zoom="restore" data-title="Pyx — Dekxtopia"><u>H</u>ome</a>
+    <a href="index.html"><u>H</u>ome</a>
     <a href="https://midi.dekx.cc/"><u>W</u>ebAssembly MIDI Player</a>
     <a href="pyx.html" class="active" aria-current="page"><u>P</u>yx<span class="new">new!</span></a>
     <span class="grow"></span>
