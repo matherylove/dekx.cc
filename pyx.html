@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Pyx: reduce a picture's resolution and colors with retro palettes, FX and dialog boxes. Runs in your browser.">
+<meta name="author" content="Dekx">
+<meta property="og:title" content="Pyx — Dekxtopia">
+<meta property="og:description" content="Pyx: reduce a picture's resolution and colors with retro palettes, FX and dialog boxes. Runs in your browser.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate icon" href="favicon.ico">
+<title>Pyx — Dekxtopia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Pixelify+Sans:wght@400..700&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="dekx.css">
+</head>
+<body>
+<canvas id="neural" aria-hidden="true"></canvas>
+<div class="win win-main">
+  <div class="win-title">
+    <span class="win-icon"><svg viewBox="0 0 14 9" width="14" height="9" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="6" height="1" fill="#c4b5fd"/><rect x="0" y="1" width="7" height="1" fill="#c4b5fd"/><rect x="0" y="2" width="2" height="1" fill="#c4b5fd"/><rect x="5" y="2" width="3" height="1" fill="#c4b5fd"/><rect x="9" y="2" width="4" height="1" fill="#a78bfa"/><rect x="0" y="3" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="3" width="2" height="1" fill="#c4b5fd"/><rect x="0" y="4" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="4" width="2" height="1" fill="#c4b5fd"/><rect x="9" y="4" width="5" height="1" fill="#818cf8"/><rect x="0" y="5" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="5" width="2" height="1" fill="#c4b5fd"/><rect x="0" y="6" width="2" height="1" fill="#c4b5fd"/><rect x="5" y="6" width="3" height="1" fill="#c4b5fd"/><rect x="9" y="6" width="3" height="1" fill="#f0abfc"/><rect x="0" y="7" width="7" height="1" fill="#c4b5fd"/><rect x="0" y="8" width="6" height="1" fill="#c4b5fd"/></svg></span>
+    <span class="win-text">Pyx — Dekxtopia</span>
+    <span class="win-ctl" aria-hidden="true"><span class="cap-btn"><svg viewBox="0 0 6 7" width="6" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="5" width="6" height="1" fill="currentColor"/><rect x="0" y="6" width="6" height="1" fill="currentColor"/></svg></span><span class="cap-btn"><svg viewBox="0 0 9 9" width="9" height="9" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="9" height="1" fill="currentColor"/><rect x="0" y="1" width="9" height="1" fill="currentColor"/><rect x="0" y="2" width="1" height="1" fill="currentColor"/><rect x="8" y="2" width="1" height="1" fill="currentColor"/><rect x="0" y="3" width="1" height="1" fill="currentColor"/><rect x="8" y="3" width="1" height="1" fill="currentColor"/><rect x="0" y="4" width="1" height="1" fill="currentColor"/><rect x="8" y="4" width="1" height="1" fill="currentColor"/><rect x="0" y="5" width="1" height="1" fill="currentColor"/><rect x="8" y="5" width="1" height="1" fill="currentColor"/><rect x="0" y="6" width="1" height="1" fill="currentColor"/><rect x="8" y="6" width="1" height="1" fill="currentColor"/><rect x="0" y="7" width="1" height="1" fill="currentColor"/><rect x="8" y="7" width="1" height="1" fill="currentColor"/><rect x="0" y="8" width="9" height="1" fill="currentColor"/></svg></span><span class="cap-btn close"><svg viewBox="0 0 8 7" width="8" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="2" height="1" fill="currentColor"/><rect x="6" y="0" width="2" height="1" fill="currentColor"/><rect x="1" y="1" width="2" height="1" fill="currentColor"/><rect x="5" y="1" width="2" height="1" fill="currentColor"/><rect x="2" y="2" width="4" height="1" fill="currentColor"/><rect x="3" y="3" width="2" height="1" fill="currentColor"/><rect x="2" y="4" width="4" height="1" fill="currentColor"/><rect x="1" y="5" width="2" height="1" fill="currentColor"/><rect x="5" y="5" width="2" height="1" fill="currentColor"/><rect x="0" y="6" width="2" height="1" fill="currentColor"/><rect x="6" y="6" width="2" height="1" fill="currentColor"/></svg></span></span>
+  </div>
+  <nav class="win-menu" aria-label="Site">
+    <a href="index.html"><u>H</u>ome</a>
+    <a href="https://midi.dekx.cc/"><u>W</u>ebAssembly MIDI Player</a>
+    <a href="pyx.html" class="active" aria-current="page"><u>P</u>yx<span class="new">new!</span></a>
+  </nav>
+  <div class="win-body">
+    <main class="doc client"><div class="page">
+      <div class="crumb">dekx.cc › Tools › <b>Pyx</b></div>
+      <div class="doc-head">
+        <div class="avatar icon"><svg viewBox="0 0 46 46" aria-hidden="true"><rect x="3" y="3" width="12" height="12" fill="#8E7CF6"/><rect x="17" y="3" width="12" height="12" fill="#C4B0FF"/><rect x="31" y="3" width="12" height="12" fill="#FF7AA8"/><rect x="3" y="17" width="12" height="12" fill="#5B4BC4"/><rect x="17" y="17" width="12" height="12" fill="#A78BFA"/><rect x="31" y="17" width="12" height="12" fill="#B5426E"/><rect x="3" y="31" width="12" height="12" fill="#2E2466"/><rect x="17" y="31" width="12" height="12" fill="#6A50C8"/><rect x="31" y="31" width="12" height="12" fill="#5E1E44"/></svg></div>
+        <div>
+          <h1>Pyx</h1>
+          <div class="tagline">Color reducer · Pixel art · Retro FX</div>
+        </div>
+      </div>
+      <p class="intro"><strong>Pyx</strong> turns any picture into pixel art: pick a pixel size, squeeze it into a <strong>retro palette</strong>, add <strong>CRT, glitch and color-cycling</strong> effects, and drop an RPG-style <strong>dialog box</strong> on top. Everything runs in your browser; nothing gets uploaded.</p>
+
+        <div class="layout">
+          <div class="col">
+            <section class="win win-child ">
+          <div class="win-title"><span class="win-icon"><svg viewBox="0 0 14 11" width="14" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="14" height="1" fill="#e9e4ff"/><rect x="0" y="1" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="1" width="12" height="1" fill="#6b55d4"/><rect x="13" y="1" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="2" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="2" width="8" height="1" fill="#6b55d4"/><rect x="9" y="2" width="2" height="1" fill="#f0abfc"/><rect x="11" y="2" width="2" height="1" fill="#6b55d4"/><rect x="13" y="2" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="3" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="3" width="8" height="1" fill="#6b55d4"/><rect x="9" y="3" width="2" height="1" fill="#f0abfc"/><rect x="11" y="3" width="2" height="1" fill="#6b55d4"/><rect x="13" y="3" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="4" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="4" width="12" height="1" fill="#6b55d4"/><rect x="13" y="4" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="5" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="5" width="4" height="1" fill="#6b55d4"/><rect x="5" y="5" width="1" height="1" fill="#241d5c"/><rect x="6" y="5" width="7" height="1" fill="#6b55d4"/><rect x="13" y="5" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="6" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="6" width="3" height="1" fill="#6b55d4"/><rect x="4" y="6" width="3" height="1" fill="#241d5c"/><rect x="7" y="6" width="6" height="1" fill="#6b55d4"/><rect x="13" y="6" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="7" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="7" width="2" height="1" fill="#6b55d4"/><rect x="3" y="7" width="5" height="1" fill="#241d5c"/><rect x="8" y="7" width="2" height="1" fill="#6b55d4"/><rect x="10" y="7" width="1" height="1" fill="#241d5c"/><rect x="11" y="7" width="2" height="1" fill="#6b55d4"/><rect x="13" y="7" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="8" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="8" width="1" height="1" fill="#6b55d4"/><rect x="2" y="8" width="10" height="1" fill="#241d5c"/><rect x="12" y="8" width="1" height="1" fill="#6b55d4"/><rect x="13" y="8" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="9" width="1" height="1" fill="#e9e4ff"/><rect x="1" y="9" width="12" height="1" fill="#241d5c"/><rect x="13" y="9" width="1" height="1" fill="#e9e4ff"/><rect x="0" y="10" width="14" height="1" fill="#e9e4ff"/></svg></span><span class="win-text">Preview</span></div>
+          <div class="win-body">
+              <div class="toolbar">
+                <span class="row" id="zoomBtns">
+                  <button type="button" data-z="fit" aria-pressed="true">Fit</button>
+                  <button type="button" data-z="1" aria-pressed="false">1×</button>
+                  <button type="button" data-z="2" aria-pressed="false">2×</button>
+                  <button type="button" data-z="4" aria-pressed="false">4×</button>
+                </span>
+                <span class="sep"></span>
+                <button type="button" id="compare" disabled>Hold to see original</button>
+              </div>
+              <div class="view client" id="view">
+                <div class="empty" id="empty">
+                  <p class="big">Drop a picture here</p>
+                  <p class="small">PNG, JPG, GIF, WebP or anything your browser can open. Pasting from the clipboard works too.</p>
+                  <span class="filebtn"><button class="default" type="button" tabindex="-1">Open picture…</button><input id="file2" type="file" accept="image/*" aria-label="Open picture"></span>
+                </div>
+                <canvas id="out" hidden></canvas>
+                <canvas id="orig" hidden></canvas>
+                <div class="busy" id="busy" hidden>Working…</div>
+              </div>
+              <div class="toolbar">
+                <button class="default" id="save" type="button" disabled>Download PNG</button>
+                <button id="saveGif" type="button" disabled hidden>Download GIF</button>
+                <button id="copyHex" type="button" disabled>Copy hex codes</button>
+              </div>
+            </div>
+          <div class="win-status"><span class="status-cell term" id="status">No picture loaded</span><span class="status-cell grow" id="saveHint" aria-live="polite"></span><span class="grip" aria-hidden="true"></span></div>
+        </section>
+
+            <section class="win win-child " id="band" hidden>
+          <div class="win-title"><span class="win-icon"><svg viewBox="0 0 11 11" width="11" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="11" height="1" fill="#0b0922"/><rect x="0" y="1" width="1" height="1" fill="#0b0922"/><rect x="1" y="1" width="4" height="1" fill="#f0abfc"/><rect x="5" y="1" width="1" height="1" fill="#0b0922"/><rect x="6" y="1" width="4" height="1" fill="#a78bfa"/><rect x="10" y="1" width="1" height="1" fill="#0b0922"/><rect x="0" y="2" width="1" height="1" fill="#0b0922"/><rect x="1" y="2" width="4" height="1" fill="#f0abfc"/><rect x="5" y="2" width="1" height="1" fill="#0b0922"/><rect x="6" y="2" width="4" height="1" fill="#a78bfa"/><rect x="10" y="2" width="1" height="1" fill="#0b0922"/><rect x="0" y="3" width="1" height="1" fill="#0b0922"/><rect x="1" y="3" width="4" height="1" fill="#f0abfc"/><rect x="5" y="3" width="1" height="1" fill="#0b0922"/><rect x="6" y="3" width="4" height="1" fill="#a78bfa"/><rect x="10" y="3" width="1" height="1" fill="#0b0922"/><rect x="0" y="4" width="1" height="1" fill="#0b0922"/><rect x="1" y="4" width="4" height="1" fill="#f0abfc"/><rect x="5" y="4" width="1" height="1" fill="#0b0922"/><rect x="6" y="4" width="4" height="1" fill="#a78bfa"/><rect x="10" y="4" width="1" height="1" fill="#0b0922"/><rect x="0" y="5" width="11" height="1" fill="#0b0922"/><rect x="0" y="6" width="1" height="1" fill="#0b0922"/><rect x="1" y="6" width="4" height="1" fill="#818cf8"/><rect x="5" y="6" width="1" height="1" fill="#0b0922"/><rect x="6" y="6" width="4" height="1" fill="#e9e4ff"/><rect x="10" y="6" width="1" height="1" fill="#0b0922"/><rect x="0" y="7" width="1" height="1" fill="#0b0922"/><rect x="1" y="7" width="4" height="1" fill="#818cf8"/><rect x="5" y="7" width="1" height="1" fill="#0b0922"/><rect x="6" y="7" width="4" height="1" fill="#e9e4ff"/><rect x="10" y="7" width="1" height="1" fill="#0b0922"/><rect x="0" y="8" width="1" height="1" fill="#0b0922"/><rect x="1" y="8" width="4" height="1" fill="#818cf8"/><rect x="5" y="8" width="1" height="1" fill="#0b0922"/><rect x="6" y="8" width="4" height="1" fill="#e9e4ff"/><rect x="10" y="8" width="1" height="1" fill="#0b0922"/><rect x="0" y="9" width="1" height="1" fill="#0b0922"/><rect x="1" y="9" width="4" height="1" fill="#818cf8"/><rect x="5" y="9" width="1" height="1" fill="#0b0922"/><rect x="6" y="9" width="4" height="1" fill="#e9e4ff"/><rect x="10" y="9" width="1" height="1" fill="#0b0922"/><rect x="0" y="10" width="11" height="1" fill="#0b0922"/></svg></span><span class="win-text">Palette used</span></div>
+          <div class="win-body win-pad">
+              <div class="client"><div class="strip" id="strip"></div></div>
+              <p class="small" style="margin-top:6px">Bar widths show how much of the picture each color covers. Click a color to copy it.</p>
+              <div class="swatches" id="swatches"></div>
+              <details class="more"><summary>Hex list</summary><textarea id="hexOut" readonly></textarea></details>
+            </div>
+        </section>
+          </div>
+
+          <section class="win win-child ">
+          <div class="win-title"><span class="win-icon"><svg viewBox="0 0 11 11" width="11" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="2" height="1" fill="#f0abfc"/><rect x="0" y="1" width="2" height="1" fill="#dcd8f0"/><rect x="2" y="1" width="2" height="1" fill="#f0abfc"/><rect x="4" y="1" width="7" height="1" fill="#dcd8f0"/><rect x="2" y="2" width="2" height="1" fill="#f0abfc"/><rect x="7" y="4" width="2" height="1" fill="#f0abfc"/><rect x="0" y="5" width="7" height="1" fill="#dcd8f0"/><rect x="7" y="5" width="2" height="1" fill="#f0abfc"/><rect x="9" y="5" width="2" height="1" fill="#dcd8f0"/><rect x="7" y="6" width="2" height="1" fill="#f0abfc"/><rect x="4" y="8" width="2" height="1" fill="#f0abfc"/><rect x="0" y="9" width="4" height="1" fill="#dcd8f0"/><rect x="4" y="9" width="2" height="1" fill="#f0abfc"/><rect x="6" y="9" width="5" height="1" fill="#dcd8f0"/><rect x="4" y="10" width="2" height="1" fill="#f0abfc"/></svg></span><span class="win-text">Settings</span></div>
+          <div class="win-body win-pad">
+            <div class="group" style="margin-top:6px">
+              <div class="legend">Picture</div>
+              <span class="filebtn"><button type="button" tabindex="-1">Open picture…</button><input id="file" type="file" accept="image/*" aria-label="Open picture"></span>
+              <div class="small" id="srcInfo" style="margin-top:6px">None loaded</div>
+            </div>
+
+            <div class="group">
+              <div class="legend">Pixel size</div>
+              <div class="seg" id="pxBtns">
+                <button type="button" data-k="1">1px</button><button type="button" data-k="2">2px</button><button type="button" data-k="3">3px</button>
+                <button type="button" data-k="4">4px</button><button type="button" data-k="5">5px</button><button type="button" data-k="6">6px</button><button type="button" data-k="8">8px</button>
+              </div>
+              <details class="more"><summary>Grid size and resizing</summary>
+                <div style="margin-top:8px">
+                  <div class="field"><label for="w">Width</label><div class="row"><input id="w" type="number" min="1" max="4096" value="256"><span class="small">pixels</span></div></div>
+                  <div class="field"><label for="h">Height</label><div class="row"><input id="h" type="number" min="1" max="4096" value="256"><span class="small">pixels</span></div></div>
+                  <div class="field"><span></span><label class="check"><input id="lock" type="checkbox" checked>Keep aspect ratio</label></div>
+                  <div class="field"><label for="resize">Resize</label><select id="resize">
+                    <option value="smooth">Smooth (photos)</option>
+                    <option value="nearest">Nearest pixel (pixel art)</option></select></div>
+                  <p class="small" style="margin-top:6px">Each grid pixel is drawn as a block of the chosen pixel size.</p>
+                </div>
+              </details>
+            </div>
+
+            <div class="group">
+              <div class="legend">Adjust</div>
+              <div class="fxrow" style="margin-top:0"><label for="bri">Brightness</label><input id="bri" type="range" min="-100" max="100" value="0"><span class="val" id="briV">0</span></div>
+              <div class="fxrow"><label for="con">Contrast</label><input id="con" type="range" min="-100" max="100" value="0"><span class="val" id="conV">0</span></div>
+              <div class="fxrow"><label for="sat">Saturation</label><input id="sat" type="range" min="0" max="200" value="100"><span class="val" id="satV">100%</span></div>
+              <div class="fxrow"><label for="hue">Hue</label><input id="hue" type="range" min="-180" max="180" value="0"><span class="val" id="hueV">0°</span></div>
+              <div class="fxrow"><label for="ero">Erosion</label><input id="ero" type="range" min="0" max="3" value="0"><span class="val" id="eroV">0</span></div>
+              <button type="button" id="resetAdj" style="margin-top:8px">Reset</button>
+            </div>
+
+            <div class="group">
+              <div class="legend">Colors</div>
+              <div class="field"><label for="n">Count</label><div class="row">
+                <input id="nRange" type="range" min="2" max="256" value="16" aria-label="Number of colors">
+                <input id="n" type="number" min="2" max="256" value="16" style="width:56px"></div></div>
+              <div class="field"><label for="dither">Dithering</label><select id="dither">
+                <option value="none">None</option>
+                <option value="fs" selected>Floyd–Steinberg</option>
+                <option value="atkinson">Atkinson</option>
+                <option value="bayer4">Ordered 4×4</option>
+                <option value="bayer8">Ordered 8×8</option></select></div>
+              <div class="field" id="strengthRow"><label for="strength">Strength</label><div class="row">
+                <input id="strength" type="range" min="0" max="100" value="80">
+                <span class="small" id="strengthVal" style="width:32px;text-align:right">80%</span></div></div>
+            </div>
+
+            <div class="group">
+              <div class="legend">Palette</div>
+              <div class="tiles" id="palTiles"></div>
+              <textarea id="custom" hidden placeholder="Paste hex colors, e.g. #000000 #FF0000 #FFFFFF" aria-label="Custom palette hex colors"></textarea>
+              <div class="hint" id="palHint"></div>
+            </div>
+
+            <div class="group">
+              <div class="legend">Effects</div>
+              <div class="fxgrid" id="fxBtns">
+                <button type="button" data-fx="crt" aria-pressed="false">CRT</button>
+                <button type="button" data-fx="glitch" aria-pressed="false">Glitch</button>
+                <button type="button" data-fx="cycle" aria-pressed="false">Cycle</button>
+                <button type="button" data-fx="ghost" aria-pressed="false">Ghost</button>
+                <button type="button" data-fx="rgb" aria-pressed="false">RGB split</button>
+                <button type="button" data-fx="grain" aria-pressed="false">Grain</button>
+              </div>
+              <div class="fxrow" data-for="crt" hidden><label for="fx-crt">CRT</label><input id="fx-crt" type="range" min="5" max="100" value="60"><span class="val">60</span></div>
+              <div class="fxrow" data-for="glitch" hidden><label for="fx-glitch">Glitch</label><input id="fx-glitch" type="range" min="5" max="100" value="40"><span class="val">40</span></div>
+              <div data-for="glitch" hidden style="margin-top:6px;text-align:right"><button type="button" id="reseed">Shuffle glitch</button></div>
+              <div class="fxrow" data-for="cycle" hidden><label for="fx-cycle">Speed</label><input id="fx-cycle" type="range" min="2" max="24" value="8"><span class="val">8 fps</span></div>
+              <div class="fxrow" data-for="ghost" hidden><label for="fx-ghost">Ghost</label><input id="fx-ghost" type="range" min="5" max="100" value="40"><span class="val">40</span></div>
+              <div class="fxrow" data-for="rgb" hidden><label for="fx-rgb">RGB split</label><input id="fx-rgb" type="range" min="5" max="100" value="40"><span class="val">40</span></div>
+              <div class="fxrow" data-for="grain" hidden><label for="fx-grain">Grain</label><input id="fx-grain" type="range" min="5" max="100" value="30"><span class="val">30</span></div>
+              <p class="small" id="cycleNote" hidden style="margin-top:6px">Cycle rotates the palette to animate the picture. Save it with Download GIF.</p>
+            </div>
+
+            <div class="group">
+              <div class="legend">Dialog box</div>
+              <label class="check"><input id="dlgOn" type="checkbox">Show a dialog box</label>
+              <div class="dlg-body" id="dlgBox" hidden style="margin-top:10px">
+                <div class="dlg-styles" id="dlgStyles">
+                  <button type="button" data-style="classic" aria-pressed="true" aria-label="Classic"><span></span></button>
+                  <button type="button" data-style="blue" aria-pressed="false" aria-label="Blue"><span></span></button>
+                  <button type="button" data-style="terminal" aria-pressed="false" aria-label="Terminal"><span></span></button>
+                  <button type="button" data-style="parchment" aria-pressed="false" aria-label="Parchment"><span></span></button>
+                  <button type="button" data-style="dekx" aria-pressed="false" aria-label="Dekxtopia"><span></span></button>
+                </div>
+                <div class="field" style="margin-top:10px"><label for="dlgName">Name</label><input id="dlgName" type="text" maxlength="24" placeholder="Optional"></div>
+                <div style="margin-top:8px"><label for="dlgText" class="small">Text</label>
+                  <textarea id="dlgText" maxlength="200">...Where am I?</textarea></div>
+                <div class="field" style="margin-top:8px"><label for="dlgPos">Position</label><select id="dlgPos">
+                  <option value="bottom">Bottom</option><option value="middle">Middle</option><option value="top">Top</option></select></div>
+                <div class="field"><label for="dlgSize">Text size</label><select id="dlgSize">
+                  <option value="s">Small</option><option value="m" selected>Medium</option><option value="l">Large</option></select></div>
+                <div style="margin-top:8px;display:grid;gap:6px">
+                  <label class="check"><input id="dlgArrow" type="checkbox" checked>Show the ▼ prompt</label>
+                  <label class="check"><input id="dlgMatch" type="checkbox" checked>Use the picture's palette</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="group">
+              <div class="legend">Transparency</div>
+              <label class="check"><input id="keepAlpha" type="checkbox" checked>Keep transparent areas</label>
+              <div class="row" id="bgRow" hidden style="margin-top:8px"><label for="bg" class="small">Fill with</label><input id="bg" type="color" value="#ffffff"></div>
+            </div>
+          </div>
+        </section>
+        </div>
+    </div></main>
+  </div>
+  <div class="win-status">
+    <span class="status-cell grow" id="status-msg">Ready</span>
+    <span class="status-cell">© 2026 Dekxtopia — Dekx's corner of the internet.</span>
+    <span class="status-cell">dekx.cc</span>
+    <span class="grip" aria-hidden="true"></span>
+  </div>
+</div>
+<script src="dekx.js"></script>
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+function nearest(P,K,r,g,b){
+  let best=0,bd=Infinity;
+  for(let j=0,o=0;j<K;j++,o+=3){
+    const pr=P[o],pg=P[o+1],pb=P[o+2];
+    const rm=(r+pr)*0.5,dr=r-pr,dg=g-pg,db=b-pb;
+    const d=(2+rm/256)*dr*dr+4*dg*dg+(2+(255-rm)/256)*db*db;
+    if(d<bd){bd=d;best=j}
+  }
+  return best;
+}
+
+function buildHist(d,N){
+  const BINS=262144;
+  const cnt=new Uint32Array(BINS),sr=new Float64Array(BINS),sg=new Float64Array(BINS),sb=new Float64Array(BINS);
+  let exact=new Map(),total=0;
+  for(let i=0;i<d.length;i+=4){
+    if(d[i+3]<128)continue;
+    const r=d[i],g=d[i+1],b=d[i+2];
+    const k=((r>>2)<<12)|((g>>2)<<6)|(b>>2);
+    cnt[k]++;sr[k]+=r;sg[k]+=g;sb[k]+=b;total++;
+    if(exact){const ek=(r<<16)|(g<<8)|b;exact.set(ek,(exact.get(ek)||0)+1);if(exact.size>N)exact=null}
+  }
+  let nb=0;for(let k=0;k<BINS;k++)if(cnt[k])nb++;
+  const R=new Float32Array(nb),G=new Float32Array(nb),B=new Float32Array(nb),Wt=new Float32Array(nb);
+  for(let k=0,i=0;k<BINS;k++){const c=cnt[k];if(c){R[i]=sr[k]/c;G[i]=sg[k]/c;B[i]=sb[k]/c;Wt[i]=c;i++}}
+  return {nb,R,G,B,Wt,total,exact:exact?[...exact.keys()].map(k=>[k>>16,(k>>8)&255,k&255]):null};
+}
+
+function makeBox(idx,h){
+  let mn=[255,255,255],mx=[0,0,0],w=0;
+  for(const i of idx){
+    const v=[h.R[i],h.G[i],h.B[i]];
+    for(let c=0;c<3;c++){if(v[c]<mn[c])mn[c]=v[c];if(v[c]>mx[c])mx[c]=v[c]}
+    w+=h.Wt[i];
+  }
+  const rng=[(mx[0]-mn[0])*1.0,(mx[1]-mn[1])*1.2,(mx[2]-mn[2])*0.9];
+  let ch=0;if(rng[1]>rng[ch])ch=1;if(rng[2]>rng[ch])ch=2;
+  return {idx,w,ch,range:rng[ch]};
+}
+function medianCut(h,N){
+  const all=new Array(h.nb);for(let i=0;i<h.nb;i++)all[i]=i;
+  const boxes=[makeBox(all,h)];
+  const chan=[h.R,h.G,h.B];
+  while(boxes.length<N){
+    let bi=-1,bs=0;
+    for(let i=0;i<boxes.length;i++){const b=boxes[i];if(b.idx.length<2)continue;const s=b.range*Math.sqrt(b.w);if(s>bs){bs=s;bi=i}}
+    if(bi<0)break;
+    const b=boxes[bi],A=chan[b.ch];
+    b.idx.sort((x,y)=>A[x]-A[y]);
+    let acc=0,half=b.w/2,s=1;
+    for(let i=0;i<b.idx.length;i++){acc+=h.Wt[b.idx[i]];if(acc>=half){s=i+1;break}}
+    s=Math.max(1,Math.min(b.idx.length-1,s));
+    boxes.splice(bi,1,makeBox(b.idx.slice(0,s),h),makeBox(b.idx.slice(s),h));
+  }
+  const P=new Float32Array(boxes.length*3);
+  boxes.forEach((b,j)=>{let r=0,g=0,bl=0;for(const i of b.idx){const w=h.Wt[i];r+=h.R[i]*w;g+=h.G[i]*w;bl+=h.B[i]*w}P[j*3]=r/b.w;P[j*3+1]=g/b.w;P[j*3+2]=bl/b.w});
+  return P;
+}
+function kmeans(h,P,iters){
+  const K=P.length/3;
+  for(let it=0;it<iters;it++){
+    const s=new Float64Array(K*4);
+    for(let i=0;i<h.nb;i++){const j=nearest(P,K,h.R[i],h.G[i],h.B[i]),w=h.Wt[i];s[j*4]+=h.R[i]*w;s[j*4+1]+=h.G[i]*w;s[j*4+2]+=h.B[i]*w;s[j*4+3]+=w}
+    for(let j=0;j<K;j++){const w=s[j*4+3];if(w>0){P[j*3]=s[j*4]/w;P[j*3+1]=s[j*4+1]/w;P[j*3+2]=s[j*4+2]/w}}
+  }
+  return P;
+}
+function autoPalette(h,N){
+  if(h.exact){const P=new Float32Array(h.exact.length*3);h.exact.forEach((c,j)=>{P[j*3]=c[0];P[j*3+1]=c[1];P[j*3+2]=c[2]});return P}
+  const P=kmeans(h,medianCut(h,N),h.nb>60000?3:5);
+  for(let i=0;i<P.length;i++)P[i]=Math.round(P[i]);
+  return P;
+}
+function fixedPalette(h,hexes,N){
+  const F=new Float32Array(hexes.length*3);
+  hexes.forEach((x,j)=>{const v=parseInt(x,16);F[j*3]=v>>16;F[j*3+1]=(v>>8)&255;F[j*3+2]=v&255});
+  const FK=hexes.length;
+  if(N>=FK||h.nb===0)return F;
+  // weight each palette entry by how much of the picture lands on it,
+  // then cluster those entries and keep one representative per cluster
+  const use=new Float64Array(FK);
+  for(let i=0;i<h.nb;i++)use[nearest(F,FK,h.R[i],h.G[i],h.B[i])]+=h.Wt[i];
+  const live=[];for(let j=0;j<FK;j++)if(use[j]>0)live.push(j);
+  const chosen=new Set();
+  if(live.length<=N)live.forEach(j=>chosen.add(j));
+  else{
+    const L=live.length,LP=new Float32Array(L*3);
+    const hp={nb:L,R:new Float32Array(L),G:new Float32Array(L),B:new Float32Array(L),Wt:new Float32Array(L),exact:null};
+    live.forEach((j,k)=>{hp.R[k]=LP[k*3]=F[j*3];hp.G[k]=LP[k*3+1]=F[j*3+1];hp.B[k]=LP[k*3+2]=F[j*3+2];hp.Wt[k]=use[j]});
+    const C=kmeans(hp,medianCut(hp,N),6);
+    for(let c=0;c<C.length/3;c++)chosen.add(live[nearest(LP,L,C[c*3],C[c*3+1],C[c*3+2])]);
+  }
+  if(chosen.size<N){
+    const order=[...use.keys()].sort((a,b)=>use[b]-use[a]);
+    for(const j of order){if(chosen.size>=N)break;chosen.add(j)}
+  }
+  const ids=[...chosen],P=new Float32Array(ids.length*3);
+  ids.forEach((j,k)=>{P[k*3]=F[j*3];P[k*3+1]=F[j*3+1];P[k*3+2]=F[j*3+2]});
+  return P;
+}
+
+function bayer(n){
+  let m=[[0]];
+  while(m.length<n){const s=m.length,M=[];for(let y=0;y<s*2;y++){const row=[];for(let x=0;x<s*2;x++){const q=[0,2,3,1][(y>=s?2:0)+(x>=s?1:0)];row.push(m[y%s][x%s]*4+q)}M.push(row)}m=M}
+  return m;
+}
+const KERNELS={
+  fs:[[1,0,7/16],[-1,1,3/16],[0,1,5/16],[1,1,1/16]],
+  atkinson:[[1,0,1/8],[2,0,1/8],[-1,1,1/8],[0,1,1/8],[1,1,1/8],[0,2,1/8]]
+};
+
+function mapPixels(d,w,h,P,mode,strength){
+  const K=P.length/3,out=new Uint8ClampedArray(d.length),used=new Uint32Array(K),idx=new Int16Array(w*h).fill(-1);
+  let lookup;
+  if(mode==="none"){
+    const cache=new Map();
+    lookup=(r,g,b)=>{const k=(r<<16)|(g<<8)|b;let j=cache.get(k);if(j===undefined){j=nearest(P,K,r,g,b);cache.set(k,j)}return j};
+  }else{
+    const t=new Int16Array(262144).fill(-1);
+    lookup=(r,g,b)=>{const k=((r>>2)<<12)|((g>>2)<<6)|(b>>2);let j=t[k];if(j<0){j=nearest(P,K,(r&252)|2,(g&252)|2,(b&252)|2);t[k]=j}return j};
+  }
+  const put=(i,j)=>{out[i]=P[j*3];out[i+1]=P[j*3+1];out[i+2]=P[j*3+2];out[i+3]=255;used[j]++;idx[i>>2]=j};
+
+  if(mode==="none"){
+    for(let i=0;i<d.length;i+=4){if(d[i+3]<128)continue;put(i,lookup(d[i],d[i+1],d[i+2]))}
+  }else if(mode==="bayer4"||mode==="bayer8"){
+    const n=mode==="bayer4"?4:8,M=bayer(n),nn=n*n;
+    const spread=(255/Math.max(1,Math.cbrt(K)-0.5))*strength;
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;if(d[i+3]<128)continue;
+      const o=((M[y%n][x%n]+0.5)/nn-0.5)*spread;
+      const r=Math.max(0,Math.min(255,d[i]+o|0)),g=Math.max(0,Math.min(255,d[i+1]+o|0)),b=Math.max(0,Math.min(255,d[i+2]+o|0));
+      put(i,lookup(r,g,b));
+    }
+  }else{
+    const ker=KERNELS[mode],RW=(w+4)*3;
+    let rows=[new Float32Array(RW),new Float32Array(RW),new Float32Array(RW)];
+    for(let y=0;y<h;y++){
+      const ltr=(y&1)===0,cur=rows[0];
+      for(let s=0;s<w;s++){
+        const x=ltr?s:w-1-s,i=(y*w+x)*4,e=(x+2)*3;
+        if(d[i+3]<128)continue;
+        const r=Math.max(0,Math.min(255,d[i]+cur[e])),g=Math.max(0,Math.min(255,d[i+1]+cur[e+1])),b=Math.max(0,Math.min(255,d[i+2]+cur[e+2]));
+        const j=lookup(r|0,g|0,b|0);put(i,j);
+        const er=(r-P[j*3])*strength,eg=(g-P[j*3+1])*strength,eb=(b-P[j*3+2])*strength;
+        for(const [dx,dy,f] of ker){
+          const xx=x+(ltr?dx:-dx);if(xx<0||xx>=w)continue;
+          const row=rows[dy],o=(xx+2)*3;row[o]+=er*f;row[o+1]+=eg*f;row[o+2]+=eb*f;
+        }
+      }
+      const r0=rows[0];r0.fill(0);rows=[rows[1],rows[2],r0];
+    }
+  }
+  return {out,used,idx};
+}
+
+
+function drawResized(bmp,sw,sh,tw,th,smooth,keepAlpha,bg){
+  let cur=bmp,cw=sw,ch=sh;
+  if(smooth){ // step down by halves for clean large reductions
+    while(cw/2>=tw&&ch/2>=th){
+      const nw=Math.max(tw,Math.round(cw/2)),nh=Math.max(th,Math.round(ch/2));
+      const c=document.createElement("canvas");c.width=nw;c.height=nh;
+      const x=c.getContext("2d");x.imageSmoothingEnabled=true;x.imageSmoothingQuality="high";x.drawImage(cur,0,0,nw,nh);
+      cur=c;cw=nw;ch=nh;
+    }
+  }
+  const c=document.createElement("canvas");c.width=tw;c.height=th;
+  const x=c.getContext("2d",{willReadFrequently:true});
+  if(!keepAlpha){x.fillStyle=bg;x.fillRect(0,0,tw,th)}
+  x.imageSmoothingEnabled=smooth;x.imageSmoothingQuality="high";
+  x.drawImage(cur,0,0,tw,th);
+  return c;
+}
+
+
+
+/* ---------- Palettes ---------- */
+const hexList=s=>s.trim().split(/\s+/);
+const gen=f=>{const a=[];f(a);return a};
+const toHex=(r,g,b)=>"#"+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,"0")).join("").toUpperCase();
+const PRESETS=[
+ ["auto","Auto",null],
+ ["dekx","Dekxtopia",hexList("0C0A1E 1E1638 3A2A6E 6A50C8 A78BFA E3D9FF FFFFFF FF7AA8 B5426E 5E1E44 2A0F26 7FD3FF")],
+ ["gb","Game Boy",hexList("0F380F 306230 8BAC0F 9BBC0F")],
+ ["nes","NES",hexList("7C7C7C 0000FC 0000BC 4428BC 940084 A80020 A81000 881400 503000 007800 006800 005800 004058 000000 BCBCBC 0078F8 0058F8 6844FC D800CC E40058 F83800 E45C10 AC7C00 00B800 00A800 00A844 008888 F8F8F8 3CBCFC 6888FC 9878F8 F878F8 F85898 F87858 FCA044 F8B800 B8F818 58D854 58F898 00E8D8 787878 FCFCFC A4E4FC B8B8F8 D8B8F8 F8B8F8 F8A4C0 F0D0B0 FCE0A8 F8D878 D8F878 B8F8B8 B8F8D8 00FCFC F8D8F8")],
+ ["cga4","CGA",hexList("000000 55FFFF FF55FF FFFFFF")],
+ ["ega","CGA / EGA 16",hexList("000000 0000AA 00AA00 00AAAA AA0000 AA00AA AA5500 AAAAAA 555555 5555FF 55FF55 55FFFF FF5555 FF55FF FFFF55 FFFFFF")],
+ ["c64","C64",hexList("000000 FFFFFF 68372B 70A4B2 6F3D86 588D43 352879 B8C76F 6F4F25 433900 9A6759 444444 6C6C6C 9AD284 6C5EB5 959595")],
+ ["pico8","PICO-8",hexList("000000 1D2B53 7E2553 008751 AB5236 5F574F C2C3C7 FFF1E8 FF004D FFA300 FFEC27 00E436 29ADFF 83769C FF77A8 FFCCAA")],
+ ["sweetie","Sweetie 16",hexList("1A1C2C 5D275D B13E53 EF7D57 FFCD75 A7F070 38B764 257179 29366F 3B5DC9 41A6F6 73EFF7 F4F4F4 94B0C2 566C86 333C57")],
+ ["win16","Windows 16",hexList("000000 800000 008000 808000 000080 800080 008080 C0C0C0 808080 FF0000 00FF00 FFFF00 0000FF FF00FF 00FFFF FFFFFF")],
+ ["win20","Windows 20",hexList("000000 800000 008000 808000 000080 800080 008080 C0C0C0 C0DCC0 A6CAF0 FFFBF0 A0A0A4 808080 FF0000 00FF00 FFFF00 0000FF FF00FF 00FFFF FFFFFF")],
+ ["pastel","Pastel",hexList("FFFFFF FFD6E0 FFB5C2 FFC8A2 FFEDB3 D4F0C0 B8E6D8 B5D8F5 C9C1F0 E6C6F0 8A86A8 4A4560")],
+ ["mono","Mono",hexList("1A1A1A 5C5C5C A8A8A8 F2F2F2")],
+ ["sepia","Sepia",hexList("2B1D0E 4A3420 6E5033 937048 B8946A D6B88E EFDDB7 FFF5E1")],
+ ["sunset","Sunset",hexList("1B0F2E 3D1A4F 6B2367 A2306E D64C5E F27A4E FBAB5A FFD97A FFF3C4")],
+ ["ocean","Ocean",hexList("06131F 0B2A3F 0F4566 14628A 1C82A8 2EA6C4 5CC8D8 9BE3E3 D7F7F3")],
+ ["earth","Earth",hexList("1E1A14 3B2E21 5C4630 7D6142 6B7A3A 8E9E4E B5A36A D8C9A0 F2EAD3")],
+ ["sakura","Sakura",hexList("2E1A2A 5A2C4A 8C3F66 C2577F E77F9E F4A7BB FAD0DA FFF0F3 7C9A5C B8D18A")],
+ ["cyber","Cyber",hexList("0A0614 1A0B33 3A0CA3 7209B7 F72585 FF5DA2 4CC9F0 00F5D4 FEE440 FFFFFF")],
+ ["horror","Horror",hexList("000000 120A0A 2B0F0F 4F0D0D 7A0F0F A61B1B 3A3A2E 5E5E4A 8C8C6E C9C2A3")],
+ ["riso","RISO",hexList("FFFFFF FF48B0 0078BF FFE800 00A95C 000000")],
+ ["cmyk","CMYK",hexList("FFFFFF 00FFFF FF00FF FFFF00 FF0000 00FF00 0000FF 000000")],
+ ["bw","1-bit",hexList("000000 FFFFFF")],
+ ["gray","Grayscale",gen(a=>{for(let i=0;i<256;i++)a.push(toHex(i,i,i))})],
+ ["web","Web-safe 216",gen(a=>{for(let r=0;r<6;r++)for(let g=0;g<6;g++)for(let b=0;b<6;b++)a.push(toHex(r*51,g*51,b*51))})],
+ ["rgb332","8-bit 3-3-2",gen(a=>{for(let r=0;r<8;r++)for(let g=0;g<8;g++)for(let b=0;b<4;b++)a.push(toHex(r*255/7,g*255/7,b*85))})],
+ ["custom","Custom",null]
+];
+let palId="auto";
+
+function parseHexes(text){
+  const out=[],seen=new Set();
+  const re=/#?\b([0-9a-f]{6}|[0-9a-f]{3})\b/gi;let m;
+  while((m=re.exec(text))){
+    let h=m[1];if(h.length===3)h=h.split("").map(c=>c+c).join("");
+    h=h.toUpperCase();if(!seen.has(h)){seen.add(h);out.push(h)}
+  }
+  return out;
+}
+function currentFixed(){
+  if(palId==="custom")return parseHexes($("custom").value);
+  const p=PRESETS.find(x=>x[0]===palId);return p&&p[2]?p[2].map(h=>h.replace("#","").toUpperCase()):null;
+}
+
+function buildPalTiles(){
+  const box=$("palTiles");
+  PRESETS.forEach(([id,name,cols])=>{
+    const b=document.createElement("button");b.type="button";b.className="pal-tile";b.dataset.pal=id;
+    b.setAttribute("aria-pressed",String(id===palId));
+    const mini=document.createElement("span");mini.className="mini";
+    if(id==="auto")mini.classList.add("auto");
+    else if(id==="custom"){mini.id="customMini";}
+    else{
+      const show=cols.length>12?cols.filter((_,i)=>i%Math.ceil(cols.length/12)===0).slice(0,12):cols;
+      show.forEach(h=>{const i=document.createElement("i");i.style.background=h.startsWith("#")?h:"#"+h;mini.appendChild(i)});
+    }
+    b.appendChild(mini);b.appendChild(document.createTextNode(id==="auto"?"Auto (best fit)":name));
+    b.addEventListener("click",()=>selectPalette(id));
+    box.appendChild(b);
+  });
+}
+function selectPalette(id){
+  palId=id;
+  [...$("palTiles").children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.pal===id)));
+  const fx=currentFixed();
+  if(fx&&fx.length>=2)setCount(Math.min(256,fx.length));
+  updatePalUI();schedule(0);
+}
+function setCount(n){$("n").value=n;$("nRange").value=n}
+function updatePalUI(){
+  $("custom").hidden=palId!=="custom";
+  const hint=$("palHint");hint.classList.remove("err");
+  const cm=$("customMini");
+  if(cm){cm.innerHTML="";parseHexes($("custom").value).slice(0,12).forEach(h=>{const i=document.createElement("i");i.style.background="#"+h;cm.appendChild(i)})}
+  if(palId==="auto"){hint.textContent="Picks the best colors for this picture.";return}
+  const fx=currentFixed(),n=+$("n").value;
+  if(!fx||fx.length<2){hint.classList.add("err");hint.textContent="Add at least 2 hex colors.";return}
+  hint.textContent=n>=fx.length?`${fx.length} colors. Lower the count to keep only the best-fitting ones.`:`${fx.length} colors; the ${n} that fit your picture best are used.`;
+}
+
+/* ---------- State ---------- */
+let src=null,base=null,result=null,zoom="fit",timer=0,running=false,pending=false,seed=1337;
+let k=2;
+const FX={crt:false,glitch:false,cycle:false,ghost:false,rgb:false,grain:false};
+let dlgStyle="classic",dlgLayer=null;
+let anim={raf:0,frame:0,last:0,frames:1};
+
+/* ---------- Image loading ---------- */
+async function loadFile(file){
+  if(!file)return;
+  if(file.type && !file.type.startsWith("image/")){setStatusText("That file isn't an image. Choose a PNG, JPG, GIF or WebP.");return}
+  let bmp=null;
+  try{bmp=await createImageBitmap(file)}catch(e){
+    try{bmp=await new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+    catch(e2){setStatusText("This image couldn't be opened. Try saving it as PNG or JPG first.");return}
+  }
+  const w=bmp.width||bmp.naturalWidth,h=bmp.height||bmp.naturalHeight;
+  src={bmp,w,h,name:(file.name||"image").replace(/\.[^.]+$/,"")};
+  $("srcInfo").textContent=`${file.name||"Pasted image"} (${w}×${h})`;
+  $("empty").hidden=true;
+  setPixelSize(k);
+}
+$("file").addEventListener("change",e=>loadFile(e.target.files[0]));
+$("file2").addEventListener("change",e=>loadFile(e.target.files[0]));
+const view=$("view");
+["dragenter","dragover"].forEach(t=>view.addEventListener(t,e=>{e.preventDefault();view.classList.add("drag")}));
+["dragleave","drop"].forEach(t=>view.addEventListener(t,e=>{e.preventDefault();view.classList.remove("drag")}));
+view.addEventListener("drop",e=>{const f=e.dataTransfer&&e.dataTransfer.files[0];if(f)loadFile(f)});
+window.addEventListener("paste",e=>{
+  const items=e.clipboardData?e.clipboardData.items:[];
+  for(const it of items){if(it.type.startsWith("image/")){loadFile(it.getAsFile());e.preventDefault();return}}
+});
+
+/* ---------- Controls ---------- */
+const W=$("w"),H=$("h"),lock=$("lock");
+const clampDim=v=>Math.max(1,Math.min(4096,Math.round(+v||1)));
+const MAX_OUT=16e6;
+function setPixelSize(nk){
+  k=nk;
+  [...$("pxBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.k===k)));
+  if(src){
+    const s=Math.min(1,Math.sqrt(MAX_OUT/(src.w*src.h)),8192/Math.max(src.w,src.h));
+    W.value=clampDim(src.w*s/k);H.value=clampDim(src.h*s/k);
+  }
+  schedule(0);
+}
+$("pxBtns").addEventListener("click",e=>{const b=e.target.closest("button");if(b)setPixelSize(+b.dataset.k)});
+W.addEventListener("input",()=>{if(lock.checked&&src)H.value=clampDim(+W.value*src.h/src.w);schedule()});
+H.addEventListener("input",()=>{if(lock.checked&&src)W.value=clampDim(+H.value*src.w/src.h);schedule()});
+$("nRange").addEventListener("input",()=>{$("n").value=$("nRange").value;updatePalUI();schedule()});
+$("n").addEventListener("input",()=>{$("nRange").value=$("n").value;updatePalUI();schedule()});
+$("strength").addEventListener("input",()=>{$("strengthVal").textContent=$("strength").value+"%";schedule()});
+$("dither").addEventListener("change",()=>{$("strengthRow").hidden=$("dither").value==="none";schedule(0)});
+$("custom").addEventListener("input",()=>{const n=parseHexes($("custom").value).length;if(n>=2)setCount(Math.min(256,n));updatePalUI();schedule()});
+$("keepAlpha").addEventListener("change",()=>{$("bgRow").hidden=$("keepAlpha").checked;schedule(0)});
+$("bg").addEventListener("input",()=>schedule());
+["resize","lock"].forEach(id=>$(id).addEventListener("change",()=>schedule(0)));
+
+const ADJ=[["bri",v=>v],["con",v=>v],["sat",v=>v+"%"],["hue",v=>v+"°"],["ero",v=>v]];
+ADJ.forEach(([id,f])=>$(id).addEventListener("input",()=>{$(id+"V").textContent=f($(id).value);schedule()}));
+$("resetAdj").addEventListener("click",()=>{[["bri",0],["con",0],["sat",100],["hue",0],["ero",0]].forEach(([id,v])=>{$(id).value=v});ADJ.forEach(([id,f])=>$(id+"V").textContent=f($(id).value));schedule(0)});
+
+$("fxBtns").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;const f=b.dataset.fx;FX[f]=!FX[f];
+  b.setAttribute("aria-pressed",String(FX[f]));
+  document.querySelectorAll(`[data-for="${f}"]`).forEach(r=>r.hidden=!FX[f]);
+  $("cycleNote").hidden=!FX.cycle;
+  if(f==="cycle")refreshOutput();else refreshFrame();
+});
+document.querySelectorAll(".fxrow[data-for] input").forEach(inp=>{
+  inp.addEventListener("input",()=>{
+    inp.nextElementSibling.textContent=inp.id==="fx-cycle"?inp.value+" fps":inp.value;
+    if(inp.id!=="fx-cycle")refreshFrame();
+  });
+});
+$("reseed").addEventListener("click",()=>{seed=(Math.random()*1e9)|0;refreshFrame()});
+
+$("dlgOn").addEventListener("change",()=>{$("dlgBox").hidden=!$("dlgOn").checked;refreshOutput()});
+$("dlgStyles").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;dlgStyle=b.dataset.style;
+  [...$("dlgStyles").children].forEach(x=>x.setAttribute("aria-pressed",String(x===b)));refreshOutput()});
+["dlgName","dlgText"].forEach(id=>$(id).addEventListener("input",()=>{clearTimeout(dlgTimer);dlgTimer=setTimeout(refreshOutput,150)}));
+["dlgPos","dlgSize","dlgArrow","dlgMatch"].forEach(id=>$(id).addEventListener("change",refreshOutput));
+let dlgTimer=0;
+
+$("zoomBtns").addEventListener("click",e=>{
+  const z=e.target.dataset&&e.target.dataset.z;if(!z)return;zoom=z;
+  [...$("zoomBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.z===z)));
+  applyZoom();
+});
+window.addEventListener("resize",()=>{if(zoom==="fit")applyZoom()});
+
+const cmp=$("compare");
+const showOrig=on=>{if(!result)return;$("orig").hidden=!on;$("out").hidden=on;cmp.setAttribute("aria-pressed",String(on))};
+cmp.addEventListener("pointerdown",e=>{e.preventDefault();cmp.setPointerCapture&&cmp.setPointerCapture(e.pointerId);showOrig(true)});
+["pointerup","pointercancel","lostpointercapture"].forEach(t=>cmp.addEventListener(t,()=>showOrig(false)));
+cmp.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();showOrig(true)}});
+cmp.addEventListener("keyup",()=>showOrig(false));
+cmp.addEventListener("blur",()=>showOrig(false));
+
+function schedule(delay=180){
+  if(!src)return;
+  clearTimeout(timer);timer=setTimeout(run,delay);
+}
+async function run(){
+  if(running){pending=true;return}
+  running=true;$("busy").hidden=false;
+  await new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0)));
+  try{if(await processBase())await refreshOutput()}catch(err){console.error(err);setStatusText("Something went wrong processing this image: "+err.message)}
+  $("busy").hidden=true;running=false;
+  if(pending){pending=false;run()}
+}
+
+/* ---------- Adjustments ---------- */
+function adjust(d){
+  const b=+$("bri").value,c=+$("con").value,s=+$("sat").value/100,hdeg=+$("hue").value;
+  if(!b&&!c&&s===1&&!hdeg)return;
+  const cf=(259*(c*2.55+255))/(255*(259-c*2.55)),bo=b*1.28;
+  const th=hdeg*Math.PI/180,cs=Math.cos(th),sn=Math.sin(th);
+  for(let i=0;i<d.length;i+=4){
+    if(d[i+3]===0)continue;
+    let r=d[i],g=d[i+1],bl=d[i+2];
+    if(hdeg){ // rotate hue in YIQ space
+      const y=.299*r+.587*g+.114*bl,ii=.596*r-.274*g-.322*bl,q=.211*r-.523*g+.312*bl;
+      const i2=ii*cs-q*sn,q2=ii*sn+q*cs;
+      r=y+.956*i2+.621*q2;g=y-.272*i2-.647*q2;bl=y-1.106*i2+1.703*q2;
+    }
+    if(s!==1){const L=.299*r+.587*g+.114*bl;r=L+(r-L)*s;g=L+(g-L)*s;bl=L+(bl-L)*s}
+    if(c){r=cf*(r-128)+128;g=cf*(g-128)+128;bl=cf*(bl-128)+128}
+    d[i]=r+bo;d[i+1]=g+bo;d[i+2]=bl+bo;
+  }
+}
+function erode(d,w,h,passes){
+  for(let p=0;p<passes;p++){
+    const c=d.slice();
+    const lum=i=>c[i]*.299+c[i+1]*.587+c[i+2]*.114;
+    for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;if(c[i+3]<128)continue;
+      let best=i,bl=lum(i);
+      for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+        const xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=w||yy>=h)continue;
+        const j=(yy*w+xx)*4;if(c[j+3]<128)continue;const l=lum(j);if(l<bl){bl=l;best=j}
+      }
+      d[i]=c[best];d[i+1]=c[best+1];d[i+2]=c[best+2];
+    }
+  }
+}
+
+/* ---------- Base pass: resize, adjust, quantize ---------- */
+async function processBase(){
+  const t0=performance.now();
+  const tw=clampDim(W.value),th=clampDim(H.value);
+  if(tw*th*k*k>MAX_OUT){setStatusText(`Output would be ${tw*k}×${th*k}, over 16 megapixels. Pick a smaller pixel grid or pixel size.`);return false}
+  let N=Math.max(2,Math.min(256,Math.round(+$("n").value||16)));
+  const keepAlpha=$("keepAlpha").checked,smooth=$("resize").value==="smooth";
+  const baseC=drawResized(src.bmp,src.w,src.h,tw,th,smooth,keepAlpha,$("bg").value);
+  const og=$("orig");og.width=tw;og.height=th;const ogx=og.getContext("2d");ogx.clearRect(0,0,tw,th);ogx.drawImage(baseC,0,0);
+  const d=baseC.getContext("2d").getImageData(0,0,tw,th).data;
+  // work in a float copy so adjustments don't clip early
+  const wd=new Float32Array(d.length);for(let i=0;i<d.length;i++)wd[i]=d[i];
+  adjust(wd);
+  const cd=new Uint8ClampedArray(wd);
+  const ero=+$("ero").value;if(ero)erode(cd,tw,th,ero);
+  const hist=buildHist(cd,N);
+  let P;
+  if(palId!=="auto"){
+    const fx=currentFixed();
+    if(!fx||fx.length<2){setStatusText("Add at least 2 hex colors to the custom palette.");return false}
+    P=fixedPalette(hist,fx,N);
+  }else P=autoPalette(hist,N);
+  const mode=$("dither").value,strength=+$("strength").value/100;
+  const K=P.length/3;
+  const m=hist.total?mapPixels(cd,tw,th,P,mode,strength):{used:new Uint32Array(K),idx:new Int16Array(tw*th).fill(-1)};
+  const order=[...Array(K).keys()].sort((a,b)=>(P[a*3]*.299+P[a*3+1]*.587+P[a*3+2]*.114)-(P[b*3]*.299+P[b*3+1]*.587+P[b*3+2]*.114));
+  const rank=new Int16Array(K);order.forEach((j,r)=>rank[j]=r);
+  const grid=document.createElement("canvas");grid.width=tw;grid.height=th;
+  base={gw:tw,gh:th,k,P,K,idx:m.idx,used:m.used,order,rank,total:hist.total,grid,gimg:new ImageData(tw,th),ms:performance.now()-t0};
+  return true;
+}
+
+/* ---------- Dialog box ---------- */
+const DLG={
+  classic:{bg:["#000000"],border:"#FFFFFF",kind:"double",text:"#FFFFFF"},
+  blue:{bg:["#2B3FB8","#0B1450"],border:"#FFFFFF",kind:"double",text:"#FFFFFF"},
+  terminal:{bg:["#000000"],border:"#33FF66",kind:"single",text:"#33FF66",prompt:"> "},
+  parchment:{bg:["#E9D7AC"],border:"#5A3A1E",kind:"thick",text:"#3A2412"},
+  dekx:{bg:["#2A1F55","#140F2C"],border:"#A78BFA",kind:"double",text:"#ECE8F7"}
+};
+let fontReady=null;
+function ensureFont(){
+  if(!fontReady)fontReady=(document.fonts&&document.fonts.load?document.fonts.load('16px "DotGothic16"').catch(()=>{}):Promise.resolve());
+  return fontReady;
+}
+function frameRect(c,x,y,w,h,t){c.fillRect(x,y,w,t);c.fillRect(x,y+h-t,w,t);c.fillRect(x,y,t,h);c.fillRect(x+w-t,y,t,h)}
+function crispText(dw,dh,lines,color,font){
+  const t=document.createElement("canvas");t.width=dw;t.height=dh;const c=t.getContext("2d");
+  c.font=font;c.textBaseline="top";c.fillStyle=color;
+  lines.forEach(([s,x,y])=>c.fillText(s,x,y));
+  const im=c.getImageData(0,0,dw,dh),d=im.data;
+  for(let i=3;i<d.length;i+=4)d[i]=d[i]>=110?255:0;
+  c.putImageData(im,0,0);return t;
+}
+function wrap(c,text,maxW){
+  const out=[];
+  for(const para of text.split("\n")){
+    let line="";
+    for(const word of para.split(/(\s+)/)){
+      if(!word)continue;
+      const test=line+word;
+      if(c.measureText(test).width<=maxW||!line.trim()){
+        if(c.measureText(test).width>maxW){ // single long word: break by characters
+          for(const ch of word){if(c.measureText(line+ch).width>maxW&&line){out.push(line);line=""}line+=ch}
+        }else line=test;
+      }else{out.push(line.trimEnd());line=word.trimStart()}
+    }
+    out.push(line.trimEnd());
+  }
+  return out;
+}
+function buildDialog(outW,outH){
+  dlgLayer=null;
+  if(!$("dlgOn").checked)return;
+  const st=DLG[dlgStyle],target={s:400,m:320,l:240}[$("dlgSize").value];
+  const u=Math.max(1,Math.round(outW/target)),dw=Math.floor(outW/u),dh=Math.floor(outH/u);
+  const font='16px "DotGothic16", ui-monospace, monospace';
+  const m=6,pad=8,lineH=18,boxH=pad*2+lineH*3-2,boxW=dw-m*2;
+  const name=$("dlgName").value.trim();
+  const nameH=name?20:0;
+  if(dw<120||dh<boxH+m*2+nameH){$("saveHint").textContent="The picture is too small for a dialog box at this text size. Try Small text or a bigger output.";return}
+  const cv=document.createElement("canvas");cv.width=dw;cv.height=dh;const c=cv.getContext("2d");
+  const pos=$("dlgPos").value;
+  const x=m,y=pos==="top"?m+nameH:pos==="middle"?Math.round((dh-boxH+nameH)/2):dh-m-boxH;
+  const fill=(bx,by,bw,bh)=>{
+    if(st.bg.length>1){const g=c.createLinearGradient(0,by,0,by+bh);g.addColorStop(0,st.bg[0]);g.addColorStop(1,st.bg[1]);c.fillStyle=g}else c.fillStyle=st.bg[0];
+    c.fillRect(bx,by,bw,bh);
+  };
+  const border=(bx,by,bw,bh)=>{
+    c.fillStyle=st.border;
+    if(st.kind==="double"){frameRect(c,bx,by,bw,bh,1);frameRect(c,bx+2,by+2,bw-4,bh-4,1)}
+    else if(st.kind==="thick")frameRect(c,bx,by,bw,bh,2);
+    else frameRect(c,bx,by,bw,bh,1);
+    c.clearRect(bx,by,1,1);c.clearRect(bx+bw-1,by,1,1);c.clearRect(bx,by+bh-1,1,1);c.clearRect(bx+bw-1,by+bh-1,1,1);
+  };
+  c.font=font;
+  const texts=[];
+  if(name){
+    const nw=Math.min(boxW-20,Math.ceil(c.measureText(name).width)+16),nx=x+8,ny=y-nameH+1;
+    fill(nx,ny,nw,nameH);border(nx,ny,nw,nameH);texts.push([name,nx+8,ny+2]);
+  }
+  fill(x,y,boxW,boxH);border(x,y,boxW,boxH);
+  const raw=(st.prompt||"")+$("dlgText").value;
+  const lines=wrap(c,raw,boxW-pad*2-14).slice(0,3);
+  lines.forEach((s,i)=>texts.push([s,x+pad+2,y+pad+i*lineH]));
+  c.drawImage(crispText(dw,dh,texts,st.text,font),0,0);
+  if($("dlgArrow").checked){
+    c.fillStyle=st.text;const ax=x+boxW-pad-9,ay=y+boxH-pad-6;
+    if(dlgStyle==="terminal")c.fillRect(ax+1,ay-4,6,9);
+    else for(let r=0;r<4;r++)c.fillRect(ax+r,ay+r,7-r*2,1);
+  }
+  if($("dlgMatch").checked&&base){
+    const im=c.getImageData(0,0,dw,dh),d=im.data,cache=new Map();
+    for(let i=0;i<d.length;i+=4){
+      if(d[i+3]<128){d[i+3]=0;continue}
+      const key=(d[i]<<16)|(d[i+1]<<8)|d[i+2];let j=cache.get(key);
+      if(j===undefined){j=nearest(base.P,base.K,d[i],d[i+1],d[i+2]);cache.set(key,j)}
+      d[i]=base.P[j*3];d[i+1]=base.P[j*3+1];d[i+2]=base.P[j*3+2];d[i+3]=255;
+    }
+    c.putImageData(im,0,0);
+  }
+  dlgLayer={canvas:cv,u};
+}
+
+/* ---------- FX ---------- */
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const val=id=>+$("fx-"+id).value/100;
+function fxGhost(d,w,h,a,kk){
+  const c=d.slice(),al=a*.55,dx=Math.max(kk*2,Math.round(w*.02)),dy=Math.max(0,Math.round(kk*0.5));
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const sx=x-dx,sy=y-dy;if(sx<0||sy<0)continue;
+    const i=(y*w+x)*4,j=(sy*w+sx)*4;if(c[j+3]<128||d[i+3]<128)continue;
+    for(let ch=0;ch<3;ch++){const v=c[i+ch]*(1-al)+c[j+ch]*al;if(v>d[i+ch])d[i+ch]=v}
+  }
+}
+function fxRGB(d,w,h,a,kk){
+  const c=d.slice(),s=Math.max(1,Math.round(a*kk*2.5));
+  for(let y=0;y<h;y++){const row=y*w;
+    for(let x=0;x<w;x++){const i=(row+x)*4;if(d[i+3]<128)continue;
+      const xr=Math.min(w-1,x+s),xb=Math.max(0,x-s);
+      d[i]=c[(row+xr)*4];d[i+2]=c[(row+xb)*4+2];
+    }}
+}
+function fxGlitch(d,w,h,a,kk,sd){
+  const r=rng(sd),c=d.slice(),n=3+Math.round(a*14);
+  for(let s=0;s<n;s++){
+    const y0=(r()*h)|0,bh=Math.max(kk,(r()*h*.06*(.4+a))|0);
+    const dx=Math.round(((r()-.5)*w*.18*a)/kk)*kk,split=r()<.5?Math.max(kk,Math.round(kk*2*a)):0;
+    for(let y=y0;y<Math.min(h,y0+bh);y++){const row=y*w;
+      for(let x=0;x<w;x++){
+        const sx=((x-dx)%w+w)%w,i=(row+x)*4,j=(row+sx)*4;
+        d[i]=c[((row+Math.min(w-1,sx+split)))*4];d[i+1]=c[j+1];d[i+2]=c[j+2];d[i+3]=c[j+3];
+      }}
+  }
+  const blocks=Math.round(a*5);
+  for(let b=0;b<blocks;b++){
+    const bw=Math.max(kk*2,(r()*w*.2)|0),bh=Math.max(kk*2,(r()*h*.05)|0);
+    const sx=(r()*(w-bw))|0,sy=(r()*(h-bh))|0,tx=(r()*(w-bw))|0,ty=(r()*(h-bh))|0;
+    for(let y=0;y<bh;y++)for(let x=0;x<bw;x++){const i=((ty+y)*w+tx+x)*4,j=((sy+y)*w+sx+x)*4;d[i]=c[j];d[i+1]=c[j+1];d[i+2]=c[j+2];d[i+3]=c[j+3]}
+  }
+}
+function fxGrain(d,w,h,a,kk,sd){
+  const r=rng(sd^0x5bd1e995),amt=a*90;
+  for(let by=0;by<h;by+=kk)for(let bx=0;bx<w;bx+=kk){
+    const n=(r()-.5)*amt;
+    for(let y=by;y<Math.min(h,by+kk);y++)for(let x=bx;x<Math.min(w,bx+kk);x++){const i=(y*w+x)*4;d[i]+=n;d[i+1]+=n;d[i+2]+=n}
+  }
+}
+function fxCRT(d,w,h,a,kk){
+  const p=Math.max(2,kk),dark=1-.55*a,boost=1+.12*a,mask=kk>=3?.22*a:0;
+  for(let y=0;y<h;y++){
+    const sl=(y%p)===p-1?dark:1,ny=(y/h-.5);
+    for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;if(d[i+3]<128)continue;
+      const nx=(x/w-.5),r2=(nx*nx+ny*ny)*2,vig=1-a*.55*Math.pow(r2,1.5);
+      const f=sl*vig*boost,ph=x%3;
+      d[i]*=f*(ph===0?1:1-mask);d[i+1]*=f*(ph===1?1:1-mask);d[i+2]*=f*(ph===2?1:1-mask);
+    }
+  }
+}
+const anyStillFX=()=>FX.crt||FX.glitch||FX.ghost||FX.rgb||FX.grain;
+
+/* ---------- Frame rendering ---------- */
+function cycleInfo(){
+  if(!FX.cycle||!base||base.K<2)return {frames:1,step:0};
+  const step=Math.max(1,Math.ceil(base.K/32));return {frames:Math.ceil(base.K/step),step};
+}
+function renderFrame(f,target){
+  const {gw,gh,idx,P,K,order,rank,grid,gimg,k:kk}=base;
+  const ci=cycleInfo(),cols=new Uint8Array(K*3);
+  for(let j=0;j<K;j++){const s=ci.step?order[(rank[j]+f*ci.step)%K]:j;cols[j*3]=P[s*3];cols[j*3+1]=P[s*3+1];cols[j*3+2]=P[s*3+2]}
+  const gd=gimg.data;
+  for(let p=0,i=0;p<idx.length;p++,i+=4){const j=idx[p];if(j<0){gd[i+3]=0;continue}gd[i]=cols[j*3];gd[i+1]=cols[j*3+1];gd[i+2]=cols[j*3+2];gd[i+3]=255}
+  grid.getContext("2d").putImageData(gimg,0,0);
+  const ow=gw*kk,oh=gh*kk;
+  if(target.width!==ow||target.height!==oh){target.width=ow;target.height=oh}
+  const c=target.getContext("2d",{willReadFrequently:true});
+  c.imageSmoothingEnabled=false;c.clearRect(0,0,ow,oh);c.drawImage(grid,0,0,ow,oh);
+  if(dlgLayer)c.drawImage(dlgLayer.canvas,0,0,dlgLayer.canvas.width*dlgLayer.u,dlgLayer.canvas.height*dlgLayer.u);
+  if(anyStillFX()){
+    const im=c.getImageData(0,0,ow,oh),fd=new Float32Array(im.data);
+    const sd=seed+(ci.frames>1?f*7919:0);
+    if(FX.ghost)fxGhost(fd,ow,oh,val("ghost"),kk);
+    if(FX.rgb)fxRGB(fd,ow,oh,val("rgb"),kk);
+    if(FX.glitch)fxGlitch(fd,ow,oh,val("glitch"),kk,sd);
+    if(FX.grain)fxGrain(fd,ow,oh,val("grain"),kk,sd);
+    if(FX.crt)fxCRT(fd,ow,oh,val("crt"),kk);
+    im.data.set(fd);c.putImageData(im,0,0);
+  }
+}
+function stopAnim(){cancelAnimationFrame(anim.raf);anim.raf=0}
+function loop(ts){
+  const fps=+$("fx-cycle").value;
+  if(ts-anim.last>=1000/fps){anim.last=ts;anim.frame=(anim.frame+1)%anim.frames;renderFrame(anim.frame,$("out"))}
+  anim.raf=requestAnimationFrame(loop);
+}
+async function refreshOutput(){
+  if(!base)return;
+  if($("dlgOn").checked)await ensureFont();
+  $("saveHint").textContent="";
+  buildDialog(base.gw*base.k,base.gh*base.k);
+  refreshFrame(true);
+}
+function refreshFrame(full){
+  if(!base)return;
+  stopAnim();
+  const t0=performance.now();
+  const ci=cycleInfo();anim.frames=ci.frames;if(anim.frame>=ci.frames)anim.frame=0;
+  renderFrame(anim.frame,$("out"));
+  const oc=$("out");
+  const pal=[];for(let j=0;j<base.K;j++)if(base.used[j])pal.push({hex:toHex(base.P[j*3],base.P[j*3+1],base.P[j*3+2]),count:base.used[j]});
+  pal.sort((a,b)=>b.count-a.count);
+  result={canvas:oc,pal,name:src.name};
+  oc.hidden=false;$("orig").hidden=true;$("band").hidden=false;
+  $("save").disabled=false;$("copyHex").disabled=pal.length===0;cmp.disabled=false;
+  $("saveGif").hidden=!FX.cycle;$("saveGif").disabled=!FX.cycle;
+  if(full!==false)renderPalette(pal,base.total);
+  applyZoom();
+  setStatus([["Grid",`${base.gw}×${base.gh}`],["Output",`${oc.width}×${oc.height}`],["Colors",pal.length],["Time",Math.round(base.ms+performance.now()-t0)+" ms"]]);
+  if(ci.frames>1&&!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){anim.last=performance.now();anim.raf=requestAnimationFrame(loop)}
+}
+
+function renderPalette(pal,total){
+  const strip=$("strip"),sw=$("swatches");strip.innerHTML="";sw.innerHTML="";
+  pal.forEach(p=>{
+    const i=document.createElement("i");i.style.background=p.hex;i.style.flex=String(p.count);i.title=`${p.hex}  ${(p.count/total*100).toFixed(1)}%`;strip.appendChild(i);
+    const b=document.createElement("button");b.type="button";b.title="Copy "+p.hex;
+    const s=document.createElement("span");s.style.background=p.hex;b.appendChild(s);b.appendChild(document.createTextNode(p.hex));
+    b.addEventListener("click",()=>copyText(p.hex,`Copied ${p.hex}`));
+    sw.appendChild(b);
+  });
+  $("hexOut").value=pal.map(p=>p.hex).join("\n");
+}
+function applyZoom(){
+  if(!result)return;
+  const ow=result.canvas.width,oh=result.canvas.height;let s;
+  if(zoom==="fit"){const r=view.getBoundingClientRect();s=Math.min((r.width-32)/ow,(r.height-32)/oh);if(!(s>0))s=1;if(s>1)s=Math.max(1,Math.floor(s))}
+  else s=+zoom;
+  for(const c of [$("out"),$("orig")]){c.style.width=ow*s+"px";c.style.height=oh*s+"px"}
+}
+function setStatus(pairs){
+  const el=$("status");el.innerHTML="";
+  pairs.forEach(([k2,v])=>{const s=document.createElement("span");s.append(k2+" ");const b=document.createElement("b");b.textContent=v;s.appendChild(b);el.appendChild(s)});
+}
+function setStatusText(t){$("status").textContent=t}
+
+/* ---------- GIF encoder ---------- */
+function lzw(ix,mcs,push){
+  const clear=1<<mcs,eoi=clear+1;let size=mcs+1,next=eoi+1,dict=new Map();
+  let cur=0,bits=0;
+  const emit=code=>{cur|=code<<bits;bits+=size;while(bits>=8){push(cur&255);cur>>>=8;bits-=8}};
+  emit(clear);
+  let prefix=ix[0];
+  for(let i=1;i<ix.length;i++){
+    const kk=ix[i],key=(prefix<<8)|kk,c=dict.get(key);
+    if(c!==undefined){prefix=c;continue}
+    emit(prefix);
+    if(next===4096){emit(clear);next=eoi+1;size=mcs+1;dict=new Map()}
+    else{if(next>=(1<<size))size++;dict.set(key,next++)}
+    prefix=kk;
+  }
+  emit(prefix);emit(eoi);
+  if(bits>0)push(cur&255);
+}
+class ByteOut{constructor(){this.chunks=[];this.buf=new Uint8Array(1<<16);this.n=0}
+  b(v){if(this.n===this.buf.length){this.chunks.push(this.buf);this.buf=new Uint8Array(1<<16);this.n=0}this.buf[this.n++]=v}
+  w(v){this.b(v&255);this.b((v>>8)&255)}
+  s(t){for(const ch of t)this.b(ch.charCodeAt(0))}
+  blob(){return new Blob([...this.chunks,this.buf.slice(0,this.n)],{type:"image/gif"})}}
+async function makeGIF(progress){
+  const ci=cycleInfo(),frames=ci.frames,fps=+$("fx-cycle").value,delay=Math.max(2,Math.round(100/fps));
+  const cv=document.createElement("canvas");
+  // pass 1: collect colors
+  let colors=new Map(),overflow=false,hasT=false;
+  for(let f=0;f<frames;f++){
+    renderFrame(f,cv);const d=cv.getContext("2d").getImageData(0,0,cv.width,cv.height).data;
+    for(let i=0;i<d.length;i+=4){
+      if(d[i+3]<128){hasT=true;continue}
+      if(overflow)continue;
+      const key=(d[i]<<16)|(d[i+1]<<8)|d[i+2];
+      if(!colors.has(key)){colors.set(key,colors.size);if(colors.size>255)overflow=true}
+    }
+    progress(`Reading frame ${f+1} of ${frames}`);await new Promise(r=>setTimeout(r,0));
+  }
+  let pal;
+  if(!overflow&&colors.size+(hasT?1:0)<=256){pal=[...colors.keys()].map(k2=>[k2>>16,(k2>>8)&255,k2&255])}
+  else{
+    renderFrame(0,cv);const h=buildHist(cv.getContext("2d").getImageData(0,0,cv.width,cv.height).data,255);
+    const P=autoPalette(h,255);pal=[];for(let j=0;j<P.length/3;j++)pal.push([P[j*3],P[j*3+1],P[j*3+2]]);
+  }
+  const PF=new Float32Array(pal.length*3);pal.forEach((c,j)=>{PF[j*3]=c[0];PF[j*3+1]=c[1];PF[j*3+2]=c[2]});
+  const tIndex=hasT?pal.length:-1,count=pal.length+(hasT?1:0);
+  let bits=1;while((1<<bits)<count)bits++;
+  const mcs=Math.max(2,bits),w=cv.width,h=cv.height;
+  const o=new ByteOut();
+  o.s("GIF89a");o.w(w);o.w(h);o.b(0x80|((bits-1)<<4)|(bits-1));o.b(0);o.b(0);
+  for(let j=0;j<(1<<bits);j++){const c=pal[j]||[0,0,0];o.b(c[0]);o.b(c[1]);o.b(c[2])}
+  if(frames>1){o.b(0x21);o.b(0xFF);o.b(11);o.s("NETSCAPE2.0");o.b(3);o.b(1);o.w(0);o.b(0)}
+  const cache=new Map(),ix=new Uint8Array(w*h);
+  for(let f=0;f<frames;f++){
+    renderFrame(f,cv);const d=cv.getContext("2d").getImageData(0,0,w,h).data;
+    for(let p=0,i=0;p<ix.length;p++,i+=4){
+      if(d[i+3]<128){ix[p]=tIndex;continue}
+      const key=(d[i]<<16)|(d[i+1]<<8)|d[i+2];let j=cache.get(key);
+      if(j===undefined){j=nearest(PF,pal.length,d[i],d[i+1],d[i+2]);cache.set(key,j)}
+      ix[p]=j;
+    }
+    o.b(0x21);o.b(0xF9);o.b(4);o.b(((hasT?2:1)<<2)|(hasT?1:0));o.w(delay);o.b(hasT?tIndex:0);o.b(0);
+    o.b(0x2C);o.w(0);o.w(0);o.w(w);o.w(h);o.b(0);
+    o.b(mcs);
+    let block=[];
+    lzw(ix,mcs,v=>{block.push(v);if(block.length===255){o.b(255);for(const x of block)o.b(x);block=[]}});
+    if(block.length){o.b(block.length);for(const x of block)o.b(x)}
+    o.b(0);
+    progress(`Encoding frame ${f+1} of ${frames}`);await new Promise(r=>setTimeout(r,0));
+  }
+  o.b(0x3B);
+  return o.blob();
+}
+
+/* ---------- Saving ---------- */
+let downloads=null;
+(async()=>{try{if(window.claude&&window.claude.use)downloads=await window.claude.use("downloads")}catch(e){}})();
+async function offer(blob,filename){
+  const hint=$("saveHint");hint.classList.remove("err");
+  if(downloads){
+    try{await downloads.save({filename,data:blob});hint.textContent="Saved "+filename}
+    catch(e){hint.textContent=e&&e.code==="declined"?"Download cancelled.":"Download isn't available here. Right-click or long-press the picture to save it.";}
+    return;
+  }
+  try{
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    hint.textContent="If nothing downloaded, right-click or long-press the picture and save it.";
+  }catch(e){hint.textContent="Right-click or long-press the picture to save it."}
+}
+const fileBase=()=>`${result.name}-${result.canvas.width}x${result.canvas.height}-${result.pal.length}c`;
+$("save").addEventListener("click",()=>{
+  if(!result)return;
+  result.canvas.toBlob(blob=>offer(blob,fileBase()+".png"),"image/png");
+});
+$("saveGif").addEventListener("click",async()=>{
+  if(!result||!base)return;
+  const btn=$("saveGif"),hint=$("saveHint");btn.disabled=true;stopAnim();
+  try{const blob=await makeGIF(t=>hint.textContent=t);await offer(blob,fileBase()+".gif")}
+  catch(e){console.error(e);hint.textContent="The GIF couldn't be made: "+e.message}
+  btn.disabled=false;refreshFrame(false);
+});
+async function copyText(t,msg){
+  const hint=$("saveHint");
+  try{await navigator.clipboard.writeText(t);hint.textContent=msg}
+  catch(e){const ta=$("hexOut");ta.closest("details").open=true;ta.focus();ta.select();hint.textContent="Copy from the hex list in the palette panel."}
+}
+$("copyHex").addEventListener("click",()=>{if(result)copyText(result.pal.map(p=>p.hex).join("\n"),`Copied ${result.pal.length} hex codes`)});
+
+buildPalTiles();
+[...$("pxBtns").children].forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.k===k)));
+updatePalUI();
+
+})();
+</script>
+</body>
+</html>

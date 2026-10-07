@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Dekxtopia — Kavya's landing page. Colombian music producer, Black MIDI composer, developer, and Windows modder.">
-<meta name="author" content="Kavya">
-<meta property="og:title" content="Dekxtopia — Kavya's Landing Page">
-<meta property="og:description" content="Dekxtopia — Kavya's landing page. Colombian music producer, Black MIDI composer, developer, and Windows modder.">
+<meta name="description" content="Dekxtopia — Dekx's landing page. Colombian music producer, Black MIDI composer, developer, and Windows modder.">
+<meta name="author" content="Dekx">
+<meta property="og:title" content="Dekxtopia — Dekx's Landing Page">
+<meta property="og:description" content="Dekxtopia — Dekx's landing page. Colombian music producer, Black MIDI composer, developer, and Windows modder.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="alternate icon" href="favicon.ico">
-<title>Dekxtopia — Kavya's Landing Page</title>
+<title>Dekxtopia — Dekx's Landing Page</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&family=VT323&display=swap" rel="stylesheet">
@@ -19,115 +19,127 @@
 </head>
 <body>
 <canvas id="neural" aria-hidden="true"></canvas>
-<div class="window">
-  <div class="titlebar">
-    <span class="tb-icon"><svg viewBox="0 0 14 9" width="14" height="9" shape-rendering="crispEdges" aria-hidden="true" class="logo"><rect x="0" y="0" width="6" height="1" fill="#c4b5fd"/><rect x="0" y="1" width="7" height="1" fill="#c4b5fd"/><rect x="0" y="2" width="2" height="1" fill="#c4b5fd"/><rect x="5" y="2" width="3" height="1" fill="#c4b5fd"/><rect x="9" y="2" width="4" height="1" fill="#a78bfa"/><rect x="0" y="3" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="3" width="2" height="1" fill="#c4b5fd"/><rect x="0" y="4" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="4" width="2" height="1" fill="#c4b5fd"/><rect x="9" y="4" width="5" height="1" fill="#818cf8"/><rect x="0" y="5" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="5" width="2" height="1" fill="#c4b5fd"/><rect x="0" y="6" width="2" height="1" fill="#c4b5fd"/><rect x="5" y="6" width="3" height="1" fill="#c4b5fd"/><rect x="9" y="6" width="3" height="1" fill="#f0abfc"/><rect x="0" y="7" width="7" height="1" fill="#c4b5fd"/><rect x="0" y="8" width="6" height="1" fill="#c4b5fd"/></svg></span>
-    <span class="tb-title">Dekxtopia — Kavya's Landing Page</span>
-    <span class="tb-btns" aria-hidden="true"><span class="tb-btn"><svg viewBox="0 0 7 7" width="7" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="5" width="6" height="1" fill="currentColor"/><rect x="0" y="6" width="6" height="1" fill="currentColor"/></svg></span><span class="tb-btn"><svg viewBox="0 0 7 7" width="7" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="currentColor"/><rect x="0" y="1" width="7" height="1" fill="currentColor"/><rect x="0" y="2" width="1" height="1" fill="currentColor"/><rect x="6" y="2" width="1" height="1" fill="currentColor"/><rect x="0" y="3" width="1" height="1" fill="currentColor"/><rect x="6" y="3" width="1" height="1" fill="currentColor"/><rect x="0" y="4" width="1" height="1" fill="currentColor"/><rect x="6" y="4" width="1" height="1" fill="currentColor"/><rect x="0" y="5" width="1" height="1" fill="currentColor"/><rect x="6" y="5" width="1" height="1" fill="currentColor"/><rect x="0" y="6" width="7" height="1" fill="currentColor"/></svg></span><span class="tb-btn"><svg viewBox="0 0 7 7" width="7" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="2" height="1" fill="currentColor"/><rect x="5" y="0" width="2" height="1" fill="currentColor"/><rect x="1" y="1" width="2" height="1" fill="currentColor"/><rect x="4" y="1" width="2" height="1" fill="currentColor"/><rect x="2" y="2" width="3" height="1" fill="currentColor"/><rect x="2" y="3" width="3" height="1" fill="currentColor"/><rect x="1" y="4" width="2" height="1" fill="currentColor"/><rect x="4" y="4" width="2" height="1" fill="currentColor"/><rect x="0" y="5" width="2" height="1" fill="currentColor"/><rect x="5" y="5" width="2" height="1" fill="currentColor"/></svg></span></span>
+<div class="win win-main">
+  <div class="win-title">
+    <span class="win-icon"><svg viewBox="0 0 14 9" width="14" height="9" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="6" height="1" fill="#c4b5fd"/><rect x="0" y="1" width="7" height="1" fill="#c4b5fd"/><rect x="0" y="2" width="2" height="1" fill="#c4b5fd"/><rect x="5" y="2" width="3" height="1" fill="#c4b5fd"/><rect x="9" y="2" width="4" height="1" fill="#a78bfa"/><rect x="0" y="3" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="3" width="2" height="1" fill="#c4b5fd"/><rect x="0" y="4" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="4" width="2" height="1" fill="#c4b5fd"/><rect x="9" y="4" width="5" height="1" fill="#818cf8"/><rect x="0" y="5" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="5" width="2" height="1" fill="#c4b5fd"/><rect x="0" y="6" width="2" height="1" fill="#c4b5fd"/><rect x="5" y="6" width="3" height="1" fill="#c4b5fd"/><rect x="9" y="6" width="3" height="1" fill="#f0abfc"/><rect x="0" y="7" width="7" height="1" fill="#c4b5fd"/><rect x="0" y="8" width="6" height="1" fill="#c4b5fd"/></svg></span>
+    <span class="win-text">Dekxtopia — Dekx's Landing Page</span>
+    <span class="win-ctl" aria-hidden="true"><span class="cap-btn"><svg viewBox="0 0 6 7" width="6" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="5" width="6" height="1" fill="currentColor"/><rect x="0" y="6" width="6" height="1" fill="currentColor"/></svg></span><span class="cap-btn"><svg viewBox="0 0 9 9" width="9" height="9" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="9" height="1" fill="currentColor"/><rect x="0" y="1" width="9" height="1" fill="currentColor"/><rect x="0" y="2" width="1" height="1" fill="currentColor"/><rect x="8" y="2" width="1" height="1" fill="currentColor"/><rect x="0" y="3" width="1" height="1" fill="currentColor"/><rect x="8" y="3" width="1" height="1" fill="currentColor"/><rect x="0" y="4" width="1" height="1" fill="currentColor"/><rect x="8" y="4" width="1" height="1" fill="currentColor"/><rect x="0" y="5" width="1" height="1" fill="currentColor"/><rect x="8" y="5" width="1" height="1" fill="currentColor"/><rect x="0" y="6" width="1" height="1" fill="currentColor"/><rect x="8" y="6" width="1" height="1" fill="currentColor"/><rect x="0" y="7" width="1" height="1" fill="currentColor"/><rect x="8" y="7" width="1" height="1" fill="currentColor"/><rect x="0" y="8" width="9" height="1" fill="currentColor"/></svg></span><span class="cap-btn close"><svg viewBox="0 0 8 7" width="8" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="2" height="1" fill="currentColor"/><rect x="6" y="0" width="2" height="1" fill="currentColor"/><rect x="1" y="1" width="2" height="1" fill="currentColor"/><rect x="5" y="1" width="2" height="1" fill="currentColor"/><rect x="2" y="2" width="4" height="1" fill="currentColor"/><rect x="3" y="3" width="2" height="1" fill="currentColor"/><rect x="2" y="4" width="4" height="1" fill="currentColor"/><rect x="1" y="5" width="2" height="1" fill="currentColor"/><rect x="5" y="5" width="2" height="1" fill="currentColor"/><rect x="0" y="6" width="2" height="1" fill="currentColor"/><rect x="6" y="6" width="2" height="1" fill="currentColor"/></svg></span></span>
   </div>
-  <nav class="menubar" aria-label="Site">
+  <nav class="win-menu" aria-label="Site">
     <a href="index.html" class="active" aria-current="page"><u>H</u>ome</a>
     <a href="https://midi.dekx.cc/"><u>W</u>ebAssembly MIDI Player</a>
-    <a href="color.html"><u>C</u>olor Reducer<span class="new">new!</span></a>
+    <a href="pyx.html"><u>P</u>yx<span class="new">new!</span></a>
   </nav>
-  <div class="workspace">
-    <aside class="sidebar">
-      <details class="group" open data-collapse-mobile>
-        <summary class="legend">Contents</summary>
-        <ul class="tree">
-          <li><span class="root"><svg viewBox="0 0 11 10" width="11" height="10" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="9" height="1" fill="#2a2266"/><rect x="0" y="1" width="1" height="1" fill="#2a2266"/><rect x="1" y="1" width="9" height="1" fill="#a78bfa"/><rect x="10" y="1" width="1" height="1" fill="#2a2266"/><rect x="0" y="2" width="1" height="1" fill="#2a2266"/><rect x="1" y="2" width="2" height="1" fill="#a78bfa"/><rect x="3" y="2" width="5" height="1" fill="#e9e4ff"/><rect x="8" y="2" width="2" height="1" fill="#a78bfa"/><rect x="10" y="2" width="1" height="1" fill="#2a2266"/><rect x="0" y="3" width="1" height="1" fill="#2a2266"/><rect x="1" y="3" width="9" height="1" fill="#a78bfa"/><rect x="10" y="3" width="1" height="1" fill="#2a2266"/><rect x="0" y="4" width="1" height="1" fill="#2a2266"/><rect x="1" y="4" width="9" height="1" fill="#a78bfa"/><rect x="10" y="4" width="1" height="1" fill="#2a2266"/><rect x="0" y="5" width="1" height="1" fill="#2a2266"/><rect x="1" y="5" width="9" height="1" fill="#a78bfa"/><rect x="10" y="5" width="1" height="1" fill="#2a2266"/><rect x="0" y="6" width="1" height="1" fill="#2a2266"/><rect x="1" y="6" width="9" height="1" fill="#a78bfa"/><rect x="10" y="6" width="1" height="1" fill="#2a2266"/><rect x="0" y="7" width="1" height="1" fill="#2a2266"/><rect x="1" y="7" width="9" height="1" fill="#a78bfa"/><rect x="10" y="7" width="1" height="1" fill="#2a2266"/><rect x="0" y="8" width="1" height="1" fill="#2a2266"/><rect x="1" y="8" width="9" height="1" fill="#e9e4ff"/><rect x="10" y="8" width="1" height="1" fill="#2a2266"/><rect x="1" y="9" width="10" height="1" fill="#2a2266"/></svg>Kavya's Landing Page</span>
-            <ul>
-            <li><a href="#about"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>1. About Me</span></a></li>
-            <li><a href="#projects"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>2. Coding Projects</span></a></li>
-            <li><a href="#music"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>3. Music &amp; Black MIDI</span></a></li>
-            <li><a href="#modding"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>4. Windows Modding</span></a></li>
-            <li><a href="#more"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>5. Other Cool Stuff</span></a></li>
-            <li><a href="#contact"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>6. Contact</span></a></li>
-            </ul>
-          </li>
-        </ul>
-      </details>
-      <div class="group">
-        <div class="legend">Find me on</div>
-        <ul class="links">
-          <li><a href="https://www.youtube.com/@Mathery"><span class="ico"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="#ff3b3b" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8z"/><path fill="#fff" d="M9.8 15.1V8.9l5.4 3.1z"/></svg></span><span class="handle">@Mathery</span><span class="tag">projects</span></a></li>
-          <li><a href="https://www.youtube.com/@Dekxtopia/"><span class="ico"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="#ff3b3b" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8z"/><path fill="#fff" d="M9.8 15.1V8.9l5.4 3.1z"/></svg></span><span class="handle">@Dekxtopia</span><span class="tag">music</span></a></li>
-          <li><a href="https://x.com/Dekxtopia"><span class="ico"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="#f3f0ff" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4zm-1.2 17.9h1.9L7.1 4.2H5.1z"/></svg></span><span class="handle">@Dekxtopia</span><span class="tag">x</span></a></li>
-          <li><a href="https://discord.com/users/369692926520852480"><span class="ico"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="#8b9cff" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.6.1 18.1a19.9 19.9 0 0 0 6 3l1.3-2.1a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4a12.9 12.9 0 0 1-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.7-3.6-13.7zM8 15.4c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.6 8 10.6s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg></span><span class="handle">@Mathery</span><span class="tag">discord</span></a></li>
-        </ul>
-      </div>
-    </aside>
-
-    <main class="doc">
-      <div class="crumb">dekx.cc › <b>Index Page</b></div>
-
-      <div class="doc-head">
-        <div class="avatar"><img src="avatar.jpg" alt="Kavya avatar" width="86" height="86"></div>
-        <div>
-          <h1>Kavya’s Landing Page!</h1>
-          <div class="tagline">Developer · Musician · Modder</div>
+  <div class="win-body">
+    <div class="workspace">
+      <aside class="sidebar">
+        <details class="group" open data-collapse-mobile>
+          <summary class="legend">Contents</summary>
+          <ul class="tree">
+            <li><span class="root"><svg viewBox="0 0 11 10" width="11" height="10" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="9" height="1" fill="#2a2266"/><rect x="0" y="1" width="1" height="1" fill="#2a2266"/><rect x="1" y="1" width="9" height="1" fill="#a78bfa"/><rect x="10" y="1" width="1" height="1" fill="#2a2266"/><rect x="0" y="2" width="1" height="1" fill="#2a2266"/><rect x="1" y="2" width="2" height="1" fill="#a78bfa"/><rect x="3" y="2" width="5" height="1" fill="#e9e4ff"/><rect x="8" y="2" width="2" height="1" fill="#a78bfa"/><rect x="10" y="2" width="1" height="1" fill="#2a2266"/><rect x="0" y="3" width="1" height="1" fill="#2a2266"/><rect x="1" y="3" width="9" height="1" fill="#a78bfa"/><rect x="10" y="3" width="1" height="1" fill="#2a2266"/><rect x="0" y="4" width="1" height="1" fill="#2a2266"/><rect x="1" y="4" width="9" height="1" fill="#a78bfa"/><rect x="10" y="4" width="1" height="1" fill="#2a2266"/><rect x="0" y="5" width="1" height="1" fill="#2a2266"/><rect x="1" y="5" width="9" height="1" fill="#a78bfa"/><rect x="10" y="5" width="1" height="1" fill="#2a2266"/><rect x="0" y="6" width="1" height="1" fill="#2a2266"/><rect x="1" y="6" width="9" height="1" fill="#a78bfa"/><rect x="10" y="6" width="1" height="1" fill="#2a2266"/><rect x="0" y="7" width="1" height="1" fill="#2a2266"/><rect x="1" y="7" width="9" height="1" fill="#a78bfa"/><rect x="10" y="7" width="1" height="1" fill="#2a2266"/><rect x="0" y="8" width="1" height="1" fill="#2a2266"/><rect x="1" y="8" width="9" height="1" fill="#e9e4ff"/><rect x="10" y="8" width="1" height="1" fill="#2a2266"/><rect x="1" y="9" width="10" height="1" fill="#2a2266"/></svg>Dekx's Landing Page</span>
+              <ul>
+                <li><a href="#about"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>1. About Me</span></a></li>
+                <li><a href="#projects"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>2. Coding Projects</span></a></li>
+                <li><a href="#music"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>3. Music &amp; Black MIDI</span></a></li>
+                <li><a href="#modding"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>4. Windows Modding</span></a></li>
+                <li><a href="#more"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>5. Other Cool Stuff</span></a></li>
+                <li><a href="#contact"><svg viewBox="0 0 10 11" width="10" height="11" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="7" height="1" fill="#6f6a98"/><rect x="0" y="1" width="1" height="1" fill="#6f6a98"/><rect x="1" y="1" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="1" width="2" height="1" fill="#6f6a98"/><rect x="0" y="2" width="1" height="1" fill="#6f6a98"/><rect x="1" y="2" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="2" width="1" height="1" fill="#6f6a98"/><rect x="7" y="2" width="1" height="1" fill="#dcd8f0"/><rect x="8" y="2" width="1" height="1" fill="#6f6a98"/><rect x="0" y="3" width="1" height="1" fill="#6f6a98"/><rect x="1" y="3" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="3" width="4" height="1" fill="#6f6a98"/><rect x="0" y="4" width="1" height="1" fill="#6f6a98"/><rect x="1" y="4" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="4" width="4" height="1" fill="#8a83bd"/><rect x="6" y="4" width="3" height="1" fill="#dcd8f0"/><rect x="9" y="4" width="1" height="1" fill="#6f6a98"/><rect x="0" y="5" width="1" height="1" fill="#6f6a98"/><rect x="1" y="5" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="5" width="1" height="1" fill="#6f6a98"/><rect x="0" y="6" width="1" height="1" fill="#6f6a98"/><rect x="1" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="6" width="6" height="1" fill="#8a83bd"/><rect x="8" y="6" width="1" height="1" fill="#dcd8f0"/><rect x="9" y="6" width="1" height="1" fill="#6f6a98"/><rect x="0" y="7" width="1" height="1" fill="#6f6a98"/><rect x="1" y="7" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="7" width="1" height="1" fill="#6f6a98"/><rect x="0" y="8" width="1" height="1" fill="#6f6a98"/><rect x="1" y="8" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="8" width="5" height="1" fill="#8a83bd"/><rect x="7" y="8" width="2" height="1" fill="#dcd8f0"/><rect x="9" y="8" width="1" height="1" fill="#6f6a98"/><rect x="0" y="9" width="1" height="1" fill="#6f6a98"/><rect x="1" y="9" width="8" height="1" fill="#dcd8f0"/><rect x="9" y="9" width="1" height="1" fill="#6f6a98"/><rect x="0" y="10" width="10" height="1" fill="#6f6a98"/></svg><span>6. Contact</span></a></li>
+              </ul>
+            </li>
+          </ul>
+        </details>
+        <div class="group">
+          <div class="legend">Find me on</div>
+          <ul class="links">
+            <li><a href="https://www.youtube.com/@Mathery"><span class="ico"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="#ff3b3b" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8z"/><path fill="#fff" d="M9.8 15.1V8.9l5.4 3.1z"/></svg></span><span class="handle">@Mathery</span><span class="tag">projects</span></a></li>
+            <li><a href="https://www.youtube.com/@Dekxtopia/"><span class="ico"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="#ff3b3b" d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8z"/><path fill="#fff" d="M9.8 15.1V8.9l5.4 3.1z"/></svg></span><span class="handle">@Dekxtopia</span><span class="tag">music</span></a></li>
+            <li><a href="https://x.com/Dekxtopia"><span class="ico"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="#f3f0ff" d="M18.2 2.3h3.4l-7.4 8.4 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.3h7l4.8 6.4zm-1.2 17.9h1.9L7.1 4.2H5.1z"/></svg></span><span class="handle">@Dekxtopia</span><span class="tag">x</span></a></li>
+            <li><a href="https://discord.com/users/369692926520852480"><span class="ico"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="#8b9cff" d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.3 18.3 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.6.1 18.1a19.9 19.9 0 0 0 6 3l1.3-2.1a12.9 12.9 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4a12.9 12.9 0 0 1-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.8-9.7-3.6-13.7zM8 15.4c-1.2 0-2.2-1.1-2.2-2.4S6.8 10.6 8 10.6s2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z"/></svg></span><span class="handle">@Mathery</span><span class="tag">discord</span></a></li>
+          </ul>
         </div>
-      </div>
-      <div class="infobox" aria-label="Emulator">
-        <div class="child-title">
-          <span class="ct-text" id="emu-title">Sega CD BIOS</span>
-          <button class="tb-btn" type="button" id="emu-prev" aria-label="Previous system"><svg viewBox="0 0 4 7" width="4" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="3" y="0" width="1" height="1" fill="currentColor"/><rect x="2" y="1" width="2" height="1" fill="currentColor"/><rect x="1" y="2" width="3" height="1" fill="currentColor"/><rect x="0" y="3" width="4" height="1" fill="currentColor"/><rect x="1" y="4" width="3" height="1" fill="currentColor"/><rect x="2" y="5" width="2" height="1" fill="currentColor"/><rect x="3" y="6" width="1" height="1" fill="currentColor"/></svg></button>
-          <button class="tb-btn" type="button" id="emu-next" aria-label="Next system"><svg viewBox="0 0 4 7" width="4" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="1" height="1" fill="currentColor"/><rect x="0" y="1" width="2" height="1" fill="currentColor"/><rect x="0" y="2" width="3" height="1" fill="currentColor"/><rect x="0" y="3" width="4" height="1" fill="currentColor"/><rect x="0" y="4" width="3" height="1" fill="currentColor"/><rect x="0" y="5" width="2" height="1" fill="currentColor"/><rect x="0" y="6" width="1" height="1" fill="currentColor"/></svg></button>
-        </div>
-        <div class="screen">
-          <div id="emu-screen" style="position:absolute;inset:2px"></div>
-          <div class="emu-help" id="emu-help" hidden>
-            <h3>Psst, hey!</h3>
-            <p style="font-size:12px;margin-bottom:8px">Did you know you can actually control this emulator? Click the screen first, then:</p>
-            <dl>
-              <dt>Arrows</dt><dd>D-pad</dd>
-              <dt>Enter</dt><dd>Start</dd>
-              <dt>Menu bar</dt><dd>Hover the bottom of the screen for save states, controls and fullscreen.</dd>
-            </dl>
+      </aside>
+
+      <main class="doc client"><div class="page">
+        <div class="crumb">dekx.cc › <b>Index Page</b></div>
+        <div class="doc-head">
+          <div class="avatar"><img src="avatar.jpg" alt="Dekx avatar" width="84" height="84"></div>
+          <div>
+            <h1>Dekx’s Landing Page!</h1>
+            <div class="tagline">Developer · Musician · Modder</div>
           </div>
         </div>
-        <div class="emu-meta">
-          <span class="caption" id="emu-caption">Sega CD US v2.11x · 1993 · Genesis Plus GX · 128KB</span>
-          <span class="count" id="emu-count">1/3</span>
-          <button type="button" id="emu-help-btn" aria-pressed="false" aria-label="Emulator controls" style="min-width:24px;padding:2px 6px">?</button>
+
+        <div class="win win-child emu" aria-label="Emulator">
+          <div class="win-title">
+            <span class="win-icon"><svg viewBox="0 0 14 8" width="14" height="8" shape-rendering="crispEdges" aria-hidden="true"><rect x="2" y="0" width="10" height="1" fill="#0b0922"/><rect x="1" y="1" width="1" height="1" fill="#0b0922"/><rect x="2" y="1" width="10" height="1" fill="#dcd8f0"/><rect x="12" y="1" width="1" height="1" fill="#0b0922"/><rect x="0" y="2" width="1" height="1" fill="#0b0922"/><rect x="1" y="2" width="2" height="1" fill="#dcd8f0"/><rect x="3" y="2" width="1" height="1" fill="#2e2768"/><rect x="4" y="2" width="6" height="1" fill="#dcd8f0"/><rect x="10" y="2" width="1" height="1" fill="#f0abfc"/><rect x="11" y="2" width="2" height="1" fill="#dcd8f0"/><rect x="13" y="2" width="1" height="1" fill="#0b0922"/><rect x="0" y="3" width="1" height="1" fill="#0b0922"/><rect x="1" y="3" width="1" height="1" fill="#dcd8f0"/><rect x="2" y="3" width="3" height="1" fill="#2e2768"/><rect x="5" y="3" width="4" height="1" fill="#dcd8f0"/><rect x="9" y="3" width="1" height="1" fill="#a78bfa"/><rect x="10" y="3" width="1" height="1" fill="#dcd8f0"/><rect x="11" y="3" width="1" height="1" fill="#f0abfc"/><rect x="12" y="3" width="1" height="1" fill="#dcd8f0"/><rect x="13" y="3" width="1" height="1" fill="#0b0922"/><rect x="0" y="4" width="1" height="1" fill="#0b0922"/><rect x="1" y="4" width="2" height="1" fill="#dcd8f0"/><rect x="3" y="4" width="1" height="1" fill="#2e2768"/><rect x="4" y="4" width="6" height="1" fill="#dcd8f0"/><rect x="10" y="4" width="1" height="1" fill="#a78bfa"/><rect x="11" y="4" width="2" height="1" fill="#dcd8f0"/><rect x="13" y="4" width="1" height="1" fill="#0b0922"/><rect x="0" y="5" width="1" height="1" fill="#0b0922"/><rect x="1" y="5" width="5" height="1" fill="#dcd8f0"/><rect x="6" y="5" width="2" height="1" fill="#0b0922"/><rect x="8" y="5" width="5" height="1" fill="#dcd8f0"/><rect x="13" y="5" width="1" height="1" fill="#0b0922"/><rect x="1" y="6" width="1" height="1" fill="#0b0922"/><rect x="2" y="6" width="3" height="1" fill="#dcd8f0"/><rect x="5" y="6" width="1" height="1" fill="#0b0922"/><rect x="8" y="6" width="1" height="1" fill="#0b0922"/><rect x="9" y="6" width="3" height="1" fill="#dcd8f0"/><rect x="12" y="6" width="1" height="1" fill="#0b0922"/><rect x="2" y="7" width="3" height="1" fill="#0b0922"/><rect x="9" y="7" width="3" height="1" fill="#0b0922"/></svg></span>
+            <span class="win-text" id="emu-title">Sega CD BIOS</span>
+            <span class="win-ctl">
+              <button class="cap-btn" type="button" id="emu-help-btn" aria-label="Emulator controls" aria-pressed="false"><svg viewBox="0 0 6 7" width="6" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="1" y="0" width="4" height="1" fill="currentColor"/><rect x="0" y="1" width="2" height="1" fill="currentColor"/><rect x="4" y="1" width="2" height="1" fill="currentColor"/><rect x="4" y="2" width="2" height="1" fill="currentColor"/><rect x="3" y="3" width="2" height="1" fill="currentColor"/><rect x="2" y="4" width="2" height="1" fill="currentColor"/><rect x="2" y="6" width="2" height="1" fill="currentColor"/></svg></button>
+              <button class="cap-btn close" type="button" id="emu-off" aria-label="Power off" disabled><svg viewBox="0 0 8 7" width="8" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="2" height="1" fill="currentColor"/><rect x="6" y="0" width="2" height="1" fill="currentColor"/><rect x="1" y="1" width="2" height="1" fill="currentColor"/><rect x="5" y="1" width="2" height="1" fill="currentColor"/><rect x="2" y="2" width="4" height="1" fill="currentColor"/><rect x="3" y="3" width="2" height="1" fill="currentColor"/><rect x="2" y="4" width="4" height="1" fill="currentColor"/><rect x="1" y="5" width="2" height="1" fill="currentColor"/><rect x="5" y="5" width="2" height="1" fill="currentColor"/><rect x="0" y="6" width="2" height="1" fill="currentColor"/><rect x="6" y="6" width="2" height="1" fill="currentColor"/></svg></button>
+            </span>
+          </div>
+          <div class="win-body">
+            <div class="screen client">
+              <div class="slot" id="emu-screen"></div>
+              <div class="emu-help" id="emu-help" hidden>
+                <p><b>Psst, hey!</b> Did you know you can actually control this emulator? Click the screen first, then:</p>
+                <dl>
+                  <dt>Arrows</dt><dd>D-pad</dd>
+                  <dt>Enter</dt><dd>Start</dd>
+                  <dt>Menu</dt><dd>Hover the bottom of the screen for save states, controls and fullscreen.</dd>
+                </dl>
+              </div>
+            </div>
+            <div class="toolbar">
+              <button type="button" id="emu-prev" aria-label="Previous system"><svg viewBox="0 0 4 7" width="4" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="3" y="0" width="1" height="1" fill="currentColor"/><rect x="2" y="1" width="2" height="1" fill="currentColor"/><rect x="1" y="2" width="3" height="1" fill="currentColor"/><rect x="0" y="3" width="4" height="1" fill="currentColor"/><rect x="1" y="4" width="3" height="1" fill="currentColor"/><rect x="2" y="5" width="2" height="1" fill="currentColor"/><rect x="3" y="6" width="1" height="1" fill="currentColor"/></svg></button>
+              <button type="button" id="emu-next" aria-label="Next system"><svg viewBox="0 0 4 7" width="4" height="7" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="1" height="1" fill="currentColor"/><rect x="0" y="1" width="2" height="1" fill="currentColor"/><rect x="0" y="2" width="3" height="1" fill="currentColor"/><rect x="0" y="3" width="4" height="1" fill="currentColor"/><rect x="0" y="4" width="3" height="1" fill="currentColor"/><rect x="0" y="5" width="2" height="1" fill="currentColor"/><rect x="0" y="6" width="1" height="1" fill="currentColor"/></svg></button>
+              <span class="spacer"></span>
+              <button type="button" id="emu-power" class="default">Power on</button>
+            </div>
+          </div>
+          <div class="win-status">
+            <span class="status-cell grow term" id="emu-caption">Sega CD US v2.11x · 1993 · Genesis Plus GX · 128KB</span>
+            <span class="status-cell term" id="emu-count">1/3</span>
+          </div>
         </div>
-      </div>
 
-      <p class="intro">Welcome to the landing page of <strong>Dekxtopia</strong>, my set of professional projects that i really like, starting from Music, Black MIDI, Coding Projects, Windows Modding and other cool and interesting stuff.</p>
+        <p class="intro">Welcome to the landing page of <strong>Dekxtopia</strong>, my set of professional projects that i really like, starting from Music, Black MIDI, Coding Projects, Windows Modding and other cool and interesting stuff.</p>
 
-    <section id="about">
-      <h2><span class="num">1</span>About Me</h2>
-      <p>Hey! Kavya here. I'm a Colombian music producer and developer with a deep passion for the craft. I've been part of the Black MIDI community for over 10 years — and most of my time still goes into making those.</p>
-      <p>Alongside that, I mod Windows ISOs and build custom toolkits tailored for embedded systems and personal rigs. It's mostly been a private affair, but I might start sharing those publicly right here — so stay tuned.</p>
-    </section>
-    <section id="projects">
-      <h2><span class="num">2</span>Coding Projects</h2>
-      <p>Something is brewing. Projects will be listed here once they're ready to go public — check back soon.</p>
-      <div class="soon">Coming soon. Projects are on their way. Stay tuned.<span class="cursor"></span></div>
-    </section>
-    <section id="music">
-      <h2><span class="num">3</span>Music &amp; Black MIDI</h2>
-      <p>Music is a core part of what I do. I produce original tracks, explore the extreme end of MIDI composition known as Black MIDI, and experiment with SoundFonts, synthesis and audio engineering.</p>
-    </section>
-    <section id="modding">
-      <h2><span class="num">4</span>Windows Modding</h2>
-      <p>It's been 12 years since I fell into the Windows modding rabbit hole — and I still can't get enough of it. My main focus is crafting serviceable Windows ISOs purpose-built for embedded systems, gaming consoles, and thin clients: lean, stable, and tuned for the hardware they run on.</p>
-      <p>As soon as I start making those public, you'll be able to find them in the Projects tab. Until then, consider this a teaser.</p>
-    </section>
-    <section id="more">
-      <h2><span class="num">5</span>Other Cool Stuff</h2>
-      <p>This section is reserved for future content.</p>
-    </section>
-    <section id="contact">
-      <h2><span class="num">6</span>Contact</h2>
-      <p>Contact links coming soon.</p>
-    </section>
-    </main>
+        <section id="about">
+          <h2><span class="num">1</span>About Me</h2>
+          <p>Hey! Dekx here. I'm a Colombian music producer and developer with a deep passion for the craft. I've been part of the Black MIDI community for over 10 years — and most of my time still goes into making those.</p>
+          <p>Alongside that, I mod Windows ISOs and build custom toolkits tailored for embedded systems and personal rigs. It's mostly been a private affair, but I might start sharing those publicly right here — so stay tuned.</p>
+        </section>
+        <section id="projects">
+          <h2><span class="num">2</span>Coding Projects</h2>
+          <p>Something is brewing. Projects will be listed here once they're ready to go public — check back soon.</p>
+          <div class="soon">Coming soon. Projects are on their way. Stay tuned.<span class="cursor"></span></div>
+        </section>
+        <section id="music">
+          <h2><span class="num">3</span>Music &amp; Black MIDI</h2>
+          <p>Music is a core part of what I do. I produce original tracks, explore the extreme end of MIDI composition known as Black MIDI, and experiment with SoundFonts, synthesis and audio engineering.</p>
+        </section>
+        <section id="modding">
+          <h2><span class="num">4</span>Windows Modding</h2>
+          <p>It's been 12 years since I fell into the Windows modding rabbit hole — and I still can't get enough of it. My main focus is crafting serviceable Windows ISOs purpose-built for embedded systems, gaming consoles, and thin clients: lean, stable, and tuned for the hardware they run on.</p>
+          <p>As soon as I start making those public, you'll be able to find them in the Projects tab. Until then, consider this a teaser.</p>
+        </section>
+        <section id="more">
+          <h2><span class="num">5</span>Other Cool Stuff</h2>
+          <p>This section is reserved for future content.</p>
+        </section>
+        <section id="contact">
+          <h2><span class="num">6</span>Contact</h2>
+          <p>Contact links coming soon.</p>
+        </section>
+      </div></main>
+    </div>
   </div>
-  <div class="statusbar">
-    <span class="status-cell" id="status-msg">Ready</span>
-    <span class="status-cell">© 2026 Dekxtopia — Kavya's corner of the internet.</span>
+  <div class="win-status">
+    <span class="status-cell grow" id="status-msg">Ready</span>
+    <span class="status-cell">© 2026 Dekxtopia — Dekx's corner of the internet.</span>
     <span class="status-cell">dekx.cc</span>
+    <span class="grip" aria-hidden="true"></span>
   </div>
 </div>
 <template id="logo-fallback"><svg viewBox="0 0 14 9" width="14" height="9" shape-rendering="crispEdges" aria-hidden="true"><rect x="0" y="0" width="6" height="1" fill="#c4b5fd"/><rect x="0" y="1" width="7" height="1" fill="#c4b5fd"/><rect x="0" y="2" width="2" height="1" fill="#c4b5fd"/><rect x="5" y="2" width="3" height="1" fill="#c4b5fd"/><rect x="9" y="2" width="4" height="1" fill="#a78bfa"/><rect x="0" y="3" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="3" width="2" height="1" fill="#c4b5fd"/><rect x="0" y="4" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="4" width="2" height="1" fill="#c4b5fd"/><rect x="9" y="4" width="5" height="1" fill="#818cf8"/><rect x="0" y="5" width="2" height="1" fill="#c4b5fd"/><rect x="6" y="5" width="2" height="1" fill="#c4b5fd"/><rect x="0" y="6" width="2" height="1" fill="#c4b5fd"/><rect x="5" y="6" width="3" height="1" fill="#c4b5fd"/><rect x="9" y="6" width="3" height="1" fill="#f0abfc"/><rect x="0" y="7" width="7" height="1" fill="#c4b5fd"/><rect x="0" y="8" width="6" height="1" fill="#c4b5fd"/></svg></template>
@@ -139,50 +151,51 @@
     { name: "Super Nintendo", rom: "bios.sfc", caption: "bios.sfc · Snes9x" },
     { name: "Nintendo 64",    rom: "bios.z64", caption: "bios.z64 · Mupen64Plus-Next" }
   ];
+  var $ = function (id) { return document.getElementById(id); };
   var i = 0, on = false;
-  var title = document.getElementById("emu-title"), screen = document.getElementById("emu-screen"),
-      caption = document.getElementById("emu-caption"), count = document.getElementById("emu-count"),
-      prev = document.getElementById("emu-prev"), next = document.getElementById("emu-next"),
-      help = document.getElementById("emu-help"), helpBtn = document.getElementById("emu-help-btn"),
-      status = document.getElementById("status-msg");
+  var slot = $("emu-screen"), help = $("emu-help"), helpBtn = $("emu-help-btn"),
+      off = $("emu-off"), power = $("emu-power"), status = $("status-msg");
   var canRun = /^https?:$/.test(location.protocol) && !/(^|\.)claude\.ai$|claudeusercontent/.test(location.hostname);
 
-  function powerScreen() {
+  function idle() {
     var s = SYSTEMS[i];
-    screen.innerHTML = "";
+    slot.innerHTML = "";
     var p = document.createElement("div"); p.className = "power";
     var n = document.createElement("div"); n.className = "sys"; n.textContent = s.name;
-    var b = document.createElement("button"); b.type = "button"; b.textContent = "Power on";
-    b.addEventListener("click", powerOn);
-    p.appendChild(n); p.appendChild(b);
-    if (!canRun) { var w = document.createElement("div"); w.textContent = "Runs on dekx.cc or a local web server."; p.appendChild(w); b.disabled = true; }
-    screen.appendChild(p);
+    var t = document.createElement("div");
+    t.textContent = canRun ? "Press Power on to start." : "Runs on dekx.cc or a local web server.";
+    p.appendChild(n); p.appendChild(t); slot.appendChild(p);
     on = false;
+    power.textContent = "Power on"; power.disabled = !canRun;
+    off.disabled = true;
+    if (status) status.textContent = "Ready";
   }
-  function powerOn() {
+  function start() {
     var s = SYSTEMS[i];
-    screen.innerHTML = "";
+    slot.innerHTML = "";
     var f = document.createElement("iframe");
     f.title = s.name + " emulator";
     f.allow = "autoplay; fullscreen; gamepad";
     f.src = "emu.html?rom=" + encodeURIComponent(s.rom);
-    screen.appendChild(f);
+    slot.appendChild(f);
     on = true;
+    power.textContent = "Power off"; off.disabled = false;
     if (status) status.textContent = "Running " + s.name + "…";
     setTimeout(function () { try { f.focus(); } catch (e) {} }, 400);
   }
   function show(k) {
     i = (k + SYSTEMS.length) % SYSTEMS.length;
     var s = SYSTEMS[i];
-    title.textContent = s.name;
-    caption.textContent = s.caption;
-    count.textContent = (i + 1) + "/" + SYSTEMS.length;
+    $("emu-title").textContent = s.name;
+    $("emu-caption").textContent = s.caption;
+    $("emu-count").textContent = (i + 1) + "/" + SYSTEMS.length;
     help.hidden = true; helpBtn.setAttribute("aria-pressed", "false");
-    if (status) status.textContent = "Ready";
-    powerScreen();
+    idle();
   }
-  prev.addEventListener("click", function () { show(i - 1); });
-  next.addEventListener("click", function () { show(i + 1); });
+  $("emu-prev").addEventListener("click", function () { show(i - 1); });
+  $("emu-next").addEventListener("click", function () { show(i + 1); });
+  power.addEventListener("click", function () { if (on) idle(); else start(); });
+  off.addEventListener("click", idle);
   helpBtn.addEventListener("click", function () {
     help.hidden = !help.hidden;
     helpBtn.setAttribute("aria-pressed", String(!help.hidden));
