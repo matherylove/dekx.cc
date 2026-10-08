@@ -1,0 +1,1511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>0xDEADDEAD — crash screen editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:#0C0A1E; --panel:#1E1638; --panel-2:#241A44; --raise:#3A2A6E30;
+    --line:#271D50; --line-2:#3A2A6E;
+    --ink:#E3D9FF; --ink-dim:#9B8FCF; --ink-faint:#6A5F99;
+    --bsod:#0000aa; --amber:#A78BFA; --amber-dim:#6A50C8; --hazard:#FF7AA8; --cyan:#7FD3FF; --rose:#B5426E;
+    --head-top:#463885; --head-bot:#281d54;
+    --head2-top:#352a68; --head2-bot:#221940;
+    --btn-top:#302659; --btn-bot:#1c1439;
+    --btn-htop:#3e3080; --btn-hbot:#271c52;
+    --sel-top:#5c49ab; --sel-bot:#3a2a74;
+    --pane:#211848; --pane-2:#1a1338;
+    --sunken:#15102f; --sunken-edge:#0b0722;
+    --gloss:rgba(255,255,255,.12); --bevel:rgba(255,255,255,.08);
+    --dock-top:#2a2052; --dock-bot:#1c1440;
+    --chk-top:#c6b0ff; --chk-bot:#9374ef; --chk-edge:#5f46bd;
+    --edge:#0e0922;
+    --mono:'IBM Plex Mono',ui-monospace,'Cascadia Mono',Consolas,monospace;
+    --sans:Tahoma,Verdana,Geneva,'DejaVu Sans',system-ui,sans-serif;
+    color-scheme:dark;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  :root[data-theme="dark"]{color-scheme:dark}
+  *,*::before,*::after{box-sizing:inherit}
+  html,body{height:100%}
+  body{margin:0; background:var(--void); color:var(--ink); font-family:var(--sans); font-size:11px; line-height:1.4; -webkit-font-smoothing:antialiased; display:flex; flex-direction:column; overflow:hidden}
+  button{font-family:var(--sans); color:var(--ink); cursor:pointer}
+  button:disabled{cursor:default}
+  :focus-visible{outline:1px dotted var(--amber); outline-offset:1px}
+  @keyframes blink{50%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  svg.ic{width:16px; height:16px; flex:0 0 auto; display:block; shape-rendering:geometricPrecision}
+  input[type=file]{display:none}
+
+  /* ---------- title bar ---------- */
+  .titlebar{flex:0 0 auto; height:26px; display:flex; align-items:center; gap:7px; padding:0 8px;
+    background:linear-gradient(#5c49ab 0%,#463885 22%,#352a68 62%,#281d54 100%);
+    border-bottom:1px solid var(--edge); box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+    color:#fff; font-weight:700; font-size:12px; text-shadow:1px 1px 0 #0009}
+  .titlebar .appicon{height:18px; width:auto; flex:0 0 auto; filter:drop-shadow(0 1px 1px #0006)}
+  .titlebar .ttl{overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .titlebar .ttl span{font-weight:400; color:#e3d9ff}
+  .logo .cur{animation:blink 1.1s steps(1) infinite}
+
+  /* ---------- command bars ---------- */
+  .cmdbars{flex:0 0 auto; display:flex; flex-direction:column; gap:2px; padding:1px 2px 3px;
+    background:linear-gradient(var(--dock-top),var(--dock-bot)); border-bottom:1px solid var(--edge)}
+  .cmdbars.bottom{padding:3px 2px; border-bottom:0; border-top:1px solid var(--edge)}
+  .menubar{display:flex; align-items:center; height:23px; gap:0}
+  .mbtn{height:20px; padding:0 7px; border:1px solid transparent; background:none; font-size:11px; color:var(--ink); white-space:nowrap}
+  .mbtn:hover,.mbtn:focus-visible{background:linear-gradient(var(--sel-top),var(--sel-bot)); border-color:var(--amber); outline:none}
+  .mbtn.open{background:linear-gradient(var(--panel-2),var(--panel)); border-color:var(--line-2); border-bottom-color:var(--panel); position:relative; z-index:61; box-shadow:2px -1px 3px -1px #0007}
+  body:not(.mnem) .mbtn u{text-decoration:none}
+  .tbrow{display:flex; flex-wrap:wrap; gap:3px 4px; align-items:flex-start}
+  .toolbar{display:flex; flex-wrap:wrap; align-items:center; gap:1px; min-height:27px; padding:0 7px 0 0;
+    background:linear-gradient(var(--btn-htop) 0%,var(--btn-top) 48%,#241a4a 100%);
+    border-radius:3px; box-shadow:inset 0 1px 0 var(--gloss), 1px 1px 0 var(--edge)}
+  .grip{width:6px; align-self:stretch; margin:5px 4px 5px 3px; flex:0 0 auto;
+    background-image:radial-gradient(#8f80d0 1px, transparent 1.2px); background-size:3px 4px;
+    background-position:1px 1px; opacity:.55}
+  .tsep{width:1px; height:17px; margin:0 4px; flex:0 0 auto; background:var(--edge); box-shadow:1px 0 0 var(--bevel)}
+  .tgroup{display:flex; gap:1px}
+  .tbtn{display:inline-flex; align-items:center; justify-content:center; gap:4px; height:22px; min-width:23px; padding:0 3px;
+    border:1px solid transparent; background:none; font-size:11px; color:var(--ink); white-space:nowrap}
+  .tbtn.txt{padding:0 6px}
+  .tbtn:hover:not(:disabled){background:linear-gradient(var(--sel-top),var(--sel-bot)); border-color:var(--amber)}
+  .tbtn:active:not(:disabled),.tbtn[aria-pressed="true"]{background:linear-gradient(var(--chk-top),var(--chk-bot)); border-color:var(--chk-edge); color:#1b1038}
+  .tbtn[aria-pressed="true"]:hover:not(:disabled){filter:brightness(1.08)}
+  .tbtn:disabled{color:var(--ink-faint)}
+  .tbtn:disabled svg{opacity:.35; filter:grayscale(1)}
+  .tlabel{color:var(--ink-dim); margin:0 4px 0 2px; white-space:nowrap}
+
+  .combo{position:relative; display:inline-flex; align-items:center}
+  .combo select{appearance:none; -webkit-appearance:none; height:20px; font:11px var(--sans); color:var(--ink);
+    background:var(--sunken); border:1px solid var(--line-2); border-radius:0; padding:0 20px 0 4px; max-width:100%}
+  .combo.mono select{font-family:var(--mono)}
+  .combo::after{content:""; position:absolute; right:1px; top:1px; bottom:1px; width:14px; pointer-events:none;
+    background:linear-gradient(var(--btn-htop),var(--btn-bot)); border-left:1px solid var(--line-2)}
+  .combo::before{content:""; position:absolute; right:5px; top:50%; margin-top:-1px; z-index:1; pointer-events:none;
+    border:3px solid transparent; border-top-color:var(--ink); border-bottom:0}
+  .combo:hover select:not(:disabled),.combo select:focus{border-color:var(--amber); outline:none}
+  .combo:hover:has(select:not(:disabled))::after{background:linear-gradient(var(--sel-top),var(--sel-bot)); border-left-color:var(--amber)}
+  .combo:has(select:disabled)::before{border-top-color:var(--ink-faint)}
+  .combo select:disabled{color:var(--ink-faint)}
+  .combo option{background:var(--panel); color:var(--ink)}
+
+  .split{display:inline-flex; border:1px solid transparent}
+  .split .tbtn{border:0}
+  .split .tbtn.arw{min-width:11px; width:11px; padding:0}
+  .split:hover:not(:has(:disabled)){border-color:var(--amber)}
+  .split:hover:not(:has(:disabled)) .tbtn{background:linear-gradient(var(--btn-htop),var(--btn-hbot))}
+  .split:hover:not(:has(:disabled)) .tbtn:hover{background:linear-gradient(var(--sel-top),var(--sel-bot))}
+  .split:hover:not(:has(:disabled)) .tbtn.arw{border-left:1px solid var(--amber)}
+  .cicon{position:relative; width:16px; height:16px; display:block}
+  .cicon .cbar{position:absolute; left:0; right:0; bottom:0; height:4px; border:1px solid #000a}
+  .arw svg{width:7px; height:4px}
+
+  .spin{width:44px; height:20px; font:11px var(--mono); background:var(--sunken); color:var(--ink); border:1px solid var(--line-2); border-radius:0; padding:0 3px}
+  .spin:focus{border-color:var(--amber); outline:none}
+  .radio{display:inline-flex; gap:4px; align-items:center; margin-right:6px; color:var(--ink); cursor:pointer; white-space:nowrap}
+  .radio input{accent-color:var(--amber); margin:0}
+  .counter{font-family:var(--mono); font-size:11px; color:var(--ink); padding:0 4px; white-space:nowrap}
+  .counter b{color:var(--amber)}
+  .dash{color:var(--ink-dim); margin:0 3px}
+
+  /* ---------- workspace ---------- */
+  .work{flex:1 1 auto; min-height:0; display:grid; grid-template-columns:196px minmax(0,1fr) 264px; position:relative}
+  body.no-scenes .work{grid-template-columns:minmax(0,1fr) 264px}
+  body.no-task .work{grid-template-columns:196px minmax(0,1fr)}
+  body.no-scenes.no-task .work{grid-template-columns:minmax(0,1fr)}
+  body.no-scenes .scenes-pane, body.no-task .taskpane{display:none}
+  body.no-status .statusbar{display:none}
+
+  .scroll{overflow-y:auto; overflow-x:hidden}
+  .scroll::-webkit-scrollbar{width:16px}
+  .scroll::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#3a2d6e,#2a2052); border:1px solid #14102f; border-radius:3px; box-shadow:inset 1px 1px 0 var(--bevel)}
+  .scroll::-webkit-scrollbar-track{background:linear-gradient(90deg,#1a1338,#1e1640)}
+
+  .pane-x{width:18px; height:18px; display:grid; place-items:center; border:1px solid transparent; background:none; color:var(--ink-dim); padding:0}
+  .pane-x:hover{border-color:var(--amber); background:linear-gradient(var(--sel-top),var(--sel-bot)); color:#fff}
+  .pane-x svg{width:10px; height:10px}
+
+  /* scenes pane (slides-pane style) */
+  .scenes-pane{min-height:0; display:flex; flex-direction:column; background:linear-gradient(var(--pane),var(--pane-2)); border-right:1px solid var(--edge)}
+  .tabs{flex:0 0 auto; display:flex; align-items:flex-end; gap:1px; height:27px; padding:0 3px 0 6px;
+    background:linear-gradient(var(--dock-top),var(--dock-bot)); border-bottom:1px solid var(--line-2)}
+  .tab{height:21px; padding:0 10px; margin-bottom:-1px; border:1px solid transparent; border-bottom:0; border-radius:3px 3px 0 0; background:none; color:var(--ink-dim); font-size:11px}
+  .tab:hover{color:var(--ink)}
+  .tab[aria-selected="true"]{background:var(--pane); border-color:var(--line-2); color:#fff; font-weight:700}
+  .tabs .sp{flex:1}
+  .tabs .pane-x,.tabs .tbtn{align-self:center}
+  .tabs .tbtn{height:20px; min-width:20px}
+
+  .scene-list{flex:1 1 auto}
+  .scene-list.thumbs{padding:10px 10px 14px 4px}
+  .thumb{display:grid; grid-template-columns:20px minmax(0,1fr); gap:3px 4px; width:100%; margin:0 0 12px; padding:0; border:0; background:none; text-align:left; color:inherit; font:inherit}
+  .thumb .n{color:var(--ink-dim); text-align:right; padding:2px 3px 0 0; font-size:11px}
+  .thumb .tframe{display:block; padding:2px; background:#000; border:1px solid var(--edge); transition:box-shadow .12s}
+  .thumb canvas{display:block; width:100%; height:auto}
+  .thumb:hover .tframe{box-shadow:0 0 0 2px var(--amber-dim)}
+  .thumb.sel .tframe{box-shadow:0 0 0 2px var(--amber), 0 0 8px #A78BFA66}
+  .thumb.sel .n{color:#fff; font-weight:700}
+  .thumb .cap{grid-column:2; display:flex; gap:6px; align-items:baseline; min-width:0}
+  .thumb .code{font-family:var(--mono); font-size:11px; color:var(--ink)}
+  .thumb .nm{font-size:11px; color:var(--ink-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+
+  .scene{display:flex; align-items:center; gap:9px; width:100%; padding:8px 11px; border:0; border-bottom:1px solid #170f3a; background:none; color:inherit; font:inherit; text-align:left}
+  .scene:hover{background:linear-gradient(#2f245e,#271c50)}
+  .scene.sel{background:linear-gradient(var(--sel-top),var(--sel-bot)); box-shadow:inset 0 1px 0 var(--bevel), inset 0 -1px 0 #0003; border-bottom-color:#15102f}
+  .scene .code{font-family:var(--mono); font-size:12px; color:var(--ink)}
+  .scene.sel .code{color:#fff}
+  .scene .nm{font-size:11px; color:var(--ink-dim); margin-left:auto; max-width:92px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .scene.sel .nm{color:#e3d9ff}
+  .dot{width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #b9ecff, var(--cyan)); border:1px solid #2b5a6e; flex:0 0 auto; box-shadow:0 0 3px #7FD3FF66}
+
+  /* document area */
+  .doc{min-width:0; min-height:0; display:flex; flex-direction:column; background:#09071A}
+  .stage{flex:1 1 auto; min-height:0; min-width:0; display:grid; grid-template-columns:20px minmax(0,1fr); grid-template-rows:20px minmax(0,1fr);
+    background:radial-gradient(130% 120% at 50% 38%, #140e34 0%, #0b0820 58%, #070512 100%)}
+  .stage.no-ruler{grid-template-columns:0 minmax(0,1fr); grid-template-rows:0 minmax(0,1fr)}
+  .stage.no-ruler .ruler,.stage.no-ruler .rcorner{display:none}
+  .rcorner{grid-column:1; grid-row:1; background:var(--sunken); border-right:1px solid var(--edge); border-bottom:1px solid var(--edge)}
+  .ruler{display:block; width:100%; height:100%; min-width:0; min-height:0}
+  .ruler.h{grid-column:2; grid-row:1; border-bottom:1px solid var(--edge)}
+  .ruler.v{grid-column:1; grid-row:2; border-right:1px solid var(--edge)}
+  .screen-area{grid-column:2; grid-row:2; min-height:0; min-width:0; display:grid; place-items:center; position:relative; overflow:hidden}
+  .screen-area::before{content:""; position:absolute; inset:0; pointer-events:none;
+    background-image:radial-gradient(#ffffff0a 1px, transparent 1px); background-size:17px 17px; opacity:.5}
+  .screen-wrap{background:#000; padding:8px; border:1px solid #0c0720; border-radius:3px;
+    box-shadow:0 0 0 1px #3a2d6e, 0 22px 60px -22px #000, 0 0 60px -10px #0000aa44; display:grid; place-items:center; position:relative}
+  .screen-box{position:relative; line-height:0; font-size:0}
+  canvas#screen{display:block; image-rendering:pixelated; image-rendering:crisp-edges; background:var(--bsod); touch-action:none}
+  .grid-ov{position:absolute; inset:0; pointer-events:none; z-index:2; mix-blend-mode:screen}
+
+  .framepane{flex:0 0 auto; border-top:1px solid var(--edge); background:linear-gradient(#271c52,#17112f)}
+  .fp-head{display:flex; align-items:center; gap:8px; height:21px; padding:0 10px; font-weight:700; color:#f1ecff; text-shadow:0 1px 1px #0005;
+    background:linear-gradient(var(--head2-top),var(--head2-bot)); border-bottom:1px solid #15102f; box-shadow:inset 0 1px 0 var(--bevel)}
+  .fp-head .mini{font-weight:400; color:var(--ink-dim); text-shadow:none}
+  .frames{display:flex; gap:6px; padding:9px 12px 10px; overflow-x:auto}
+  .frame{flex:0 0 auto; width:46px; height:38px; background:linear-gradient(#2a2052,#1d1540); border:1px solid var(--line-2); border-radius:2px; display:grid; place-items:center;
+    font-family:var(--mono); font-size:12px; color:var(--ink-dim); position:relative; box-shadow:inset 0 1px 0 var(--gloss); padding:0}
+  .frame:hover{border-color:var(--amber); background:linear-gradient(var(--btn-htop),var(--btn-hbot)); color:var(--ink)}
+  .frame.cur{border-color:var(--chk-edge); color:#1b1038; font-weight:700; background:linear-gradient(var(--chk-top),var(--chk-bot))}
+  .frame.inloop::after{content:""; position:absolute; left:3px; right:3px; bottom:2px; height:2px; background:var(--amber)}
+  .frame.cur.inloop::after{background:#3a2a74}
+  .frame.addf{color:var(--ink-faint); font-size:16px; background:linear-gradient(#211848,#1a1338); border-style:dashed}
+
+  /* task pane */
+  .taskpane{min-height:0; display:flex; flex-direction:column; background:linear-gradient(var(--pane),var(--pane-2)); border-left:1px solid var(--edge)}
+  .tp-head{flex:0 0 auto; height:27px; display:flex; align-items:center; gap:2px; padding:0 4px; background:linear-gradient(var(--dock-top),var(--dock-bot)); border-bottom:1px solid var(--line-2)}
+  .tp-title{flex:1; min-width:0; height:22px; display:flex; align-items:center; justify-content:space-between; gap:6px; padding:0 5px;
+    border:1px solid transparent; background:none; font-size:12px; font-weight:700; color:#fff; text-align:left}
+  .tp-title:hover,.tp-title[aria-expanded="true"]{border-color:var(--amber); background:linear-gradient(var(--sel-top),var(--sel-bot))}
+  .tp-title svg{width:7px; height:4px}
+  .tp-body{flex:1 1 auto; min-height:0; padding:9px 9px 16px; display:flex; flex-direction:column; gap:10px}
+  .tp-sec{border:1px solid #15102f; border-radius:5px 5px 0 0; background:linear-gradient(#20183f,#1b1338); box-shadow:0 1px 0 var(--bevel)}
+  .tp-sh{margin:0; font-size:inherit}
+  .tp-sh button{width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; padding:5px 6px 5px 10px; border:0; border-radius:4px 4px 0 0;
+    font-size:12px; font-weight:700; color:#f1ecff; text-shadow:0 1px 1px #00000055; text-align:left;
+    background:linear-gradient(var(--head-top),var(--head-bot)); box-shadow:inset 0 1px 0 var(--bevel)}
+  .tp-sh button:hover .chev{filter:brightness(1.15)}
+  .chev{width:17px; height:17px; flex:0 0 auto; border-radius:50%; display:grid; place-items:center;
+    background:linear-gradient(#f1ecff,#b9a9ee); border:1px solid #5f46bd; box-shadow:0 1px 1px #0005}
+  .chev svg{width:9px; height:9px; transition:transform .15s}
+  .tp-sec.collapsed .chev svg{transform:rotate(180deg)}
+  .tp-sec.collapsed .tp-sb{display:none}
+  .tp-sb{border-top:1px solid #15102f}
+
+  .toolrow{display:flex; align-items:center; gap:2px; padding:5px 6px; border-bottom:1px solid #15102f; background:linear-gradient(#241a4a,#1d1540)}
+  .layerlist{max-height:260px}
+  .layer{display:flex; align-items:center; gap:8px; padding:6px 8px 6px 11px; border-bottom:1px solid #170f3a; cursor:pointer}
+  .layer:hover{background:linear-gradient(#2f245e,#271c50)}
+  .layer.sel{background:linear-gradient(var(--sel-top),var(--sel-bot)); box-shadow:inset 0 1px 0 var(--bevel)}
+  .layer.off .lname{color:var(--ink-faint)}
+  .layer .lname{font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .layer.sel .lname{color:#fff}
+  .layer .vis{margin-left:auto; display:grid; place-items:center; width:22px; height:20px; padding:0; border:1px solid transparent; background:transparent; color:var(--ink-dim)}
+  .layer .vis:hover{border-color:var(--amber); color:#fff}
+  .layer.sel .vis{color:#e3d9ff}
+  .layer.bg{cursor:pointer}
+  .layer:focus-visible{outline:1px dotted var(--amber); outline-offset:-2px}
+
+  .props{padding:10px 10px 11px; display:flex; flex-direction:column; gap:8px; min-height:46px}
+  .props.empty{color:var(--ink-faint); font-style:italic; font-size:12px}
+  .prow{display:flex; align-items:center; gap:8px}
+  .prow.top{align-items:flex-start}
+  .prow.top label{padding-top:4px}
+  .prow label{font-size:11px; color:var(--ink-dim); width:58px; flex:0 0 auto}
+  .prow input[type=text],.prow input[type=number],.prow textarea{flex:1; min-width:0; font-family:var(--mono); font-size:12px; background:var(--sunken); color:var(--ink); border:1px solid var(--line-2); border-radius:0; padding:4px 6px; box-shadow:inset 1px 1px 2px #00000055}
+  .prow textarea{resize:vertical; min-height:58px; line-height:1.35; white-space:pre; overflow-x:auto}
+  .prow select{flex:1; min-width:0}
+  .prow .combo{flex:1; min-width:0}
+  .prow .combo select{width:100%; height:22px}
+  .prow input:focus,.prow textarea:focus{outline:none; border-color:var(--amber)}
+  .xy{display:flex; gap:6px; flex:1; min-width:0}
+  .xy input{width:50%}
+  .pval{color:var(--ink); font-size:11px}
+
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:5px; background:linear-gradient(var(--btn-htop),var(--btn-bot)); border:1px solid var(--line-2); border-radius:3px;
+    box-shadow:inset 0 1px 0 var(--gloss); color:var(--ink); padding:3px 10px; min-height:22px; font-size:11px}
+  .btn:hover{border-color:var(--amber); background:linear-gradient(var(--sel-top),var(--sel-bot))}
+  .btn:active{background:linear-gradient(var(--btn-bot),var(--btn-top)); box-shadow:inset 0 2px 3px #00000066}
+  .btn.wide{flex:1}
+  .btn.danger{color:var(--hazard)}
+  .btn svg.ic{width:14px; height:14px}
+  .mini{font-size:10.5px; color:var(--ink-faint)}
+  .chip{width:26px; height:15px; border:1px solid #00000088; box-shadow:inset 0 1px 0 rgba(255,255,255,.25); flex:0 0 auto}
+
+  .palette{display:grid; gap:2px; padding:10px 11px 12px}
+  .palette.p16{grid-template-columns:repeat(8,1fr)}
+  .palette.p256{grid-template-columns:repeat(16,1fr)}
+  .sw{aspect-ratio:1; border:1px solid #00000080; padding:0; position:relative; min-width:0}
+  .palette.p256 .sw{border-width:0}
+  .sw:hover{outline:1px solid #fff; outline-offset:-1px; z-index:1}
+  .sw.sel{outline:2px solid var(--amber); outline-offset:-1px; z-index:2; box-shadow:0 0 4px var(--amber)}
+
+  /* status bar */
+  .statusbar{flex:0 0 auto; height:23px; display:flex; align-items:stretch; gap:2px; padding:2px 3px;
+    background:linear-gradient(var(--dock-top),var(--dock-bot)); border-top:1px solid var(--edge); color:var(--ink-dim)}
+  .sb{display:flex; align-items:center; padding:0 9px; white-space:nowrap; overflow:hidden;
+    border:1px solid; border-color:#0e0922 #3a2d6e66 #3a2d6e66 #0e0922}
+  .sb.grow{flex:1 1 auto; min-width:0}
+  .sb.mono{font-family:var(--mono); min-width:76px}
+  .sb strong{color:var(--ink); font-weight:400; margin-left:4px}
+
+  /* menus & popups */
+  .menu-layer{position:fixed; inset:0; pointer-events:none; z-index:60}
+  .menu{position:fixed; pointer-events:auto; min-width:200px; padding:2px; outline:none;
+    background:linear-gradient(90deg,var(--head2-top) 0,var(--head2-bot) 25px,var(--panel) 25px);
+    border:1px solid var(--line-2); box-shadow:3px 3px 4px -1px #000b}
+  .mi{display:flex; align-items:center; width:100%; height:23px; padding:0 14px 0 0; border:1px solid transparent; background:none; font-size:11px; color:var(--ink); text-align:left; white-space:nowrap}
+  .mi .mg{width:24px; height:21px; display:grid; place-items:center; flex:0 0 auto; margin-right:9px}
+  .mi .ml{flex:1}
+  .mi .ms{margin-left:28px; color:var(--ink-dim)}
+  .mi:hover:not(:disabled),.mi:focus:not(:disabled){background:linear-gradient(var(--sel-top),var(--sel-bot)); border-color:var(--amber); outline:none}
+  .mi:hover .ms,.mi:focus .ms{color:var(--ink)}
+  .mi:disabled{color:var(--ink-faint)}
+  .mi:disabled svg{opacity:.35; filter:grayscale(1)}
+  .mbox{width:20px; height:20px; display:grid; place-items:center; background:linear-gradient(var(--chk-top),var(--chk-bot)); border:1px solid var(--chk-edge)}
+  .mbox svg{width:14px; height:14px}
+  .msep{height:1px; margin:3px 2px 3px 32px; background:var(--line-2)}
+  .colorpop{min-width:0; padding:7px; background:var(--panel)}
+  .cp-h{font-weight:700; color:var(--ink-dim); padding:0 1px 6px}
+  .cp-g{display:grid; gap:2px}
+  .cp-g.p16{grid-template-columns:repeat(8,17px)}
+  .cp-g.p256{grid-template-columns:repeat(16,12px); gap:1px}
+  .cp-g button{aspect-ratio:1; padding:0; border:1px solid #00000080; outline:none}
+  .cp-g button:hover,.cp-g button:focus{outline:1px solid #fff; outline-offset:0; position:relative; z-index:1}
+  .cp-g button.sel{outline:2px solid var(--amber); position:relative; z-index:2}
+
+  /* desktop-alert style notification */
+  .alert{position:fixed; right:14px; bottom:36px; max-width:min(360px,calc(100vw - 28px)); display:flex; gap:10px; align-items:center;
+    padding:10px 16px 10px 10px; background:linear-gradient(var(--head2-top),var(--pane-2)); border:1px solid var(--amber-dim);
+    box-shadow:inset 0 1px 0 var(--gloss), 0 10px 30px -10px #000; color:var(--ink); font-size:12px;
+    opacity:0; transform:translateY(10px); transition:opacity .22s, transform .22s; pointer-events:none; z-index:70}
+  .alert.show{opacity:1; transform:none}
+  .alert svg{width:20px; height:20px}
+
+  /* dialogs */
+  dialog.win{padding:0; border:1px solid var(--line-2); border-radius:6px 6px 0 0; background:var(--panel); color:var(--ink); width:min(440px,calc(100vw - 32px)); box-shadow:0 24px 60px -12px #000; font-size:12px}
+  dialog.win::backdrop{background:#05031099}
+  .win-title{height:26px; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:0 3px 0 9px;
+    background:linear-gradient(#5c49ab 0%,#463885 22%,#352a68 62%,#281d54 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+    border-radius:5px 5px 0 0; color:#fff; font-weight:700; text-shadow:1px 1px 0 #0009}
+  .win-x{width:21px; height:21px; display:grid; place-items:center; padding:0; border:1px solid #fff8; border-radius:3px; background:linear-gradient(#ff9ec0,var(--rose)); color:#fff}
+  .win-x:hover{filter:brightness(1.12)}
+  .win-x svg{width:10px; height:10px}
+  .win-body{padding:16px 18px 6px; line-height:1.5}
+  .win-body p{margin:0 0 10px; max-width:60ch}
+  .win-foot{display:flex; justify-content:flex-end; padding:10px 16px 14px}
+  .win-foot .btn{min-width:76px}
+  .about{display:flex; gap:16px; align-items:flex-start}
+  .about svg{width:96px; height:auto; flex:0 0 auto}
+  .about h3{margin:0 0 6px; font-size:14px}
+  .keys{border-collapse:collapse; width:100%}
+  .keys td{padding:4px 6px; border-bottom:1px solid var(--line)}
+  .keys td:first-child{font-family:var(--mono); color:var(--amber); white-space:nowrap; width:1%}
+
+  @media (max-width:900px){ .work{grid-template-columns:160px minmax(0,1fr) 230px} body.no-scenes .work{grid-template-columns:minmax(0,1fr) 230px} body.no-task .work{grid-template-columns:160px minmax(0,1fr)} }
+  @media (max-width:600px){
+    .work,body.no-scenes .work,body.no-task .work{grid-template-columns:minmax(0,1fr)}
+    .scenes-pane,.taskpane{position:absolute; top:0; bottom:0; z-index:20; width:min(290px,86vw); box-shadow:0 0 30px #000c}
+    .scenes-pane{left:0} .taskpane{right:0}
+    .tbtn.txt .lbl{display:none}
+    #sbScene,#sbXY,#canvasTitle{display:none}
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-new" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="11" height="8" fill="#0000aa" stroke="#E3D9FF"/><path d="M4.5 12.5h5M7 10.5v2" stroke="#9B8FCF"/><path d="M13 8.5v7M9.5 12h7" stroke="#A78BFA" stroke-width="2"/></symbol>
+    <symbol id="i-import" viewBox="0 0 16 16"><rect x="1.5" y="4.5" width="10" height="9" fill="#15102f" stroke="#9B8FCF"/><path d="M2 13l3-4 2 2 2-3 2.5 5z" fill="#7FD3FF"/><circle cx="8.5" cy="7" r="1" fill="#E3D9FF"/><path d="M13.5 0.5v7M11 5l2.5 2.5L16 5" stroke="#A78BFA" stroke-width="1.6" fill="none"/></symbol>
+    <symbol id="i-export" viewBox="0 0 16 16"><path d="M1.5 1.5h11l2 2v11h-13z" fill="#5c49ab" stroke="#E3D9FF"/><rect x="4" y="2" width="7" height="4" fill="#E3D9FF"/><rect x="8.6" y="2.6" width="1.6" height="2.6" fill="#3a2a74"/><rect x="3.5" y="8.5" width="9" height="6" fill="#15102f"/><path d="M5 10.5h6M5 12.5h6" stroke="#7FD3FF"/></symbol>
+    <symbol id="i-text" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="13" height="13" fill="#15102f" stroke="#9B8FCF" stroke-dasharray="2 1.5"/><path d="M4.5 12.5L8 3.5l3.5 9M5.8 9.5h4.4" stroke="#E3D9FF" stroke-width="1.5" fill="none"/></symbol>
+    <symbol id="i-field" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="13" height="13" fill="#15102f" stroke="#2b5a6e"/><path d="M6 3.5c-1.5 0-1.5 1-1.5 2v1L3.5 8l1 1.5v1c0 1 0 2 1.5 2M10 3.5c1.5 0 1.5 1 1.5 2v1l1 1.5-1 1.5v1c0 1 0 2-1.5 2" stroke="#7FD3FF" stroke-width="1.3" fill="none"/></symbol>
+    <symbol id="i-sprite" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="13" height="13" fill="#15102f" stroke="#9B8FCF"/><path shape-rendering="crispEdges" d="M5 4h1v1H5zM10 4h1v1h-1zM6 5h4v1H6zM5 6h6v1H5zM4 7h2v1H4zM7 7h2v1H7zM10 7h2v1h-2zM4 8h8v2H4zM4 10h1v2H4zM11 10h1v2h-1zM6 11h1v1H6zM9 11h1v1H9z" fill="#A78BFA"/></symbol>
+    <symbol id="i-del" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="#FF7AA8" stroke-width="2.4" stroke-linecap="round"/></symbol>
+    <symbol id="i-bg" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" fill="#0000aa" stroke="#E3D9FF"/><path d="M3.5 5.5h6M3.5 7.5h4" stroke="#ffffffaa"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 16 16"><path d="M3 3h2v10H3zM13 3v10L6 8z" fill="#E3D9FF"/></symbol>
+    <symbol id="i-next" viewBox="0 0 16 16"><path d="M11 3h2v10h-2zM3 3v10l7-5z" fill="#E3D9FF"/></symbol>
+    <symbol id="i-play" viewBox="0 0 16 16"><path d="M4 2.5v11l9.5-5.5z" fill="#7FD3FF" stroke="#2b5a6e"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 16 16"><path d="M3.5 3h3v10h-3zM9.5 3h3v10h-3z" fill="#E3D9FF" stroke="#3a2a74"/></symbol>
+    <symbol id="i-addframe" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="9" height="10" fill="#2a2052" stroke="#9B8FCF"/><path d="M3 4v1M3 7v1M3 10v1M9 4v1M9 7v1M9 10v1" stroke="#9B8FCF"/><path d="M12.5 8v7M9 11.5h7" stroke="#A78BFA" stroke-width="2"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 16 16"><path d="M1.5 1.5h13v13h-13zM5.8 1.5v13M10.2 1.5v13M1.5 5.8h13M1.5 10.2h13" fill="none" stroke="#9B8FCF"/></symbol>
+    <symbol id="i-fontcolor" viewBox="0 0 16 16"><path d="M3.5 11.5L8 1l4.5 10.5M5.2 7.6h5.6" stroke="#E3D9FF" stroke-width="1.7" fill="none"/></symbol>
+    <symbol id="i-fill" viewBox="0 0 16 16"><path d="M2.5 6.5l5-5 5 5-5 5z" fill="#3A2A6E" stroke="#E3D9FF"/><path d="M7.5 1.5L5 0" stroke="#E3D9FF"/><path d="M13.3 6.5c.9 1.3 1.5 2.1 1.5 2.8a1.5 1.5 0 01-3 0c0-.7.6-1.5 1.5-2.8z" fill="#7FD3FF"/></symbol>
+    <symbol id="i-ttf" viewBox="0 0 16 16"><path d="M1 2h8v2.5H6.4V12H3.6V4.5H1z" fill="#E3D9FF"/><path d="M7 7h8v2h-3v6H10V9H7z" fill="#7FD3FF"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 16 16"><path d="M1 8s2.6-4.5 7-4.5S15 8 15 8s-2.6 4.5-7 4.5S1 8 1 8z" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="2.2" fill="currentColor"/></symbol>
+    <symbol id="i-eyeoff" viewBox="0 0 16 16"><path d="M1 8s2.6-4.5 7-4.5S15 8 15 8s-2.6 4.5-7 4.5S1 8 1 8z" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/><path d="M2.5 13.5l11-11" stroke="currentColor" stroke-width="1.3"/></symbol>
+    <symbol id="i-help" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5" fill="#3a2a74" stroke="#A78BFA"/><path d="M6 6.2a2 2 0 113 1.7c-.7.4-1 .8-1 1.6M8 11.2v1.2" stroke="#fff" stroke-width="1.5" fill="none"/></symbol>
+    <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#0000aa" stroke="#7FD3FF"/><path d="M8 7v5M8 4v1.6" stroke="#fff" stroke-width="1.8"/></symbol>
+    <symbol id="i-keys" viewBox="0 0 16 16"><rect x="0.5" y="4.5" width="15" height="8" rx="1" fill="#2a2052" stroke="#9B8FCF"/><path d="M2.5 6.5h1M5 6.5h1M7.5 6.5h1M10 6.5h1M12.5 6.5h1M2.5 8.5h1M5 8.5h1M7.5 8.5h1M10 8.5h1M12.5 8.5h1M4.5 10.5h7" stroke="#E3D9FF"/></symbol>
+    <symbol id="i-pane" viewBox="0 0 16 16"><rect x="1.5" y="2.5" width="13" height="11" fill="#15102f" stroke="#9B8FCF"/><rect x="9.5" y="3" width="4.5" height="10" fill="#5c49ab"/></symbol>
+    <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" stroke="#1b1038" stroke-width="2" fill="none"/></symbol>
+    <symbol id="i-dot" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="#1b1038"/></symbol>
+    <symbol id="i-x" viewBox="0 0 10 10"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-down" viewBox="0 0 7 4"><path d="M0 0h7L3.5 4z" fill="currentColor"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 10 10"><path d="M2 4.2L5 1.5l3 2.7M2 8.2L5 5.5l3 2.7" stroke="#3a2a74" stroke-width="1.5" fill="none"/></symbol>
+  </defs>
+</svg>
+
+<input type="file" id="fileIn" accept="image/*">
+<input type="file" id="spriteIn" accept="image/*,.bmp">
+<input type="file" id="fontIn" accept=".ttf,.otf,font/ttf,font/otf">
+
+<header class="titlebar">
+  <svg class="appicon logo" viewBox="0 0 58 34" role="img" aria-label="0xDD_ console logo">
+    <defs><clipPath id="ddwinT"><rect x="1" y="1" width="56" height="32" rx="6"/></clipPath></defs>
+    <g clip-path="url(#ddwinT)">
+      <rect x="1" y="1" width="56" height="32" fill="#0000AA"/>
+      <rect x="1" y="1" width="56" height="9" fill="#000063"/>
+      <rect x="5" y="3.4" width="4.2" height="4.2" fill="#D7CEF2"/>
+      <path d="M43 5.5h3.6" stroke="#ffffff88" stroke-width="1.1"/>
+      <path d="M49.4 3.6l3.2 3.2M52.6 3.6l-3.2 3.2" stroke="#ffffff88" stroke-width="1.1"/>
+    </g>
+    <rect x="1" y="1" width="56" height="32" rx="6" fill="none" stroke="#ffffff33"/>
+    <text x="7" y="25" font-family="'IBM Plex Mono',monospace" font-size="14" font-weight="700" letter-spacing=".3" fill="#ffffff">0xDD<tspan class="cur" fill="#7FD3FF">_</tspan></text>
+  </svg>
+  <span class="ttl" id="winTitle">0xDEADDEAD</span>
+</header>
+
+<div class="cmdbars">
+  <nav class="menubar" id="menubar" role="menubar" aria-label="Menu bar"><span class="grip"></span></nav>
+  <div class="tbrow">
+    <div class="toolbar" role="toolbar" aria-label="Standard">
+      <span class="grip"></span>
+      <button class="tbtn" id="tbNew" title="New scene" aria-label="New scene"><svg class="ic"><use href="#i-new"/></svg></button>
+      <button class="tbtn txt" id="tbImport" title="Import a background image or GIF"><svg class="ic"><use href="#i-import"/></svg><span class="lbl">Import background</span></button>
+      <button class="tbtn txt" id="tbExport" title="Export the scene pack"><svg class="ic"><use href="#i-export"/></svg><span class="lbl">Export .pak</span></button>
+      <span class="tsep"></span>
+      <button class="tbtn" id="tbText" title="Add text layer" aria-label="Add text layer"><svg class="ic"><use href="#i-text"/></svg></button>
+      <button class="tbtn" id="tbSprite" title="Add sprite…" aria-label="Add sprite"><svg class="ic"><use href="#i-sprite"/></svg></button>
+      <button class="tbtn" id="tbDel" title="Delete layer (Del)" aria-label="Delete layer"><svg class="ic"><use href="#i-del"/></svg></button>
+      <span class="tsep"></span>
+      <span class="tgroup" id="tbTarget" role="group" aria-label="Target system">
+        <button class="tbtn txt" data-t="win98" aria-pressed="false">Win98 SE</button>
+        <button class="tbtn txt" data-t="xp" aria-pressed="true">Windows XP</button>
+      </span>
+      <span class="tsep"></span>
+      <span class="tgroup" id="tbBase" role="group" aria-label="VGA baseline">
+        <button class="tbtn txt" data-b="13h" aria-pressed="false" title="VGA mode 13h, 320×200">256 colors</button>
+        <button class="tbtn txt" data-b="12h" aria-pressed="true" title="VGA mode 12h, 640×480">16 colors</button>
+      </span>
+      <span class="tsep"></span>
+      <span title="Grid"><svg class="ic" aria-hidden="true" style="margin:0 4px 0 2px"><use href="#i-grid"/></svg></span>
+      <span class="combo"><select id="gridSel" aria-label="Grid">
+        <option value="0">Off</option>
+        <option value="4">4 px</option>
+        <option value="8" selected>8 px</option>
+        <option value="16">16 px</option>
+        <option value="32">32 px</option>
+        <option value="64">64 px</option>
+      </select></span>
+    </div>
+    <div class="toolbar" role="toolbar" aria-label="Formatting">
+      <span class="grip"></span>
+      <span class="combo"><select id="tbFont" aria-label="Font" style="width:170px"></select></span>
+      <button class="tbtn" id="tbTTF" title="Load a .ttf/.otf font" aria-label="Load TrueType font"><svg class="ic"><use href="#i-ttf"/></svg></button>
+      <span class="tsep"></span>
+      <span class="combo"><select id="tbField" aria-label="Insert driver field" style="width:126px">
+        <option value="">Insert field…</option>
+        <option value="STOP">Stop code</option>
+        <option value="BUGCHECK">Bugcheck name</option>
+        <option value="PARAMS">Parameters</option>
+        <option value="DRIVER">Faulting driver</option>
+        <option value="ADDRESS">Address</option>
+      </select></span>
+      <span class="tsep"></span>
+      <span class="split">
+        <button class="tbtn" id="fontColorBtn" title="Font color" aria-label="Apply font color"><span class="cicon"><svg class="ic"><use href="#i-fontcolor"/></svg><span class="cbar" id="fontColorBar"></span></span></button>
+        <button class="tbtn arw" id="fontColorArrow" title="Font color palette" aria-label="Choose font color" aria-haspopup="true"><svg><use href="#i-down"/></svg></button>
+      </span>
+      <span class="split">
+        <button class="tbtn" id="fillBtn" title="Background fill" aria-label="Apply background fill"><span class="cicon"><svg class="ic"><use href="#i-fill"/></svg><span class="cbar" id="fillBar"></span></span></button>
+        <button class="tbtn arw" id="fillArrow" title="Background fill palette" aria-label="Choose background fill" aria-haspopup="true"><svg><use href="#i-down"/></svg></button>
+      </span>
+      <span class="tsep"></span>
+      <label class="tlabel" for="stopSel">Triggers on</label>
+      <span class="combo mono"><select id="stopSel" style="max-width:270px"></select></span>
+    </div>
+  </div>
+</div>
+
+<div class="work" id="work">
+  <aside class="scenes-pane" aria-label="Scenes">
+    <div class="tabs" role="tablist" aria-label="Scene view">
+      <button class="tab" role="tab" id="tabThumbs" aria-selected="true">Scenes</button>
+      <button class="tab" role="tab" id="tabList" aria-selected="false">Outline</button>
+      <span class="sp"></span>
+      <button class="tbtn" id="addScene" title="New scene" aria-label="New scene"><svg class="ic"><use href="#i-new"/></svg></button>
+      <button class="pane-x" id="scenesX" title="Close pane" aria-label="Close scenes pane"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <div class="scroll scene-list" id="sceneList" role="listbox" aria-label="Scenes"></div>
+  </aside>
+
+  <main class="doc">
+    <div class="stage" id="stage">
+      <div class="rcorner"></div>
+      <canvas class="ruler h" id="rulerH" aria-hidden="true"></canvas>
+      <canvas class="ruler v" id="rulerV" aria-hidden="true"></canvas>
+      <div class="screen-area">
+        <div class="screen-wrap">
+          <div class="screen-box">
+            <canvas id="screen" width="640" height="480"></canvas>
+            <div class="grid-ov" id="gridOv"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="framepane" aria-label="Frames">
+      <div class="fp-head">Frames <span class="mini" id="fpInfo"></span></div>
+      <div class="frames" id="frames"></div>
+    </section>
+  </main>
+
+  <aside class="taskpane" aria-label="Task pane">
+    <div class="tp-head">
+      <button class="tp-title" id="tpTitle" aria-haspopup="true" aria-expanded="false"><span>Scene layers</span><svg><use href="#i-down"/></svg></button>
+      <button class="pane-x" id="taskX" title="Close (Ctrl+F1)" aria-label="Close task pane"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <div class="tp-body scroll" id="tpBody">
+      <section class="tp-sec" id="secLayers">
+        <h2 class="tp-sh"><button aria-expanded="true"><span>Layers</span><span class="chev"><svg><use href="#i-chev"/></svg></span></button></h2>
+        <div class="tp-sb">
+          <div class="toolrow">
+            <button class="btn" id="addText"><svg class="ic"><use href="#i-text"/></svg>Text</button>
+            <button class="btn" id="addSprite"><svg class="ic"><use href="#i-sprite"/></svg>Sprite…</button>
+          </div>
+          <div class="scroll layerlist" id="layerList" role="listbox" aria-label="Layers"></div>
+        </div>
+      </section>
+      <section class="tp-sec" id="secProps">
+        <h2 class="tp-sh"><button aria-expanded="true"><span>Properties</span><span class="chev"><svg><use href="#i-chev"/></svg></span></button></h2>
+        <div class="tp-sb"><div class="props empty" id="props">Select a layer to edit it.</div></div>
+      </section>
+      <section class="tp-sec" id="secPalette">
+        <h2 class="tp-sh"><button aria-expanded="true"><span id="palHead">Palette (16 colors)</span><span class="chev"><svg><use href="#i-chev"/></svg></span></button></h2>
+        <div class="tp-sb"><div class="palette p16" id="palette"></div></div>
+      </section>
+    </div>
+  </aside>
+</div>
+
+<div class="cmdbars bottom">
+  <div class="tbrow">
+    <div class="toolbar" role="toolbar" aria-label="Animation">
+      <span class="grip"></span>
+      <button class="tbtn" id="prevF" title="Previous frame (←)" aria-label="Previous frame"><svg class="ic"><use href="#i-prev"/></svg></button>
+      <button class="tbtn" id="playF" title="Play (Space)" aria-label="Play" aria-pressed="false"><svg class="ic"><use id="playUse" href="#i-play"/></svg></button>
+      <button class="tbtn" id="nextF" title="Next frame (→)" aria-label="Next frame"><svg class="ic"><use href="#i-next"/></svg></button>
+      <span class="tsep"></span>
+      <span class="counter">frame <b id="cFrame">1</b> / <span id="cTotal">1</span></span>
+      <span class="tsep"></span>
+      <label class="tlabel" for="fps">fps</label><input class="spin" type="number" id="fps" min="1" max="30" value="10">
+      <span class="tsep"></span>
+      <label class="radio"><input type="radio" name="loop" value="freeze" checked> freeze on last</label>
+      <label class="radio"><input type="radio" name="loop" value="range"> loop</label>
+      <input class="spin" type="number" id="loopA" min="1" value="1" aria-label="Loop start frame"><span class="dash">–</span><input class="spin" type="number" id="loopB" min="1" value="1" aria-label="Loop end frame">
+      <span class="tsep"></span>
+      <button class="tbtn txt" id="addFrameBtn" title="Add frame (Ins)"><svg class="ic"><use href="#i-addframe"/></svg><span class="lbl">Add frame</span></button>
+    </div>
+  </div>
+</div>
+
+<footer class="statusbar">
+  <span class="sb" id="sbScene">Scene 1 of 1</span>
+  <span class="sb" id="sbFrame">Frame 1 of 1</span>
+  <span class="sb grow" id="tlStatus"></span>
+  <span class="sb mono" id="sbXY" title="Cursor position on the canvas"></span>
+  <span class="sb" id="resTag">640×480</span>
+  <span class="sb" id="canvasTitle">Windows XP</span>
+</footer>
+
+<div class="menu-layer" id="menuLayer"></div>
+<div class="alert" id="toast" role="status" aria-live="polite"><svg class="ic" aria-hidden="true"><use href="#i-info"/></svg><span id="toastMsg"></span></div>
+
+<dialog class="win" id="dlg" aria-labelledby="dlgTitle">
+  <div class="win-title"><span id="dlgTitle"></span><button class="win-x" id="dlgX" aria-label="Close"><svg><use href="#i-x"/></svg></button></div>
+  <div class="win-body" id="dlgBody"></div>
+  <div class="win-foot"><button class="btn" id="dlgOk">OK</button></div>
+</dialog>
+
+<script>
+"use strict";
+(function(){
+  const $=id=>document.getElementById(id);
+  const VGA16 = ["#000000","#0000aa","#00aa00","#00aaaa","#aa0000","#aa00aa","#aa5500","#aaaaaa",
+                 "#555555","#5555ff","#55ff55","#55ffff","#ff5555","#ff55ff","#ffff55","#ffffff"];
+  function buildVGA256(){
+    const p = VGA16.slice();
+    for(let i=16;i<32;i++){ const v=Math.round(((i-16)/15)*255); p.push(rgb(v,v,v)); }
+    const lv=[0,95,135,175,215,255];
+    for(let r=0;r<6;r++)for(let g=0;g<6;g++)for(let b=0;b<6;b++) p.push(rgb(lv[r],lv[g],lv[b]));
+    while(p.length<256) p.push("#000000");
+    return p;
+  }
+  function rgb(r,g,b){return "#"+[r,g,b].map(x=>x.toString(16).padStart(2,"0")).join("")}
+  const PAL256 = buildVGA256();
+
+  const CONSOLE_FONT = "'Lucida Console','Consolas','DejaVu Sans Mono',monospace";
+  const SYS_FONTS = [
+    {label:"Lucida Console (BSOD)", family:CONSOLE_FONT},
+    {label:"Consolas",         family:"Consolas, monospace"},
+    {label:"Fixedsys / Terminal", family:"'Fixedsys','Terminal', monospace"},
+    {label:"Courier New",      family:"'Courier New', monospace"},
+    {label:"IBM Plex Mono",    family:"'IBM Plex Mono', monospace"},
+    {label:"MS Sans Serif",    family:"'MS Sans Serif', sans-serif"},
+    {label:"Tahoma",           family:"Tahoma, sans-serif"},
+    {label:"Arial",            family:"Arial, sans-serif"},
+    {label:"Verdana",          family:"Verdana, sans-serif"},
+    {label:"Times New Roman",  family:"'Times New Roman', serif"},
+    {label:"Georgia",          family:"Georgia, serif"},
+    {label:"Impact",           family:"Impact, sans-serif"},
+    {label:"Comic Sans MS",    family:"'Comic Sans MS', cursive"}
+  ];
+  let customFonts=[], fontUid=1, pendingFontLayer=null;
+
+  const XP_CODES = [
+    ["default","— default —"],
+    ["0xDEADDEAD","MANUALLY_INITIATED_CRASH1"],
+    ["0x0A","IRQL_NOT_LESS_OR_EQUAL"],
+    ["0x1E","KMODE_EXCEPTION_NOT_HANDLED"],
+    ["0x3B","SYSTEM_SERVICE_EXCEPTION"],
+    ["0x50","PAGE_FAULT_IN_NONPAGED_AREA"],
+    ["0x7B","INACCESSIBLE_BOOT_DEVICE"],
+    ["0x7E","SYSTEM_THREAD_EXCEPTION_NOT_HANDLED"],
+    ["0x8E","KERNEL_MODE_EXCEPTION_NOT_HANDLED"],
+    ["0xD1","DRIVER_IRQL_NOT_LESS_OR_EQUAL"],
+    ["0xC2","BAD_POOL_CALLER"]
+  ];
+  const W98_CODES = [
+    ["default","— default —"],
+    ["fatal_0E","Fatal exception 0E (page fault)"],
+    ["fatal_0D","Fatal exception 0D (general protection)"],
+    ["protection","Windows protection error"],
+    ["busy","System busy / unstable (Ctrl+Alt+Del)"],
+    ["exception","Recoverable exception"]
+  ];
+  const FIELDS=[["STOP","Stop code"],["BUGCHECK","Bugcheck name"],["PARAMS","Parameters"],["DRIVER","Faulting driver"],["ADDRESS","Address"]];
+  const GRID_OPTS=[0,4,8,16,32,64];
+
+  let uid=1; const nid=()=>uid++;
+  function newLayer(kind){
+    const base = {id:nid(), kind, visible:true, colorIndex: kind==="text"?15:14, img:null, font:CONSOLE_FONT, perFrame:[{x: kind==="text"?24:120, y: kind==="text"?70:60, visible:true}]};
+    if(kind==="text") return Object.assign(base,{name:"Text", text:"AN ERROR HAS OCCURRED"});
+    return Object.assign(base,{name:"Sprite", w:64, h:40});
+  }
+  function newScene(stop){
+    const l1 = Object.assign(newLayer("text"),{name:"Title", text:":(", colorIndex:15, perFrame:[{x:20,y:40,visible:true}]});
+    const l2 = Object.assign(newLayer("text"),{name:"Message", text:"Your PC ran into a problem\nand needs to restart.", colorIndex:15, perFrame:[{x:20,y:84,visible:true}]});
+    const l3 = Object.assign(newLayer("text"),{name:"Stop code", text:stop==="default"?"*** STOP: 0x????????":"*** STOP: "+(stop.startsWith("0x")?stop:""), colorIndex:11, perFrame:[{x:20,y:150,visible:true}]});
+    return {id:nid(), stop, name:"Scene "+uid, bg:{type:"color", colorIndex:1, img:null},
+            frames:1, fps:10, loop:{mode:"freeze", a:1, b:1}, layers:[l1,l2,l3], activeLayer:l1.id, cur:0};
+  }
+  function textLayer(name,text,x,y,colorIndex){
+    const L=newLayer("text"); L.name=name; L.text=text; L.colorIndex=colorIndex; L.font=CONSOLE_FONT;
+    L.perFrame=[{x,y,visible:true}]; return L;
+  }
+  function makeDefaultBSOD(){
+    const layers=[
+      textLayer("Intro","A problem has been detected and Windows has been shut down to prevent\ndamage to your computer.",40,40,15),
+      textLayer("Bugcheck","{{BUGCHECK}}",40,80,15),
+      textLayer("First time","If this is the first time you've seen this Stop error screen,\nrestart your computer. If this screen appears again, follow\nthese steps:",40,114,15),
+      textLayer("Steps","Check to be sure you have adequate disk space. If a driver is\nidentified in the Stop message, disable the driver or check\nwith the manufacturer for driver updates. Try changing video\nadapters.\n\nDisable BIOS memory options such as caching or shadowing. If\nyou need to use Safe Mode to remove or disable components,\nrestart your computer, press F8 to select Advanced Startup\nOptions, and then select Safe Mode.",40,176,15),
+      textLayer("Technical","Technical information:",40,330,15),
+      textLayer("Stop","*** STOP: {{STOP}} ({{PARAMS}})",40,360,15)
+    ];
+    return {id:nid(), stop:"0xDEADDEAD", name:"Blue Screen", bg:{type:"color", colorIndex:1, img:null},
+            frames:1, fps:10, loop:{mode:"freeze", a:1, b:1}, layers, activeLayer:layers[0].id, cur:0};
+  }
+
+  const project = { target:"xp", baseline:"12h", scenes:[], active:0 };
+  project.scenes.push(makeDefaultBSOD());
+
+  const ui = { scenes: window.innerWidth>=820, task: window.innerWidth>600, ruler:true, status:true, sceneView:"thumbs" };
+  let lastFont=15, lastFill=1;
+  let playing=false, timer=null;
+
+  const scene = ()=>project.scenes[project.active];
+  const codesFor = ()=> project.target==="xp"?XP_CODES:W98_CODES;
+  const resW = ()=> project.baseline==="13h"?320:640;
+  const resH = ()=> project.baseline==="13h"?200:480;
+  const palette = ()=> project.baseline==="13h"?PAL256:VGA16;
+  const activeL = ()=>{ const S=scene(); return S.activeLayer==="bg"?null:(S.layers.find(x=>x.id===S.activeLayer)||null); };
+  const activeText = ()=>{ const L=activeL(); return L&&L.kind==="text"?L:null; };
+  const canColorLayer = ()=>{ const L=activeL(); return !!L && (L.kind==="text"||!L.img); };
+
+  function codeName(stop){ const e=codesFor().find(c=>c[0]===stop); return e?e[1]:""; }
+  function fieldPreview(t,S){
+    t=String(t).toUpperCase();
+    if(t==="STOP") return (S.stop&&S.stop.indexOf("0x")===0)?S.stop:"0x0000DEAD";
+    if(t==="BUGCHECK") return codeName(S.stop)||"BUGCHECK";
+    if(t==="PARAMS") return "0x00000000, 0x00000000, 0x00000000, 0x00000000";
+    if(t==="PARAM1"||t==="PARAM2"||t==="PARAM3"||t==="PARAM4") return "0x00000000";
+    if(t==="DRIVER") return "driver.sys";
+    if(t==="ADDRESS") return "0xF86B5A89";
+    if(t==="DUMP") return "Beginning dump of physical memory";
+    return "{{"+t+"}}";
+  }
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+  const icon = id => `<svg class="ic" aria-hidden="true"><use href="#${id}"/></svg>`;
+  let tTimer; function toast(m){ const t=$("toast"); $("toastMsg").textContent=m; t.classList.add("show"); clearTimeout(tTimer); tTimer=setTimeout(()=>t.classList.remove("show"),2800); }
+
+  /* ---------- canvas render + fit + grid ---------- */
+  let bounds={};
+  const cv=$("screen"), ctx=cv.getContext("2d");
+  const areaEl=document.querySelector(".screen-area");
+  const gridOv=$("gridOv");
+  let gridPx=8;
+  function updateGrid(){
+    if(!gridPx || !cv.style.width){ gridOv.style.backgroundImage="none"; return; }
+    const scale=parseFloat(cv.style.width)/cv.width, cell=gridPx*scale, c="rgba(167,139,250,.22)";
+    gridOv.style.backgroundImage=
+      "repeating-linear-gradient(to right,"+c+" 0,"+c+" 1px,transparent 1px,transparent "+cell+"px),"+
+      "repeating-linear-gradient(to bottom,"+c+" 0,"+c+" 1px,transparent 1px,transparent "+cell+"px)";
+  }
+  function fitCanvas(){
+    if(!areaEl) return;
+    const pad=48;
+    const aw=Math.max(40, areaEl.clientWidth-pad), ah=Math.max(40, areaEl.clientHeight-pad);
+    const ar=cv.width/cv.height;
+    let w=aw, h=aw/ar;
+    if(h>ah){ h=ah; w=ah*ar; }
+    cv.style.width=Math.floor(w)+"px"; cv.style.height=Math.floor(h)+"px";
+    updateGrid(); drawRulers();
+  }
+  if(window.ResizeObserver){ new ResizeObserver(fitCanvas).observe(areaEl); }
+  window.addEventListener("resize", ()=>{ closeMenus(); fitCanvas(); });
+
+  function clampColor(ci){ return Math.min(ci, palette().length-1); }
+  function paintScene(g,S,f,sc,showSel){
+    const W=resW(), H=resH(), pal=palette();
+    g.setTransform(sc,0,0,sc,0,0);
+    g.imageSmoothingEnabled = sc<1;
+    if(S.bg.type==="gif" && S.bg.frames && S.bg.frames.length){ g.drawImage(S.bg.frames[Math.min(f,S.bg.frames.length-1)],0,0,W,H); }
+    else if(S.bg.type==="image" && S.bg.img){ g.drawImage(S.bg.img,0,0,W,H); }
+    else { g.fillStyle=pal[clampColor(S.bg.colorIndex)]; g.fillRect(0,0,W,H); }
+    const cell = project.baseline==="13h"?8:10;
+    const b={};
+    for(const L of S.layers){
+      const pf=L.perFrame[Math.min(f,L.perFrame.length-1)];
+      if(!L.visible || !pf.visible) continue;
+      g.fillStyle=pal[clampColor(L.colorIndex)];
+      if(L.kind==="text"){
+        g.font=cell+"px "+(L.font||CONSOLE_FONT); g.textBaseline="top";
+        const lines=String(L.text).replace(/{{([A-Z0-9]+)}}/g,(m,t)=>fieldPreview(t,S)).split("\n"); let mw=0;
+        lines.forEach((line,i)=>{ mw=Math.max(mw,g.measureText(line).width); g.fillText(line, pf.x, pf.y + i*(cell+3)); });
+        b[L.id]={x:pf.x, y:pf.y, w:Math.max(mw,4), h:lines.length*(cell+3)-3};
+      } else if(L.img){
+        g.drawImage(L.img, pf.x, pf.y, L.w, L.h);
+        b[L.id]={x:pf.x, y:pf.y, w:L.w, h:L.h};
+      } else {
+        g.fillRect(pf.x, pf.y, L.w, L.h);
+        b[L.id]={x:pf.x, y:pf.y, w:L.w, h:L.h};
+      }
+    }
+    if(showSel && S.activeLayer!=="bg" && b[S.activeLayer]){
+      const r=b[S.activeLayer];
+      g.save(); g.setLineDash([3,2]); g.lineWidth=1; g.strokeStyle="#A78BFA";
+      g.strokeRect(r.x-1, r.y-1, r.w+2, r.h+2); g.restore();
+    }
+    g.setTransform(1,0,0,1,0,0);
+    return b;
+  }
+  function render(){
+    const S=scene(), W=resW(), H=resH();
+    if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H; fitCanvas();}
+    bounds=paintScene(ctx,S,S.cur,1,!playing);
+    queueThumb(); drawRulers();
+  }
+
+  /* ---------- rulers ---------- */
+  const rh=$("rulerH"), rv=$("rulerV"); let rulerCursor=null;
+  function sizeCanvas(c){
+    const d=window.devicePixelRatio||1, w=Math.max(1,Math.round(c.clientWidth*d)), h=Math.max(1,Math.round(c.clientHeight*d));
+    if(c.width!==w||c.height!==h){ c.width=w; c.height=h; } return d;
+  }
+  function drawRulers(){
+    if(!ui.ruler || !cv.style.width) return;
+    const cr=cv.getBoundingClientRect(); if(!cr.width) return;
+    const sc=cr.width/cv.width, S=scene();
+    const b=(!playing && S.activeLayer!=="bg") ? bounds[S.activeLayer] : null;
+    rulerOne(rh,true, cr.left-rh.getBoundingClientRect().left, sc, cv.width,  b?[b.x,b.x+b.w]:null, rulerCursor?rulerCursor.x:null);
+    rulerOne(rv,false,cr.top-rv.getBoundingClientRect().top,   sc, cv.height, b?[b.y,b.y+b.h]:null, rulerCursor?rulerCursor.y:null);
+  }
+  function rulerOne(c,horiz,o,sc,len,band,cur){
+    const d=sizeCanvas(c), g=c.getContext("2d");
+    const A=horiz?c.clientWidth:c.clientHeight, T=horiz?c.clientHeight:c.clientWidth;
+    g.setTransform(d,0,0,d,0,0);
+    const rect=(u,v,du,dv)=> horiz ? g.fillRect(u,v,du,dv) : g.fillRect(v,u,dv,du);
+    g.fillStyle="#15102f"; rect(0,0,A,T);
+    g.fillStyle="#2a2052"; rect(o,2,len*sc,T-4);
+    if(band){ g.fillStyle="rgba(167,139,250,.38)"; rect(o+band[0]*sc,2,(band[1]-band[0])*sc,T-4); }
+    const steps=[4,8,16,32,64,128,256,512];
+    const major=steps.find(s=>s*sc>=40)||512;
+    let minor=major/4; if(minor*sc<4) minor=major/2;
+    g.fillStyle="#6A5F99";
+    for(let v=0; v<=len; v+=minor){
+      const p=Math.round(o+v*sc);
+      const h = v%major===0 ? T-4 : (v%(major/2)===0 ? Math.round(T*.42) : Math.round(T*.25));
+      rect(p, T-h, 1, h);
+    }
+    g.fillStyle="#9B8FCF"; g.font="9px Tahoma, Verdana, sans-serif"; g.textBaseline="alphabetic";
+    for(let v=0; v<=len; v+=major){
+      const p=Math.round(o+v*sc), s=String(v);
+      if(horiz) g.fillText(s, p+3, 10);
+      else { g.save(); g.translate(10, p+3+g.measureText(s).width); g.rotate(-Math.PI/2); g.fillText(s,0,0); g.restore(); }
+    }
+    if(cur!=null){ g.fillStyle="#7FD3FF"; rect(Math.round(o+cur*sc),0,1,T); }
+  }
+
+  /* ---------- scene list ---------- */
+  const sceneList=$("sceneList");
+  const thumbCanvases=new Map(); let thumbQueued=false;
+  function paintThumb(S){
+    const c=thumbCanvases.get(S.id); if(!c) return;
+    const W=resW(), H=resH(), th=Math.round(c.width*H/W);
+    if(c.height!==th) c.height=th;
+    paintScene(c.getContext("2d"),S,S.cur,c.width/W,false);
+  }
+  function queueThumb(){
+    if(thumbQueued || !ui.scenes || ui.sceneView!=="thumbs") return;
+    thumbQueued=true; requestAnimationFrame(()=>{ thumbQueued=false; paintThumb(scene()); });
+  }
+  function drawScenes(){
+    sceneList.innerHTML=""; thumbCanvases.clear();
+    const thumbs=ui.sceneView==="thumbs";
+    sceneList.className="scroll scene-list "+(thumbs?"thumbs":"rows");
+    $("tabThumbs").setAttribute("aria-selected",String(thumbs));
+    $("tabList").setAttribute("aria-selected",String(!thumbs));
+    project.scenes.forEach((S,i)=>{
+      const sel=i===project.active;
+      const code = S.stop==="default"?"def":(S.stop.startsWith("0x")?S.stop:S.stop.replace(/_/g," "));
+      const el=document.createElement("button"); el.type="button";
+      el.setAttribute("role","option"); el.setAttribute("aria-selected",String(sel));
+      if(thumbs){
+        el.className="thumb"+(sel?" sel":"");
+        el.innerHTML=`<span class="n">${i+1}</span><span class="tframe"></span><span class="cap"><span class="code">${esc(code)}</span><span class="nm">${esc(S.name)}</span></span>`;
+        const c=document.createElement("canvas"); c.width=200; c.height=150;
+        el.querySelector(".tframe").appendChild(c); thumbCanvases.set(S.id,c);
+      } else {
+        el.className="scene"+(sel?" sel":"");
+        el.innerHTML=`<span class="dot"></span><span class="code">${esc(code)}</span><span class="nm">${esc(S.name)}</span>`;
+      }
+      el.onclick=()=>{project.active=i; syncAll();};
+      sceneList.appendChild(el);
+    });
+    if(thumbs) project.scenes.forEach(paintThumb);
+  }
+
+  /* ---------- layers + props ---------- */
+  const layerList=$("layerList"), props=$("props");
+  function drawLayerList(){
+    const S=scene(), refocus=layerList.contains(document.activeElement);
+    layerList.innerHTML="";
+    const mk=(sel,cls)=>{ const el=document.createElement("div"); el.className="layer"+cls+(sel?" sel":""); el.tabIndex=0;
+      el.setAttribute("role","option"); el.setAttribute("aria-selected",String(sel)); return el; };
+    [...S.layers].reverse().forEach(L=>{
+      const el=mk(L.id===S.activeLayer, L.visible?"":" off");
+      const ic = L.kind==="text"?(/{{/.test(L.text)?"i-field":"i-text"):"i-sprite";
+      el.innerHTML=`${icon(ic)}<span class="lname">${esc(L.name)}</span>
+        <button class="vis" type="button" title="${L.visible?"Hide layer":"Show layer"}" aria-pressed="${L.visible}" aria-label="Visible">${icon(L.visible?"i-eye":"i-eyeoff")}</button>`;
+      el.onclick=e=>{ if(e.target.closest(".vis")){L.visible=!L.visible;} S.activeLayer=L.id; syncAll(); };
+      el.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); S.activeLayer=L.id; syncAll(); } };
+      el.oncontextmenu=e=>{ e.preventDefault(); if(S.activeLayer!==L.id){ S.activeLayer=L.id; syncAll(); } openMenuAt(layerMenu(),e.clientX,e.clientY); };
+      layerList.appendChild(el);
+    });
+    const bg=mk(S.activeLayer==="bg"," bg");
+    bg.innerHTML=`${icon("i-bg")}<span class="lname">Background (${S.bg.type==="gif"?"GIF":S.bg.type==="image"?"image":"color"})</span>`;
+    bg.onclick=()=>{S.activeLayer="bg"; syncAll();};
+    bg.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); S.activeLayer="bg"; syncAll(); } };
+    layerList.appendChild(bg);
+    if(refocus){ const s=layerList.querySelector(".layer.sel"); if(s) s.focus({preventScroll:true}); }
+  }
+  function drawLayers(){ drawLayerList(); drawProps(); }
+  function fontOptions(cur){
+    const all=SYS_FONTS.concat(customFonts); let found=false;
+    let html=all.map(f=>{ const sel=f.family===cur; if(sel)found=true; return `<option value="${esc(f.family)}"${sel?" selected":""}>${esc(f.label)}</option>`; }).join("");
+    if(!found && cur){ html=`<option value="${esc(cur)}" selected>Custom</option>`+html; }
+    return html;
+  }
+  function drawProps(){
+    const S=scene();
+    if(S.activeLayer==="bg"){
+      props.className="props";
+      const kind=S.bg.type==="gif"?"GIF, "+(S.bg.frames||[]).length+" frames":S.bg.type==="image"?"image":"palette color";
+      props.innerHTML=`<div class="prow"><label>Type</label><span class="pval">${kind}</span></div>
+        <div class="prow"><label>Fill</label><span class="chip" style="background:${S.bg.type==="color"?palette()[clampColor(S.bg.colorIndex)]:"#2a2052"}"></span></div>
+        <div class="prow"><button class="btn wide" id="pImport">${icon("i-import")}Import background…</button></div>`;
+      $("pImport").onclick=cmd.importBg;
+      highlightSwatch(S.bg.type==="color"?S.bg.colorIndex:-1);
+      return;
+    }
+    const L=S.layers.find(x=>x.id===S.activeLayer);
+    if(!L){ props.className="props empty"; props.textContent="Select a layer to edit it."; return; }
+    const pf=L.perFrame[Math.min(S.cur,L.perFrame.length-1)];
+    props.className="props";
+    let html=`<div class="prow"><label for="pName">Name</label><input type="text" id="pName" value="${esc(L.name)}"></div>`;
+    if(L.kind==="text"){
+      html+=`<div class="prow top"><label for="pText">Text</label><textarea id="pText" rows="3" spellcheck="false">${esc(L.text)}</textarea></div>`;
+      html+=`<div class="prow"><label for="pFont">Font</label><span class="combo"><select id="pFont">${fontOptions(L.font)}</select></span><button class="btn" id="pFontLoad" title="Load a .ttf/.otf font">TTF…</button></div>`;
+      html+=`<div class="prow"><label for="pField">Insert</label><span class="combo"><select id="pField"><option value="">+ driver field…</option>${FIELDS.map(([v,l])=>`<option value="${v}">${l}</option>`).join("")}</select></span></div>`;
+      if(/{{/.test(L.text)) html+=`<div class="prow"><span class="mini">{{…}} is filled by the driver at crash time.</span></div>`;
+    } else {
+      html+=`<div class="prow"><label>Size</label><div class="xy"><input type="number" id="pW" value="${L.w}" aria-label="Width"><input type="number" id="pH" value="${L.h}" aria-label="Height"></div></div>`;
+    }
+    html+=`<div class="prow"><label>Pos X / Y</label><div class="xy"><input type="number" id="pX" value="${pf.x}" aria-label="X"><input type="number" id="pY" value="${pf.y}" aria-label="Y"></div></div>`;
+    if(L.kind==="text" || !L.img){ html+=`<div class="prow"><label>Color</label><span class="chip" style="background:${palette()[clampColor(L.colorIndex)]}"></span><span class="mini">index ${clampColor(L.colorIndex)}</span></div>`; }
+    html+=`<div class="prow"><button class="btn wide danger" id="pDel">${icon("i-del")}Delete layer</button></div>`;
+    props.innerHTML=html;
+    const bind=(id,fn)=>{const e=$(id); if(e)e.oninput=fn;};
+    bind("pName",e=>{L.name=e.target.value; drawLayerList(); queueThumb();});
+    bind("pText",e=>{L.text=e.target.value.replace(/\\n/g,"\n"); render(); drawLayerList();});
+    bind("pW",e=>{L.w=+e.target.value||0; render();});
+    bind("pH",e=>{L.h=+e.target.value||0; render();});
+    bind("pX",e=>{pf.x=+e.target.value||0; render();});
+    bind("pY",e=>{pf.y=+e.target.value||0; render();});
+    const fsel=$("pFont"); if(fsel)fsel.onchange=ev=>{ L.font=ev.target.value; render(); syncToolbars(); };
+    const fload=$("pFontLoad"); if(fload)fload.onclick=cmd.loadFont;
+    const ffld=$("pField"); if(ffld)ffld.onchange=ev=>{ const tok=ev.target.value; ev.target.value=""; if(tok) cmd.insertField(tok); };
+    $("pDel").onclick=cmd.delLayer;
+    highlightSwatch(L.colorIndex);
+  }
+
+  /* ---------- palette ---------- */
+  const palWrap=$("palette"), palHead=$("palHead");
+  function drawPalette(){
+    const pal=palette();
+    palWrap.className="palette "+(project.baseline==="13h"?"p256":"p16");
+    palHead.textContent="Palette ("+pal.length+" colors)";
+    palWrap.innerHTML="";
+    pal.forEach((hex,i)=>{
+      const sw=document.createElement("button"); sw.type="button"; sw.className="sw"; sw.style.background=hex; sw.dataset.i=i;
+      sw.title="index "+i+", "+hex; sw.setAttribute("aria-label","Color "+i+", "+hex);
+      sw.onclick=()=>applyColor(i);
+      palWrap.appendChild(sw);
+    });
+  }
+  function highlightSwatch(i){ palWrap.querySelectorAll(".sw").forEach(s=> s.classList.toggle("sel", +s.dataset.i===i)); }
+  function applyColor(i){
+    const S=scene();
+    if(S.activeLayer==="bg"){ S.bg.type="color"; S.bg.colorIndex=i; lastFill=i; }
+    else { const L=S.layers.find(x=>x.id===S.activeLayer); if(L){ L.colorIndex=i; lastFont=i; } }
+    highlightSwatch(i); render(); drawLayers(); syncToolbars();
+  }
+  function setFontColor(i){
+    lastFont=i; const L=activeL();
+    if(L && (L.kind==="text"||!L.img)){ L.colorIndex=i; render(); drawProps(); }
+    syncToolbars();
+  }
+  function setFill(i){
+    lastFill=i; const S=scene(); S.bg.type="color"; S.bg.colorIndex=i;
+    render(); drawLayers(); syncToolbars();
+  }
+
+  /* ---------- frames / timeline ---------- */
+  const framesEl=$("frames");
+  function drawFrames(){
+    const S=scene(); framesEl.innerHTML="";
+    for(let i=0;i<S.frames;i++){
+      const f=document.createElement("button"); f.type="button";
+      const inLoop = S.loop.mode==="range" && (i+1)>=S.loop.a && (i+1)<=S.loop.b;
+      f.className="frame"+(i===S.cur?" cur":"")+(inLoop?" inloop":"");
+      f.textContent=i+1; f.title="Frame "+(i+1)+(inLoop?" (in loop)":"");
+      f.onclick=()=>{S.cur=i; syncFrameUI(); render();};
+      framesEl.appendChild(f);
+    }
+    const add=document.createElement("button"); add.type="button"; add.className="frame addf"; add.textContent="+"; add.title="Add frame (Ins)";
+    add.onclick=cmd.addFrame; framesEl.appendChild(add);
+    $("fpInfo").textContent=S.frames+" frame"+(S.frames===1?"":"s")+" at "+S.fps+" fps";
+  }
+  function addFrame(){
+    const S=scene(); S.frames++;
+    S.layers.forEach(L=>{ const last=L.perFrame[L.perFrame.length-1]; L.perFrame.push({x:last.x,y:last.y,visible:last.visible}); });
+    S.cur=S.frames-1; $("loopB").value=S.frames;
+    if(S.loop.mode==="range")S.loop.b=S.frames;
+    syncAll();
+  }
+  function syncFrameUI(){
+    const S=scene();
+    $("cFrame").textContent=S.cur+1;
+    $("sbFrame").textContent="Frame "+(S.cur+1)+" of "+S.frames;
+    framesEl.querySelectorAll(".frame:not(.addf)").forEach((el,i)=>el.classList.toggle("cur",i===S.cur));
+    drawProps();
+  }
+
+  /* ---------- playback ---------- */
+  function setPlayUI(on){
+    const b=$("playF"); b.setAttribute("aria-pressed",String(on));
+    b.title=on?"Pause (Space)":"Play (Space)"; b.setAttribute("aria-label",on?"Pause":"Play");
+    $("playUse").setAttribute("href",on?"#i-pause":"#i-play");
+  }
+  function play(){
+    const S=scene(); if(S.frames<2){toast("Add more frames to animate");return;}
+    playing=true; setPlayUI(true);
+    clearInterval(timer);
+    timer=setInterval(()=>{
+      let n=S.cur+1;
+      if(S.loop.mode==="range"){ if(n+1>S.loop.b) n=S.loop.a-1; }
+      else { if(n>=S.frames){ n=S.frames-1; stop(); } }
+      S.cur=Math.max(0,Math.min(n,S.frames-1)); syncFrameUI(); render();
+    }, 1000/(scene().fps||10));
+  }
+  function stop(){ const was=playing; playing=false; clearInterval(timer); setPlayUI(false); if(was) render(); }
+
+  /* ---------- sync ---------- */
+  function drawStopSel(){
+    const sel=$("stopSel"); sel.innerHTML="";
+    codesFor().forEach(([v,label])=>{ const o=document.createElement("option"); o.value=v; o.textContent=(v.startsWith("0x")?v+"  ":"")+label; sel.appendChild(o); });
+    sel.value=scene().stop;
+  }
+  function syncToolbars(){
+    document.querySelectorAll("#tbTarget .tbtn").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.t===project.target)));
+    document.querySelectorAll("#tbBase .tbtn").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.b===project.baseline)));
+    $("gridSel").value=String(gridPx);
+    const L=activeL(), T=activeText(), pal=palette();
+    const fs=$("tbFont"); fs.innerHTML=fontOptions(T?T.font:CONSOLE_FONT); fs.disabled=!T;
+    $("tbTTF").disabled=!T; $("tbField").disabled=!T;
+    $("tbDel").disabled=!L;
+    lastFont=clampColor(lastFont); lastFill=clampColor(lastFill);
+    $("fontColorBar").style.background=pal[lastFont];
+    $("fillBar").style.background=pal[lastFill];
+    $("fontColorBtn").title="Font color: index "+lastFont;
+    $("fillBtn").title="Background fill: index "+lastFill;
+    $("fontColorBtn").disabled=$("fontColorArrow").disabled=!canColorLayer();
+  }
+  function syncMeta(){
+    const S=scene();
+    $("cTotal").textContent=S.frames;
+    $("resTag").textContent=resW()+"×"+resH()+", "+palette().length+" colors";
+    $("canvasTitle").textContent = project.target==="xp"?"Windows XP":"Windows 98 SE";
+    $("tlStatus").textContent = S.layers.length+" layer"+(S.layers.length===1?"":"s")+", "+(S.loop.mode==="freeze"?"freeze on last":"loop "+S.loop.a+"–"+S.loop.b);
+    $("sbScene").textContent="Scene "+(project.active+1)+" of "+project.scenes.length;
+    $("winTitle").innerHTML="0xDEADDEAD <span>- ["+esc(S.name)+"]</span>";
+    document.title=S.name+" - 0xDEADDEAD";
+    $("fps").value=S.fps;
+    document.querySelector('input[name=loop][value="'+S.loop.mode+'"]').checked=true;
+    $("loopA").value=S.loop.a; $("loopB").value=S.loop.b;
+    syncToolbars();
+  }
+  function syncAll(){ stop(); drawScenes(); drawStopSel(); drawLayers(); drawPalette(); drawFrames(); syncMeta(); syncFrameUI(); render(); fitCanvas(); }
+
+  /* ---------- file loading ---------- */
+  function readDataURL(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+  async function loadImage(file){
+    if(window.createImageBitmap){ try{ return await createImageBitmap(file); }catch(_){} }
+    const url=await readDataURL(file);
+    return await new Promise((res,rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=url; });
+  }
+  async function decodeGifFrames(file){
+    const buf=await file.arrayBuffer();
+    const dec=new ImageDecoder({data:buf, type:"image/gif"});
+    await dec.tracks.ready;
+    let count=1; try{ count=dec.tracks.selectedTrack.frameCount||1; }catch(_){ count=1; }
+    const frames=[];
+    for(let i=0;i<count;i++){
+      let res; try{ res=await dec.decode({frameIndex:i}); }catch(_){ break; }
+      const vf=res.image, w=vf.displayWidth||vf.codedWidth||1, h=vf.displayHeight||vf.codedHeight||1;
+      const c=document.createElement("canvas"); c.width=w; c.height=h; c.getContext("2d").drawImage(vf,0,0); frames.push(c);
+      try{ vf.close(); }catch(_){}
+    }
+    return frames;
+  }
+  function applyGifBackground(frames){
+    const S=scene(), N=frames.length;
+    S.bg.type="gif"; S.bg.frames=frames; S.bg.img=null;
+    S.frames=N;
+    S.layers.forEach(L=>{ const base=L.perFrame[0]||{x:0,y:0,visible:true}; L.perFrame=[]; for(let i=0;i<N;i++) L.perFrame.push({x:base.x,y:base.y,visible:base.visible}); });
+    S.cur=0;
+    if(N>1){ S.loop.mode="range"; S.loop.a=1; S.loop.b=N; } else { S.loop.mode="freeze"; S.loop.a=1; S.loop.b=1; }
+    syncAll();
+  }
+  $("fileIn").onchange=async e=>{
+    const file=e.target.files[0]; e.target.value=""; if(!file){return;}
+    const isGif = file.type==="image/gif" || /\.gif$/i.test(file.name);
+    if(isGif && window.ImageDecoder){
+      try{
+        const frames=await decodeGifFrames(file);
+        if(frames.length>1){ applyGifBackground(frames); toast("GIF imported — "+frames.length+" frames, layers copied to all"); return; }
+        if(frames.length===1){ const S=scene(); S.bg.type="image"; S.bg.img=frames[0]; S.bg.frames=null; toast("GIF imported"); render(); drawLayers(); return; }
+      }catch(_){}
+    }
+    try{
+      const img=await loadImage(file);
+      const S=scene(); S.bg.type="image"; S.bg.img=img; S.bg.frames=null;
+      toast(isGif?"GIF imported (static)":"Background imported"); render(); drawLayers();
+    }catch(_){ toast("Could not read that image. Try a PNG, BMP, JPG or GIF."); }
+  };
+  $("spriteIn").onchange=async e=>{
+    const file=e.target.files[0]; e.target.value=""; if(!file){return;}
+    let img; try{ img=await loadImage(file); }catch(_){ toast("Could not read that image. Try a PNG, BMP, JPG or GIF."); return; }
+    const S=scene(), W=resW(), H=resH();
+    const sc=Math.min(1,(W*0.55)/img.width,(H*0.55)/img.height);
+    const w=Math.max(1,Math.round(img.width*sc)), h=Math.max(1,Math.round(img.height*sc));
+    const L=newLayer("sprite"); L.img=img; L.w=w; L.h=h;
+    L.name=((file.name||"Sprite").replace(/\.[^.]+$/,"")).slice(0,18)||"Sprite";
+    L.perFrame=[{x:Math.round((W-w)/2), y:Math.round((H-h)/2), visible:true}];
+    padFrames(L,S.frames);
+    S.layers.push(L); S.activeLayer=L.id; syncAll();
+    toast("Sprite added");
+  };
+  $("fontIn").onchange=async e=>{
+    const file=e.target.files[0]; e.target.value=""; if(!file){return;}
+    const label=((file.name||"Custom").replace(/\.[^.]+$/,"")).slice(0,22)||"Custom";
+    const fam="ttf"+(fontUid++);
+    try{
+      const face=new FontFace(fam, await file.arrayBuffer());
+      const f=await face.load();
+      document.fonts.add(f);
+      const family="'"+fam+"', monospace";
+      customFonts.push({label:label+" (TTF)", family});
+      const L=scene().layers.find(x=>x.id===pendingFontLayer);
+      if(L) L.font=family;
+      drawProps(); syncToolbars(); render(); toast("Font loaded: "+label);
+    }catch(_){ toast("Could not load font. Use a .ttf or .otf file."); }
+  };
+
+  /* ---------- export ---------- */
+  async function saveFile(name,text){
+    let dl=null;
+    if(window.claude && typeof window.claude.use==="function"){ try{ dl=await window.claude.use("downloads"); }catch(_){ dl=null; } }
+    if(dl){
+      try{ await dl.save({filename:name, data:text}); return true; }
+      catch(err){ const c=err&&err.code; toast(c==="declined"?"Export cancelled":c==="rate_limited"?"A save prompt is already open":"Export isn't available in this view"); return false; }
+    }
+    if(window.claude){ toast("Export isn't available in this view"); return false; }
+    const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([text],{type:"application/json"})); a.download=name; a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    return true;
+  }
+  async function exportPak(){
+    const pack={ format:"deaddead-pack", version:1, target:project.target, baseline:project.baseline,
+      canvas:{w:resW(),h:resH()},
+      scenes:project.scenes.map(S=>({ stop:S.stop, name:S.name, frames:S.frames, fps:S.fps, loop:S.loop,
+        background:S.bg.type==="color"?{paletteIndex:S.bg.colorIndex}:(S.bg.type==="gif"?{gif:(S.bg.frames||[]).length}:"<bitmap>"),
+        layers:S.layers.map(L=>({kind:L.kind, name:L.name, color:L.colorIndex,
+          text:L.kind==="text"?L.text:undefined, font:L.kind==="text"?L.font:undefined,
+          size:L.kind==="sprite"?{w:L.w,h:L.h}:undefined,
+          image:(L.kind==="sprite"&&L.img)?"<bitmap>":undefined,
+          track:L.perFrame})) })) };
+    const ok=await saveFile("0xDEADDEAD-scenes.json", JSON.stringify(pack,null,2));
+    if(ok) toast("Exported 0xDEADDEAD-scenes.json (the driver reads the binary .pak)");
+  }
+
+  /* ---------- commands ---------- */
+  function padFrames(L,n){ while(L.perFrame.length<n){const l=L.perFrame[L.perFrame.length-1]; L.perFrame.push({x:l.x,y:l.y,visible:l.visible});} }
+  const cmd={
+    newScene(){ project.scenes.push(newScene("default")); project.active=project.scenes.length-1; syncAll(); },
+    importBg(){ $("fileIn").click(); },
+    exportPak,
+    addText(){ const S=scene(); const L=newLayer("text"); padFrames(L,S.frames); S.layers.push(L); S.activeLayer=L.id; syncAll(); },
+    addSprite(){ $("spriteIn").click(); },
+    delLayer(){ const S=scene(), L=activeL(); if(!L) return; S.layers=S.layers.filter(x=>x.id!==L.id); S.activeLayer=(S.layers[0]||{}).id||"bg"; syncAll(); toast("Layer deleted"); },
+    toggleVis(){ const L=activeL(); if(!L) return; L.visible=!L.visible; syncAll(); },
+    selectBg(){ scene().activeLayer="bg"; syncAll(); },
+    setGrid(px){ gridPx=px; $("gridSel").value=String(px); updateGrid(); },
+    setTarget(t){ if(project.target===t) return; project.target=t;
+      project.scenes.forEach(S=>{ if(!codesFor().some(c=>c[0]===S.stop)) S.stop="default"; }); syncAll(); },
+    setBaseline(b){ if(project.baseline===b) return; project.baseline=b;
+      if(b==="12h") project.scenes.forEach(S=>{ S.bg.colorIndex=Math.min(S.bg.colorIndex,15); S.layers.forEach(L=>L.colorIndex=Math.min(L.colorIndex,15)); });
+      syncAll(); },
+    togglePlay(){ playing?stop():play(); },
+    prev(){ const S=scene(); S.cur=(S.cur-1+S.frames)%S.frames; syncFrameUI(); render(); },
+    next(){ const S=scene(); S.cur=(S.cur+1)%S.frames; syncFrameUI(); render(); },
+    addFrame,
+    setLoop(m){ scene().loop.mode=m; syncMeta(); drawFrames(); },
+    insertField(tok){ const L=activeText(); if(!L) return; L.text=(L.text?L.text+" ":"")+"{{"+tok+"}}"; render(); drawLayers(); },
+    loadFont(){ const L=activeText(); if(!L) return; pendingFontLayer=L.id; $("fontIn").click(); },
+    pane(name){ ui[name]=!ui[name]; applyUI(); },
+    sceneView(v){ ui.sceneView=v; drawScenes(); },
+    about(){ showDialog("About 0xDEADDEAD", `<div class="about">${logoSVG("ddwinA")}<div><h3>0xDEADDEAD</h3>
+      <p>Crash screen editor for Windows 98 SE and Windows XP. Design a scene for each stop code, then export the scene pack the driver installs.</p>
+      <p class="mini">Named after the manually initiated crash bugcheck. Mockup build.</p></div></div>`); },
+    keys(){ showDialog("Keyboard shortcuts", `<table class="keys"><tbody>
+      <tr><td>Space</td><td>Play or pause the animation</td></tr>
+      <tr><td>← / →</td><td>Previous or next frame</td></tr>
+      <tr><td>Ins</td><td>Add a frame</td></tr>
+      <tr><td>Del</td><td>Delete the selected layer</td></tr>
+      <tr><td>Ctrl+F1</td><td>Show or hide the task pane</td></tr>
+      <tr><td>Alt, F10</td><td>Move to the menu bar</td></tr>
+      <tr><td>Alt+letter</td><td>Open a menu (underlined letter)</td></tr>
+      <tr><td>Right-click</td><td>Layer and canvas shortcut menus</td></tr>
+      </tbody></table>`); }
+  };
+
+  function applyUI(){
+    document.body.classList.toggle("no-scenes",!ui.scenes);
+    document.body.classList.toggle("no-task",!ui.task);
+    document.body.classList.toggle("no-status",!ui.status);
+    $("stage").classList.toggle("no-ruler",!ui.ruler);
+    if(ui.scenes) drawScenes();
+    requestAnimationFrame(fitCanvas);
+  }
+
+  function logoSVG(cid){
+    return `<svg class="logo" viewBox="0 0 58 34" role="img" aria-label="0xDD_ console logo">
+      <defs><clipPath id="${cid}"><rect x="1" y="1" width="56" height="32" rx="6"/></clipPath></defs>
+      <g clip-path="url(#${cid})"><rect x="1" y="1" width="56" height="32" fill="#0000AA"/><rect x="1" y="1" width="56" height="9" fill="#000063"/>
+      <rect x="5" y="3.4" width="4.2" height="4.2" fill="#D7CEF2"/><path d="M43 5.5h3.6" stroke="#ffffff88" stroke-width="1.1"/>
+      <path d="M49.4 3.6l3.2 3.2M52.6 3.6l-3.2 3.2" stroke="#ffffff88" stroke-width="1.1"/></g>
+      <rect x="1" y="1" width="56" height="32" rx="6" fill="none" stroke="#ffffff33"/>
+      <text x="7" y="25" font-family="'IBM Plex Mono',monospace" font-size="14" font-weight="700" letter-spacing=".3" fill="#ffffff">0xDD<tspan class="cur" fill="#7FD3FF">_</tspan></text></svg>`;
+  }
+
+  /* ---------- dialogs ---------- */
+  const dlg=$("dlg");
+  function showDialog(title,html){
+    closeMenus(); $("dlgTitle").textContent=title; $("dlgBody").innerHTML=html;
+    if(dlg.showModal){ if(!dlg.open) dlg.showModal(); } else dlg.setAttribute("open","");
+    $("dlgOk").focus();
+  }
+  $("dlgOk").onclick=$("dlgX").onclick=()=>{ if(dlg.close) dlg.close(); else dlg.removeAttribute("open"); };
+
+  /* ---------- menus ---------- */
+  const MENUS=[
+    {label:"File", key:"f", items:()=>[
+      {label:"New scene", icon:"i-new", run:cmd.newScene},
+      "-",
+      {label:"Import background…", icon:"i-import", run:cmd.importBg},
+      {label:"Export .pak…", icon:"i-export", run:cmd.exportPak}
+    ]},
+    {label:"Edit", key:"e", items:()=>[
+      {label:"Select background", icon:"i-bg", run:cmd.selectBg},
+      {label:"Layer visible", check:()=>{const L=activeL(); return !!(L&&L.visible);}, enabled:()=>!!activeL(), run:cmd.toggleVis},
+      "-",
+      {label:"Delete layer", icon:"i-del", sc:"Del", enabled:()=>!!activeL(), run:cmd.delLayer}
+    ]},
+    {label:"View", key:"v", items:()=>[
+      {label:"Scenes pane", check:()=>ui.scenes, run:()=>cmd.pane("scenes")},
+      {label:"Task pane", sc:"Ctrl+F1", check:()=>ui.task, run:()=>cmd.pane("task")},
+      {label:"Ruler", check:()=>ui.ruler, run:()=>cmd.pane("ruler")},
+      {label:"Status bar", check:()=>ui.status, run:()=>cmd.pane("status")},
+      "-",
+      {label:"Scene thumbnails", radio:()=>ui.sceneView==="thumbs", run:()=>cmd.sceneView("thumbs")},
+      {label:"Scene outline", radio:()=>ui.sceneView==="list", run:()=>cmd.sceneView("list")},
+      "-",
+      ...GRID_OPTS.map(g=>({label:g?"Grid "+g+" px":"Grid off", radio:()=>gridPx===g, run:()=>cmd.setGrid(g)}))
+    ]},
+    {label:"Insert", key:"i", items:()=>[
+      {label:"Text layer", icon:"i-text", run:cmd.addText},
+      {label:"Sprite…", icon:"i-sprite", run:cmd.addSprite},
+      {label:"Frame", icon:"i-addframe", sc:"Ins", run:cmd.addFrame},
+      "-",
+      ...FIELDS.map(([tok,lab])=>({label:lab+" field", icon:"i-field", enabled:()=>!!activeText(), run:()=>cmd.insertField(tok)}))
+    ]},
+    {label:"Format", key:"o", items:()=>[
+      {label:"Font color…", icon:"i-fontcolor", enabled:canColorLayer, run:()=>openColorPop("font",$("fontColorArrow"))},
+      {label:"Background fill…", icon:"i-fill", run:()=>openColorPop("fill",$("fillArrow"))},
+      "-",
+      {label:"Load TrueType font…", icon:"i-ttf", enabled:()=>!!activeText(), run:cmd.loadFont}
+    ]},
+    {label:"Tools", key:"t", items:()=>[
+      {label:"Target Windows 98 SE", radio:()=>project.target==="win98", run:()=>cmd.setTarget("win98")},
+      {label:"Target Windows XP", radio:()=>project.target==="xp", run:()=>cmd.setTarget("xp")},
+      "-",
+      {label:"256 colors (VGA mode 13h, 320×200)", radio:()=>project.baseline==="13h", run:()=>cmd.setBaseline("13h")},
+      {label:"16 colors (VGA mode 12h, 640×480)", radio:()=>project.baseline==="12h", run:()=>cmd.setBaseline("12h")}
+    ]},
+    {label:"Animation", key:"a", items:()=>[
+      {label:playing?"Pause":"Play", icon:playing?"i-pause":"i-play", sc:"Space", run:cmd.togglePlay},
+      {label:"Previous frame", icon:"i-prev", sc:"←", run:cmd.prev},
+      {label:"Next frame", icon:"i-next", sc:"→", run:cmd.next},
+      {label:"Add frame", icon:"i-addframe", sc:"Ins", run:cmd.addFrame},
+      "-",
+      {label:"Freeze on last frame", radio:()=>scene().loop.mode==="freeze", run:()=>cmd.setLoop("freeze")},
+      {label:"Loop frame range", radio:()=>scene().loop.mode==="range", run:()=>cmd.setLoop("range")}
+    ]},
+    {label:"Help", key:"h", items:()=>[
+      {label:"Keyboard shortcuts", icon:"i-keys", run:cmd.keys},
+      "-",
+      {label:"About 0xDEADDEAD", icon:"i-help", run:cmd.about}
+    ]}
+  ];
+  const layerMenu=()=>[
+    {label:"Layer visible", check:()=>{const L=activeL(); return !!(L&&L.visible);}, enabled:()=>!!activeL(), run:cmd.toggleVis},
+    {label:"Font color…", icon:"i-fontcolor", enabled:canColorLayer, run:()=>openColorPop("font",$("fontColorArrow"))},
+    "-",
+    {label:"Delete layer", icon:"i-del", sc:"Del", enabled:()=>!!activeL(), run:cmd.delLayer}
+  ];
+  const canvasMenu=()=>[
+    {label:"Add text layer", icon:"i-text", run:cmd.addText},
+    {label:"Add sprite…", icon:"i-sprite", run:cmd.addSprite},
+    "-",
+    {label:"Font color…", icon:"i-fontcolor", enabled:canColorLayer, run:()=>openColorPop("font",$("fontColorArrow"))},
+    {label:"Background fill…", icon:"i-fill", run:()=>openColorPop("fill",$("fillArrow"))},
+    {label:"Import background…", icon:"i-import", run:cmd.importBg},
+    "-",
+    {label:"Delete layer", icon:"i-del", sc:"Del", enabled:()=>!!activeL(), run:cmd.delLayer}
+  ];
+
+  const menuLayer=$("menuLayer"), menubar=$("menubar");
+  let openMenu=null;
+  function buildMenu(items){
+    const m=document.createElement("div"); m.className="menu"; m.setAttribute("role","menu"); m.tabIndex=-1;
+    items.forEach(it=>{
+      if(it==="-"){ const s=document.createElement("div"); s.className="msep"; s.setAttribute("role","separator"); m.appendChild(s); return; }
+      const b=document.createElement("button"); b.type="button"; b.className="mi";
+      const isR=!!it.radio, isC=!!it.check, on=isR?it.radio():isC?it.check():false;
+      b.setAttribute("role",isR?"menuitemradio":isC?"menuitemcheckbox":"menuitem");
+      if(isR||isC) b.setAttribute("aria-checked",String(!!on));
+      b.disabled=!!(it.enabled && !it.enabled());
+      const g = on ? `<span class="mbox">${icon(it.icon||(isR?"i-dot":"i-check"))}</span>` : (it.icon?icon(it.icon):"");
+      b.innerHTML=`<span class="mg">${g}</span><span class="ml">${esc(it.label)}</span><span class="ms">${it.sc||""}</span>`;
+      b.onclick=()=>{ closeMenus(); it.run(); };
+      b.onpointerenter=()=>{ if(!b.disabled) b.focus({preventScroll:true}); };
+      m.appendChild(b);
+    });
+    return m;
+  }
+  function place(m,x,y){
+    menuLayer.appendChild(m);
+    const r=m.getBoundingClientRect(), vw=window.innerWidth, vh=window.innerHeight;
+    if(x+r.width>vw-4) x=Math.max(4,vw-r.width-4);
+    if(y+r.height>vh-4) y=Math.max(4,vh-r.height-4);
+    m.style.left=x+"px"; m.style.top=y+"px";
+  }
+  function closeMenus(){
+    menuLayer.innerHTML=""; openMenu=null;
+    barBtns.forEach(b=>{ b.classList.remove("open"); b.setAttribute("aria-expanded","false"); });
+    $("tpTitle").setAttribute("aria-expanded","false");
+  }
+  function focusables(m){ return [...m.querySelectorAll(".mi:not(:disabled), .cp-g button")]; }
+  function moveFocus(m,dir,abs){
+    const it=focusables(m); if(!it.length) return;
+    let i;
+    if(abs!=null) i=abs<0?it.length-1:abs;
+    else { const c=it.indexOf(document.activeElement); i = c<0 ? (dir>0?0:it.length-1) : Math.min(it.length-1,Math.max(0,c+dir)); if(c>=0 && Math.abs(dir)===1) i=(c+dir+it.length)%it.length; }
+    it[i].focus();
+  }
+  function openBar(idx,kbd){
+    closeMenus();
+    const btn=barBtns[idx], r=btn.getBoundingClientRect();
+    const m=buildMenu(MENUS[idx].items());
+    place(m,r.left,r.bottom-1);
+    btn.classList.add("open"); btn.setAttribute("aria-expanded","true");
+    openMenu={kind:"bar", idx, el:m, btn};
+    if(kbd) moveFocus(m,1); else m.focus({preventScroll:true});
+  }
+  function openMenuAt(items,x,y,ret){
+    closeMenus();
+    const m=buildMenu(items); place(m,x,y);
+    openMenu={kind:"ctx", el:m, btn:ret||null};
+    m.focus({preventScroll:true});
+  }
+  function openColorPop(kind,anchor){
+    closeMenus();
+    const pal=palette(), cur=kind==="font"?lastFont:lastFill;
+    const m=document.createElement("div"); m.className="menu colorpop"; m.setAttribute("role","dialog"); m.tabIndex=-1;
+    m.setAttribute("aria-label",kind==="font"?"Font color":"Background fill");
+    m.innerHTML=`<div class="cp-h">${kind==="font"?"Font color":"Background fill"}</div>`;
+    const grid=document.createElement("div"); grid.className="cp-g "+(pal.length>16?"p256":"p16");
+    pal.forEach((hex,i)=>{
+      const b=document.createElement("button"); b.type="button"; b.style.background=hex; b.title="index "+i+", "+hex;
+      b.setAttribute("aria-label","Color "+i+", "+hex); if(i===cur) b.classList.add("sel");
+      b.onclick=()=>{ closeMenus(); kind==="font"?setFontColor(i):setFill(i); };
+      grid.appendChild(b);
+    });
+    m.appendChild(grid);
+    const r=(anchor||$("fillArrow")).getBoundingClientRect();
+    place(m,r.left-24,r.bottom+1);
+    openMenu={kind:"pop", el:m, btn:anchor, cols:pal.length>16?16:8};
+    const s=grid.querySelector(".sel")||grid.firstChild; s.focus({preventScroll:true});
+  }
+  function menuKey(e){
+    const m=openMenu.el, k=e.key;
+    if(openMenu.kind==="pop" && /^Arrow/.test(k)){
+      e.preventDefault();
+      const d = k==="ArrowRight"?1:k==="ArrowLeft"?-1:k==="ArrowDown"?openMenu.cols:-openMenu.cols;
+      const it=focusables(m), c=Math.max(0,it.indexOf(document.activeElement));
+      const n=c+d; if(n>=0 && n<it.length) it[n].focus();
+      return;
+    }
+    if(k==="ArrowDown"){ e.preventDefault(); moveFocus(m,1); }
+    else if(k==="ArrowUp"){ e.preventDefault(); moveFocus(m,-1); }
+    else if(k==="Home"){ e.preventDefault(); moveFocus(m,0,0); }
+    else if(k==="End"){ e.preventDefault(); moveFocus(m,0,-1); }
+    else if((k==="ArrowRight"||k==="ArrowLeft") && openMenu.kind==="bar"){
+      e.preventDefault(); openBar((openMenu.idx+(k==="ArrowRight"?1:-1)+MENUS.length)%MENUS.length,true);
+    }
+    else if(k==="Escape"){ e.preventDefault(); const b=openMenu.btn; closeMenus(); if(b && !b.disabled) b.focus(); }
+    else if(k==="Tab"){ closeMenus(); }
+    else if(k.length===1 && k!==" " && !e.ctrlKey && !e.metaKey && !e.altKey && openMenu.kind!=="pop"){
+      const hit=[...m.querySelectorAll(".mi:not(:disabled)")].find(b=>b.querySelector(".ml").textContent.trim().toLowerCase().startsWith(k.toLowerCase()));
+      if(hit){ e.preventDefault(); hit.click(); }
+    }
+  }
+  const barBtns=MENUS.map((M,i)=>{
+    const b=document.createElement("button"); b.type="button"; b.className="mbtn";
+    b.setAttribute("role","menuitem"); b.setAttribute("aria-haspopup","true"); b.setAttribute("aria-expanded","false");
+    const k=M.label.toLowerCase().indexOf(M.key);
+    b.innerHTML=esc(M.label.slice(0,k))+"<u>"+esc(M.label[k])+"</u>"+esc(M.label.slice(k+1));
+    b.tabIndex=i===0?0:-1;
+    b.onclick=()=>{ if(openMenu && openMenu.kind==="bar" && openMenu.idx===i) closeMenus(); else openBar(i,false); };
+    b.onpointerenter=()=>{ if(openMenu && openMenu.kind==="bar" && openMenu.idx!==i) openBar(i,false); };
+    b.onkeydown=e=>{
+      if(openMenu) return;
+      if(e.key==="ArrowRight"||e.key==="ArrowLeft"){ e.preventDefault(); e.stopPropagation(); barBtns[(i+(e.key==="ArrowRight"?1:-1)+MENUS.length)%MENUS.length].focus(); }
+      else if(e.key==="ArrowDown"||e.key==="Enter"||e.key===" "){ e.preventDefault(); e.stopPropagation(); openBar(i,true); }
+      else if(e.key==="Escape"){ e.stopPropagation(); b.blur(); document.body.classList.remove("mnem"); }
+    };
+    menubar.appendChild(b); return b;
+  });
+  menubar.addEventListener("focusout",e=>{ if(!menubar.contains(e.relatedTarget) && !openMenu) document.body.classList.remove("mnem"); });
+  document.addEventListener("pointerdown",e=>{
+    if(!openMenu) return;
+    if(menuLayer.contains(e.target) || e.target.closest(".mbtn")) return;
+    if(openMenu.btn && openMenu.btn.contains(e.target)) return;
+    closeMenus();
+  },true);
+  window.addEventListener("blur",closeMenus);
+
+  /* ---------- events ---------- */
+  document.querySelectorAll(".toolbar .tbtn, .tabs .tbtn").forEach(b=>b.addEventListener("mousedown",e=>e.preventDefault()));
+  $("tbNew").onclick=cmd.newScene; $("addScene").onclick=cmd.newScene;
+  $("tbImport").onclick=cmd.importBg;
+  $("tbExport").onclick=cmd.exportPak;
+  $("tbText").onclick=cmd.addText; $("addText").onclick=cmd.addText;
+  $("tbSprite").onclick=cmd.addSprite; $("addSprite").onclick=cmd.addSprite;
+  $("tbDel").onclick=cmd.delLayer;
+  $("tbTarget").onclick=e=>{ const b=e.target.closest("button"); if(b) cmd.setTarget(b.dataset.t); };
+  $("tbBase").onclick=e=>{ const b=e.target.closest("button"); if(b) cmd.setBaseline(b.dataset.b); };
+  $("gridSel").onchange=e=>{ cmd.setGrid(+e.target.value||0); };
+  $("tbFont").onchange=e=>{ const T=activeText(); if(!T) return; T.font=e.target.value; render(); drawProps(); };
+  $("tbTTF").onclick=cmd.loadFont;
+  $("tbField").onchange=e=>{ const tok=e.target.value; e.target.value=""; if(tok) cmd.insertField(tok); };
+  $("stopSel").onchange=e=>{ scene().stop=e.target.value; drawScenes(); render(); };
+  $("fontColorBtn").onclick=()=>setFontColor(lastFont);
+  $("fontColorArrow").onclick=e=>{ if(openMenu&&openMenu.kind==="pop"&&openMenu.btn===e.currentTarget){closeMenus();return;} openColorPop("font",e.currentTarget); };
+  $("fillBtn").onclick=()=>setFill(lastFill);
+  $("fillArrow").onclick=e=>{ if(openMenu&&openMenu.kind==="pop"&&openMenu.btn===e.currentTarget){closeMenus();return;} openColorPop("fill",e.currentTarget); };
+
+  $("fps").oninput=e=>{ scene().fps=Math.max(1,Math.min(30,+e.target.value||10)); $("fpInfo").textContent=scene().frames+" frame"+(scene().frames===1?"":"s")+" at "+scene().fps+" fps"; if(playing){stop();play();} };
+  $("prevF").onclick=cmd.prev;
+  $("nextF").onclick=cmd.next;
+  $("playF").onclick=cmd.togglePlay;
+  $("addFrameBtn").onclick=cmd.addFrame;
+  document.querySelectorAll('input[name=loop]').forEach(r=> r.onchange=e=>cmd.setLoop(e.target.value));
+  $("loopA").oninput=e=>{ scene().loop.a=Math.max(1,+e.target.value||1); drawFrames(); syncMeta(); };
+  $("loopB").oninput=e=>{ scene().loop.b=Math.max(1,+e.target.value||1); drawFrames(); syncMeta(); };
+
+  $("tabThumbs").onclick=()=>cmd.sceneView("thumbs");
+  $("tabList").onclick=()=>cmd.sceneView("list");
+  $("scenesX").onclick=()=>cmd.pane("scenes");
+  $("taskX").onclick=()=>cmd.pane("task");
+  document.querySelectorAll(".tp-sh button").forEach(b=>b.onclick=()=>{
+    const sec=b.closest(".tp-sec"), col=sec.classList.toggle("collapsed"); b.setAttribute("aria-expanded",String(!col));
+  });
+  function showSection(id){
+    const sec=$(id); sec.classList.remove("collapsed"); sec.querySelector(".tp-sh button").setAttribute("aria-expanded","true");
+    sec.scrollIntoView({block:"start", behavior:"smooth"});
+  }
+  $("tpTitle").onclick=e=>{
+    if(openMenu && openMenu.btn===e.currentTarget){ closeMenus(); return; }
+    const r=e.currentTarget.getBoundingClientRect();
+    openMenuAt([
+      {label:"Layers", icon:"i-text", run:()=>showSection("secLayers")},
+      {label:"Properties", icon:"i-pane", run:()=>showSection("secProps")},
+      {label:"Palette", icon:"i-fill", run:()=>showSection("secPalette")},
+      "-",
+      {label:"Close task pane", sc:"Ctrl+F1", run:()=>cmd.pane("task")}
+    ], r.left, r.bottom, e.currentTarget);
+    e.currentTarget.setAttribute("aria-expanded","true");
+  };
+
+  /* ---------- pointer editing on the canvas ---------- */
+  let drag=null;
+  function canvasPos(e){ const r=cv.getBoundingClientRect(); return { x:Math.round((e.clientX-r.left)*(cv.width/r.width)), y:Math.round((e.clientY-r.top)*(cv.height/r.height)) }; }
+  function curPf(L){ return L.perFrame[Math.min(scene().cur,L.perFrame.length-1)]; }
+  function hitLayer(cx,cy){ const S=scene(); for(let i=S.layers.length-1;i>=0;i--){ const L=S.layers[i]; if(!L.visible)continue; const pf=curPf(L); if(!pf.visible)continue; const b=bounds[L.id]; if(b&&cx>=b.x&&cx<=b.x+b.w&&cy>=b.y&&cy<=b.y+b.h) return L; } return null; }
+  cv.addEventListener("pointerdown",e=>{
+    if(e.button!==0) return;
+    const p=canvasPos(e), L=hitLayer(p.x,p.y);
+    if(L){ const pf=curPf(L); drag={L,sx:p.x,sy:p.y,ox:pf.x,oy:pf.y}; cv.style.cursor="grabbing";
+      try{ cv.setPointerCapture(e.pointerId); }catch(_){}
+      if(scene().activeLayer!==L.id){ scene().activeLayer=L.id; syncAll(); } e.preventDefault(); }
+    else if(scene().activeLayer!=="bg"){ scene().activeLayer="bg"; syncAll(); }
+  });
+  cv.addEventListener("pointermove",e=>{
+    const p=canvasPos(e);
+    rulerCursor=p; $("sbXY").textContent=p.x+", "+p.y;
+    if(drag){ const pf=curPf(drag.L);
+      let nx=drag.ox+(p.x-drag.sx), ny=drag.oy+(p.y-drag.sy);
+      if(gridPx){ nx=Math.round(nx/gridPx)*gridPx; ny=Math.round(ny/gridPx)*gridPx; }
+      pf.x=nx; pf.y=ny;
+      const px=$("pX"),py=$("pY"); if(px)px.value=pf.x; if(py)py.value=pf.y;
+      render();
+    } else { cv.style.cursor=hitLayer(p.x,p.y)?"grab":"default"; drawRulers(); }
+  });
+  const endDrag=()=>{ if(drag){ drag=null; cv.style.cursor="grab"; } };
+  cv.addEventListener("pointerup",endDrag);
+  cv.addEventListener("pointercancel",endDrag);
+  cv.addEventListener("pointerleave",()=>{ if(drag) return; rulerCursor=null; $("sbXY").textContent=""; drawRulers(); });
+  cv.addEventListener("contextmenu",e=>{
+    e.preventDefault();
+    const p=canvasPos(e), L=hitLayer(p.x,p.y), S=scene(), want=L?L.id:"bg";
+    if(S.activeLayer!==want){ S.activeLayer=want; syncAll(); }
+    openMenuAt(canvasMenu(), e.clientX, e.clientY);
+  });
+
+  /* ---------- keyboard ---------- */
+  let altOnly=false;
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Alt"){ altOnly=true; return; }
+    altOnly=false;
+    if(openMenu){ menuKey(e); return; }
+    if(dlg.open) return;
+    if(e.altKey && !e.ctrlKey && !e.metaKey){
+      const i=MENUS.findIndex(M=>e.code==="Key"+M.key.toUpperCase());
+      if(i>=0){ e.preventDefault(); document.body.classList.add("mnem"); openBar(i,true); return; }
+    }
+    if(e.key==="F10" && !e.shiftKey){ e.preventDefault(); document.body.classList.add("mnem"); barBtns[0].focus(); return; }
+    if(e.key==="F1" && e.ctrlKey){ e.preventDefault(); cmd.pane("task"); return; }
+    if(/input|select|textarea/i.test(e.target.tagName)) return;
+    if(menubar.contains(e.target)) return;
+    if(e.code==="Space"){ if(e.target.closest("button,[role=option],[role=tab]")) return; e.preventDefault(); cmd.togglePlay(); }
+    else if(e.key==="ArrowRight"){ cmd.next(); }
+    else if(e.key==="ArrowLeft"){ cmd.prev(); }
+    else if(e.key==="Delete"){ if(activeL()){ e.preventDefault(); cmd.delLayer(); } }
+    else if(e.key==="Insert"){ e.preventDefault(); cmd.addFrame(); }
+  });
+  document.addEventListener("keyup",e=>{
+    if(e.key!=="Alt") return;
+    if(altOnly){
+      e.preventDefault();
+      if(openMenu){ closeMenus(); document.body.classList.remove("mnem"); }
+      else if(menubar.contains(document.activeElement)){ document.activeElement.blur(); document.body.classList.remove("mnem"); }
+      else if(!dlg.open){ document.body.classList.add("mnem"); barBtns[0].focus(); }
+    }
+    altOnly=false;
+  });
+
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{render();fitCanvas(); if(ui.scenes) drawScenes();});
+  applyUI();
+  syncAll();
+  requestAnimationFrame(fitCanvas);
+})();
+</script>
+</body>
+</html>
